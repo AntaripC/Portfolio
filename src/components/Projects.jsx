@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
-import { Github, ExternalLink, FolderGit, Cpu, Code2, Database, Cloud, Zap, Compass, CheckCircle2, ArrowUpRight, Layers } from 'lucide-react'
+import { Github, ExternalLink, FolderGit, Cpu, Code2, Database, Cloud, Zap, Compass, CheckCircle2, ArrowUpRight, Layers, ShieldCheck } from 'lucide-react'
 import { TiltCard } from './About.jsx'
 
 export default function Projects() {
@@ -88,6 +88,27 @@ export default function Projects() {
       color: '#059669',
       bg: 'rgba(5, 150, 105, 0.1)',
       architecture: 'Client App -> Express REST API -> SQL RDBMS -> Audit Logs',
+    },
+    {
+      id: 'CLOUD_DOSSIER // 05',
+      title: 'Cloud-Native Microservices with Spring Boot & Docker',
+      category: 'cloud',
+      badge: 'CAPGEMINI ENGINEERING',
+      domain: 'Cloud-Native Architecture & Containerized Microservices',
+      description:
+        'Cloud-Native Microservices with Spring Boot and Docker transform how modern software is built and run by breaking massive, rigid applications down into a network of small, independent services. Spring Boot acts as the internal engine for each service, allowing developers to quickly build self-contained, production-ready features (like a payment or checkout service) without wrestling with complex infrastructure setup. Docker then acts as a standard shipping container, packaging each Spring Boot service along with its exact operating environment so it runs identically on a laptop, a test server, or the cloud. When combined with Cloud-Native design, these containerised services become highly resilient and dynamic—capable of automatically spinning up to handle traffic spikes, self-healing instantly if a crash occurs, and allowing engineering teams to continuously deploy updates to one part of the system without ever taking the whole application offline.',
+      tech: ['Spring Boot', 'Docker', 'Kubernetes', 'Cloud-Native', 'Microservices', 'CI/CD'],
+      highlights: [
+        'Independent self-contained microservices with auto-scaling and self-healing capabilities.',
+        'Docker containerization ensuring identical environments across dev, staging, and production.',
+        'Continuous deployment pipeline enabling zero-downtime partial system updates.',
+      ],
+      icon: <ShieldCheck size={24} />,
+      github: 'https://github.com/AntaripC',
+      color: '#0072C6',
+      bg: 'rgba(0, 114, 198, 0.1)',
+      architecture: 'Spring Boot Services -> Docker Build -> K8s Orchestration -> Cloud Deploy',
+      capgemini: true,
     },
   ]
 
@@ -251,9 +272,40 @@ export default function Projects() {
                 <h3 style={{ fontSize: '1.35rem', color: 'var(--text-primary)', marginBottom: '0.2rem' }}>
                   {project.title}
                 </h3>
-                <span style={{ fontSize: '0.82rem', color: project.color, fontFamily: 'var(--font-mono)', fontWeight: '600', display: 'block', marginBottom: '0.85rem' }}>
+                <span style={{ fontSize: '0.82rem', color: project.color, fontFamily: 'var(--font-mono)', fontWeight: '600', display: 'block', marginBottom: '0.5rem' }}>
                   {project.domain}
                 </span>
+
+                {/* Capgemini Verified Badge for flagged projects */}
+                {project.capgemini && (
+                  <div
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.4rem',
+                      padding: '0.3rem 0.7rem',
+                      borderRadius: '8px',
+                      background: 'linear-gradient(135deg, rgba(0, 114, 198, 0.08), rgba(18, 170, 255, 0.06))',
+                      border: '1px solid rgba(0, 114, 198, 0.25)',
+                      marginBottom: '0.85rem',
+                      boxShadow: '0 0 12px rgba(0, 114, 198, 0.1)',
+                    }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="12" r="11" fill="#0072C6" />
+                      <path d="M7.5 12.5L10.5 15.5L16.5 9.5" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    <span style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.7rem',
+                      fontWeight: '700',
+                      color: '#0072C6',
+                      letterSpacing: '0.05em',
+                    }}>
+                      by Capgemini
+                    </span>
+                  </div>
+                )}
 
                 {/* Description */}
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: '1.7', marginBottom: '1.25rem' }}>

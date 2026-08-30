@@ -201,8 +201,8 @@ function CloudModel({ onSelectService }) {
           <Html position={[0, 0, 0.2]} center distanceFactor={5.2} style={{ pointerEvents: 'none' }}>
             <div
               style={{
-                width: '100px',
-                height: '100px',
+                width: '150px',
+                height: '150px',
                 borderRadius: '50%',
                 padding: '3px',
                 background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-green), #7c3aed)',
@@ -622,9 +622,35 @@ export default function Hero() {
 
                 <div style={{ flex: 1 }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.3rem' }}>
-                    <h4 style={{ margin: 0, fontSize: '1.15rem', color: 'var(--text-primary)', fontWeight: '700' }}>
-                      Antarip Chatterjee
-                    </h4>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <h4 style={{ margin: 0, fontSize: '1.15rem', color: 'var(--text-primary)', fontWeight: '700' }}>
+                        Antarip Chatterjee
+                      </h4>
+                      {/* Capgemini Verified Badge */}
+                      <span
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.3rem',
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.62rem',
+                          padding: '2px 7px',
+                          borderRadius: '10px',
+                          background: 'linear-gradient(135deg, rgba(0, 114, 198, 0.12), rgba(18, 170, 255, 0.10))',
+                          color: '#0072C6',
+                          border: '1px solid rgba(0, 114, 198, 0.3)',
+                          fontWeight: '700',
+                          letterSpacing: '0.04em',
+                          boxShadow: '0 0 8px rgba(0, 114, 198, 0.15)',
+                        }}
+                      >
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                          <circle cx="12" cy="12" r="11" fill="#0072C6" />
+                          <path d="M7.5 12.5L10.5 15.5L16.5 9.5" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                        CAPGEMINI VERIFIED
+                      </span>
+                    </div>
                     <span
                       style={{
                         fontFamily: 'var(--font-mono)',
