@@ -197,6 +197,51 @@ function CloudModel({ onSelectService }) {
             </mesh>
           </group>
 
+          {/* Central Holographic Photo Node attached to 3D Model */}
+          <Html position={[0, 0, 0.2]} center distanceFactor={5.2} style={{ pointerEvents: 'none' }}>
+            <div
+              style={{
+                width: '100px',
+                height: '100px',
+                borderRadius: '50%',
+                padding: '3px',
+                background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-green), #7c3aed)',
+                boxShadow: '0 0 30px var(--accent-glow), 0 0 50px rgba(217, 119, 6, 0.3)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'relative',
+                userSelect: 'none',
+              }}
+            >
+              <img
+                src="/antarip.jpg"
+                alt="Antarip Chatterjee"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  display: 'block',
+                  border: '2px solid rgba(255, 255, 255, 0.95)',
+                }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: '2px',
+                  right: '2px',
+                  width: '18px',
+                  height: '18px',
+                  borderRadius: '50%',
+                  backgroundColor: '#059669',
+                  border: '2.5px solid var(--bg-card)',
+                  boxShadow: '0 0 8px #059669',
+                }}
+              />
+            </div>
+          </Html>
+
           {/* Service Nodes */}
           {services.map((svc, i) => (
             <ServiceNode
@@ -459,110 +504,197 @@ export default function Hero() {
             transition={{ duration: 0.9, delay: 0.2 }}
             style={{
               position: 'relative',
-              height: '520px',
               display: 'flex',
+              flexDirection: 'column',
               justifyContent: 'center',
-              alignItems: 'center',
             }}
           >
-            {/* Subtle glow background */}
+            {/* 3D Canvas Viewport */}
             <div
               style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                width: '380px',
-                height: '380px',
-                background: 'radial-gradient(circle, var(--accent-glow) 0%, rgba(5, 150, 105, 0.05) 50%, transparent 70%)',
-                filter: 'blur(60px)',
-                zIndex: 0,
-              }}
-            />
-
-            {/* 3D Canvas */}
-            <div style={{ width: '100%', height: '100%', position: 'relative', zIndex: 2 }}>
-              <Canvas camera={{ position: [0, 0, 6], fov: 50 }}>
-                <ambientLight intensity={0.7} />
-                <directionalLight position={[10, 10, 10]} intensity={1.2} color="var(--accent-primary)" />
-                <directionalLight position={[-10, -10, -10]} intensity={0.8} color="#059669" />
-                <pointLight position={[0, 3, 0]} intensity={0.5} color="#7c3aed" />
-                <CloudModel onSelectService={setActiveService} />
-                <Environment preset="city" />
-                <ContactShadows
-                  position={[0, -2, 0]}
-                  opacity={0.3}
-                  scale={12}
-                  blur={3}
-                  far={5}
-                  color="var(--accent-primary)"
-                />
-                <OrbitControls
-                  enableZoom={false}
-                  enablePan={false}
-                  maxPolarAngle={Math.PI / 1.8}
-                  minPolarAngle={Math.PI / 3}
-                  autoRotate
-                  autoRotateSpeed={0.6}
-                />
-              </Canvas>
-            </div>
-
-            {/* Floating Profile Badge */}
-            <motion.div
-              style={{
-                position: 'absolute',
-                bottom: '10px',
-                right: '10px',
+                position: 'relative',
+                height: '420px',
+                width: '100%',
                 display: 'flex',
+                justifyContent: 'center',
                 alignItems: 'center',
-                gap: '0.85rem',
-                padding: '0.6rem 1.1rem 0.6rem 0.6rem',
-                background: 'var(--bg-card-elevated)',
-                backdropFilter: 'blur(16px)',
-                border: '1px solid var(--border-color)',
-                borderRadius: '50px',
-                zIndex: 4,
-                boxShadow: '0 10px 30px rgba(15, 23, 42, 0.1), 0 0 15px var(--accent-glow)',
               }}
-              whileHover={{ scale: 1.05 }}
             >
+              {/* Subtle glow background */}
               <div
                 style={{
-                  width: '50px',
-                  height: '50px',
-                  borderRadius: '50%',
-                  backgroundColor: 'var(--bg-secondary)',
-                  border: '2px solid var(--accent-primary)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontWeight: '700',
-                  color: 'var(--accent-primary)',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '1.05rem',
-                  boxShadow: '0 0 10px var(--accent-glow)',
-                  overflow: 'hidden',
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: '380px',
+                  height: '380px',
+                  background: 'radial-gradient(circle, var(--accent-glow) 0%, rgba(5, 150, 105, 0.05) 50%, transparent 70%)',
+                  filter: 'blur(60px)',
+                  zIndex: 0,
+                }}
+              />
+
+              <div style={{ width: '100%', height: '100%', position: 'relative', zIndex: 2 }}>
+                <Canvas camera={{ position: [0, 0, 6], fov: 50 }}>
+                  <ambientLight intensity={0.7} />
+                  <directionalLight position={[10, 10, 10]} intensity={1.2} color="var(--accent-primary)" />
+                  <directionalLight position={[-10, -10, -10]} intensity={0.8} color="#059669" />
+                  <pointLight position={[0, 3, 0]} intensity={0.5} color="#7c3aed" />
+                  <CloudModel onSelectService={setActiveService} />
+                  <Environment preset="city" />
+                  <ContactShadows
+                    position={[0, -2, 0]}
+                    opacity={0.3}
+                    scale={12}
+                    blur={3}
+                    far={5}
+                    color="var(--accent-primary)"
+                  />
+                  <OrbitControls
+                    enableZoom={false}
+                    enablePan={false}
+                    maxPolarAngle={Math.PI / 1.8}
+                    minPolarAngle={Math.PI / 3}
+                    autoRotate
+                    autoRotateSpeed={0.6}
+                  />
+                </Canvas>
+              </div>
+            </div>
+
+            {/* Profile Bio Card Directly Under 3D Model */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.3 }}
+              style={{
+                background: 'var(--bg-card)',
+                backdropFilter: 'blur(16px)',
+                border: '1px solid var(--border-color)',
+                borderTop: '2px solid var(--accent-primary)',
+                borderRadius: '14px',
+                padding: '1.15rem 1.35rem',
+                marginTop: '0.5rem',
+                boxShadow: '0 8px 30px rgba(15, 23, 42, 0.06), 0 0 15px var(--accent-glow)',
+                position: 'relative',
+                zIndex: 3,
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.75rem' }}>
+                <div
+                  style={{
+                    width: '62px',
+                    height: '62px',
+                    borderRadius: '50%',
+                    padding: '2px',
+                    background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-green))',
+                    boxShadow: '0 0 14px var(--accent-glow)',
+                    flexShrink: 0,
+                    position: 'relative',
+                  }}
+                >
+                  <img
+                    src="/antarip.jpg"
+                    alt="Antarip Chatterjee"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                      display: 'block',
+                    }}
+                  />
+                  <div
+                    style={{
+                      position: 'absolute',
+                      bottom: '0px',
+                      right: '0px',
+                      width: '13px',
+                      height: '13px',
+                      borderRadius: '50%',
+                      backgroundColor: '#059669',
+                      border: '2px solid var(--bg-card)',
+                      boxShadow: '0 0 6px #059669',
+                    }}
+                  />
+                </div>
+
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.3rem' }}>
+                    <h4 style={{ margin: 0, fontSize: '1.15rem', color: 'var(--text-primary)', fontWeight: '700' }}>
+                      Antarip Chatterjee
+                    </h4>
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.68rem',
+                        padding: '2px 8px',
+                        borderRadius: '12px',
+                        background: 'rgba(5, 150, 105, 0.12)',
+                        color: 'var(--accent-green)',
+                        border: '1px solid var(--border-green)',
+                        fontWeight: '600',
+                      }}
+                    >
+                      ● AVAILABLE SUMMER '27
+                    </span>
+                  </div>
+                  <div
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.78rem',
+                      color: 'var(--accent-primary)',
+                      marginTop: '0.15rem',
+                      fontWeight: '600',
+                    }}
+                  >
+                    Cloud Systems Architect & IoT Innovator
+                  </div>
+                  <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                    B.Tech CSE (Cloud Computing) • LPU (Top 1% Global Cohort)
+                  </div>
+                </div>
+              </div>
+
+              {/* Bio Paragraph under Picture */}
+              <p
+                style={{
+                  fontSize: '0.84rem',
+                  lineHeight: '1.6',
+                  color: 'var(--text-secondary)',
+                  margin: '0 0 0.75rem 0',
+                  borderTop: '1px solid var(--border-subtle)',
+                  paddingTop: '0.65rem',
                 }}
               >
-                <img
-                  src="/photo.jpg"
-                  alt="Antarip Chatterjee"
-                  onError={(e) => {
-                    e.target.style.display = 'none'
-                  }}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-                <span style={{ position: 'absolute' }}>AC</span>
-              </div>
-              <div>
-                <div style={{ fontSize: '0.88rem', fontWeight: '700', color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
-                  Antarip Chatterjee
-                </div>
-                <div style={{ fontSize: '0.75rem', color: 'var(--accent-green)', fontFamily: 'var(--font-mono)', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--accent-green)', boxShadow: '0 0 6px var(--accent-green)' }} />
-                  B.Tech CSE (Cloud) @ LPU
-                </div>
+                Specializing in <strong>distributed cloud architectures (AWS & GCP)</strong>, <strong>containerized microservices (Docker & Kubernetes)</strong>, and <strong>patent-pending IoT spectral diagnostics (ESP32)</strong>. Passionate about architecting zero-trust resilient infrastructure and leading high-velocity hackathon engineering squads.
+              </p>
+
+              {/* Skill Tags */}
+              <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+                {[
+                  { label: 'AWS & Kubernetes', color: 'var(--accent-primary)' },
+                  { label: 'Patent-Pending IoT', color: 'var(--accent-green)' },
+                  { label: 'Top 1% Standing', color: 'var(--accent-purple)' },
+                  { label: 'Hackathon Lead', color: 'var(--accent-primary)' },
+                ].map((tag, idx) => (
+                  <span
+                    key={idx}
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.7rem',
+                      padding: '2px 8px',
+                      borderRadius: '4px',
+                      background: 'var(--bg-secondary)',
+                      border: '1px solid var(--border-color)',
+                      color: 'var(--text-secondary)',
+                      fontWeight: '500',
+                    }}
+                  >
+                    #{tag.label}
+                  </span>
+                ))}
               </div>
             </motion.div>
           </motion.div>
