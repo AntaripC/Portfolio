@@ -70,28 +70,28 @@ export default function Extracurricular() {
     {
       num: '500+',
       label: 'COMMUNITY & LEADERSHIP',
-      sub: 'Head of Marketing @ CREST',
+      sub: 'Technical Mentorship & Hackathons',
       color: 'var(--accent-amber)',
       icon: <Users size={20} />,
       bgGlow: 'rgba(217, 119, 6, 0.08)',
     },
   ]
 
-  // 2. CREST Head of Marketing Leadership Pillars
+  // 2. Technical Leadership Pillars
   const leadershipNodes = [
     {
       id: 'brand',
-      title: 'Brand Growth & Outreach Campaigns',
+      title: 'Technical Mentorship & Outreach',
       tag: 'OUTREACH ARCHITECTURE',
-      role: 'Head of Marketing @ CREST',
+      role: 'Hackathon Squad Lead',
       logId: 'NODE // MKT_01',
       color: 'var(--accent-primary)',
       icon: <TrendingUp size={22} />,
-      shortDesc: 'Spearheading marketing operations, digital visibility campaigns, and brand storytelling for CREST across university platforms.',
+      shortDesc: 'Mentoring junior developers in foundational cloud principles, cybersecurity hygiene, and rapid prototype delivery.',
       details: [
-        'Orchestrated multi-channel marketing campaigns, expanding CREST student footprint and engagement.',
-        'Established consistent brand voice, visual aesthetics, and promotional roadmaps for tech initiatives.',
-        'Collaborated with design & editorial squads to launch high-conversion media assets and banners.',
+        'Organized collaborative developer workshops on cloud infrastructure and REST APIs.',
+        'Established consistent architectural standards, visual aesthetics, and project roadmaps for hackathon teams.',
+        'Collaborated with design and engineering squads to deliver high-impact technical demonstrations.',
       ],
     },
     {
@@ -104,8 +104,8 @@ export default function Extracurricular() {
       icon: <Users size={22} />,
       shortDesc: 'Managing cross-disciplinary sub-teams across content, social media, outreach, and ground public relations.',
       details: [
-        'Directed weekly syncs, sprint delegations, and task pipelines ensuring 100% on-time event promotions.',
-        'Mentored junior marketing associates on outreach copywriting, engagement analytics, and PR management.',
+        'Directed weekly syncs, sprint delegations, and task pipelines ensuring 100% on-time event deliverables.',
+        'Mentored junior squad members on technical documentation, engagement analytics, and team coordination.',
         'Bridged communication between faculty advisors, student executive council, and external participants.',
       ],
     },
@@ -179,7 +179,7 @@ export default function Extracurricular() {
               margin: '0 auto',
             }}
           >
-            Proven track record of high-speed execution under 24–48h hackathon clocks, student organization leadership as Head of Marketing @ CREST, and patent-pending IoT engineering.
+            Proven track record of high-speed execution under 24–48h hackathon clocks, technical team leadership, and patent-pending IoT engineering.
           </p>
 
           {/* Core Philosophy Banner Pill */}
@@ -682,20 +682,20 @@ export default function Extracurricular() {
         </div>
 
         {/* ========================================================================= */}
-        {/* 4. CREST MARKETING LEADERSHIP MATRIX */}
+        {/* 4. TECHNICAL LEADERSHIP MATRIX */}
         {/* ========================================================================= */}
         <div style={{ marginBottom: '5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.75rem', flexWrap: 'wrap', gap: '1rem' }}>
             <div>
               <div className="section-subtitle" style={{ justifyContent: 'flex-start', margin: 0, marginBottom: '0.5rem' }}>
-                <TrendingUp size={14} /> LEADERSHIP_POSITION // HEAD_OF_MARKETING
+                <TrendingUp size={14} /> LEADERSHIP_POSITION // TECHNICAL_MENTOR
               </div>
               <h3 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', margin: 0 }}>
-                CREST — Marketing & Brand Leadership
+                Technical & Community Leadership
               </h3>
             </div>
             <div className="cyber-tag" style={{ margin: 0 }}>
-              <Users size={14} style={{ marginRight: '0.3rem' }} /> CORE STUDENT EXECUTIVE
+              <Users size={14} style={{ marginRight: '0.3rem' }} /> SPRINT LEADERSHIP
             </div>
           </div>
 

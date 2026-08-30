@@ -139,7 +139,7 @@ export default function About() {
           { type: 'text', text: '  Name: Antarip Chatterjee' },
           { type: 'text', text: '  Degree: B.Tech CSE (Cloud Computing) @ Lovely Professional University' },
           { type: 'text', text: '  Cohort Standing: Top 1% Global Cohort' },
-          { type: 'text', text: '  Key Roles: Lead Cloud Systems Architect & Head of Marketing @ CREST' },
+          { type: 'text', text: '  Key Roles: Lead Cloud Systems Architect & IoT Researcher' },
           { type: 'text', text: '  Target: Summer 2027 Internship (Cloud Architecture / DevOps / SWE)' },
         ])
         break
@@ -348,7 +348,7 @@ export default function About() {
                 {[
                   { id: 'cloud', label: 'Cloud & Systems', icon: <Cpu size={14} /> },
                   { id: 'iot', label: 'IoT & Patent Research', icon: <Zap size={14} /> },
-                  { id: 'leadership', label: 'CREST & Leadership', icon: <Sparkles size={14} /> },
+                  { id: 'leadership', label: 'Leadership & Hackathons', icon: <Sparkles size={14} /> },
                 ].map((tab) => (
                   <button
                     key={tab.id}
@@ -413,7 +413,7 @@ export default function About() {
                       transition={{ duration: 0.2 }}
                       style={{ color: 'var(--text-secondary)', fontSize: '0.98rem', lineHeight: '1.8', margin: 0 }}
                     >
-                      In parallel to core engineering, I serve as the <strong>Head of Marketing at CREST</strong>, orchestrating cross-functional teams, outreach analytics, and brand positioning across flagship university campaigns. I am seeking a <strong>Summer 2027 internship</strong> to contribute to high-impact enterprise teams.
+                      Across hackathons and university initiatives, I direct cross-functional engineering squads, sprint deliverables, and technical jury demonstrations. I am seeking a <strong>Summer 2027 internship</strong> to contribute to high-impact enterprise engineering teams.
                     </motion.p>
                   )}
                 </AnimatePresence>
@@ -432,9 +432,9 @@ export default function About() {
                   <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>IoT Spectral Detector</span>
                 </div>
                 <div style={{ background: 'var(--bg-secondary)', padding: '0.65rem 0.85rem', borderRadius: '8px', border: '1px solid var(--border-purple)' }}>
-                  <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>COMMUNITY LEAD</span>
-                  <div style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--accent-purple)', marginTop: '0.15rem' }}>CREST Head</div>
-                  <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>Marketing & Outreach</span>
+                  <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>SPRINT LEAD</span>
+                  <div style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--accent-purple)', marginTop: '0.15rem' }}>5+ Sprints</div>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>Hackathons & Teams</span>
                 </div>
               </div>
             </TiltCard>

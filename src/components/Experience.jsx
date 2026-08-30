@@ -10,22 +10,22 @@ export default function Experience() {
   const timelineItems = [
     {
       id: 'EXP // 01',
-      title: 'Head of Marketing',
-      organization: 'CREST (Student Organization)',
-      track: 'leadership',
-      type: 'Executive Leadership • Brand & Community',
-      duration: 'Apr 2026 – Present',
-      location: 'LPU Campus',
+      title: 'Lead Hackathon Squad Architect',
+      organization: 'National Hackathons (IITs & Premier Universities)',
+      track: 'engineering',
+      type: 'Sprint Team Lead • Full-Stack Prototyping',
+      duration: '2025 – Present',
+      location: 'National Arenas',
       color: 'var(--accent-primary)',
       bg: 'rgba(217, 119, 6, 0.1)',
-      icon: <Megaphone size={20} />,
-      impactMetrics: ['500+ Community Reach', 'Omnichannel Campaigns', 'Design & Outreach Sprints'],
+      icon: <Trophy size={20} />,
+      impactMetrics: ['5+ National Sprints', 'High-Velocity MVPs', 'A* Pathfinding Graph Engine'],
       description:
-        'Spearheading marketing strategy and brand positioning across university events. Directing cross-functional creative teams, managing high-visibility promotional sprints, and orchestrating community engagement.',
+        'Directing cross-functional engineering squads under 24–48h high-pressure hackathon clocks. Managing architecture design, code review pipelines, REST APIs, and technical demo defense.',
       deliverables: [
-        'Developed data-driven student outreach strategies boosting campus engagement.',
-        'Mentored marketing associates and coordinated technical event launches.',
-        'Structured automated communication channels and visual brand guidelines.',
+        'Architected the Smart Campus Navigator platform with accessible corridor routing.',
+        'Structured automated CI/CD branch workflows and API specifications for squad members.',
+        'Presented and defended technical blueprints before industry evaluation juries.',
       ],
     },
     {
@@ -50,22 +50,22 @@ export default function Experience() {
     },
     {
       id: 'EXP // 03',
-      title: 'Lead Hackathon Squad Architect',
-      organization: 'National Hackathon Arenas (IITs & Premier Universities)',
+      title: 'Cloud Infrastructure & Systems Developer',
+      organization: 'Cloud Computing Specialization Lab',
       track: 'engineering',
-      type: 'High-Pressure Sprint Execution',
+      type: 'Distributed Microservices & Cloud Security',
       duration: '2025 – Present',
-      location: 'National Hackathon Arenas',
+      location: 'LPU Cloud Labs',
       color: '#7c3aed',
       bg: 'rgba(124, 58, 237, 0.1)',
-      icon: <Trophy size={20} />,
-      impactMetrics: ['5+ National Hackathons', 'Full-Stack Rapid Delivery', 'Jury Demo Defense'],
+      icon: <Briefcase size={20} />,
+      impactMetrics: ['AWS Well-Architected', 'Docker & K8s Pods', 'Zero-Trust IAM'],
       description:
-        'Led engineering squads in 24–48h high-pressure hackathons, managing architecture planning, Git branches, REST API contracts, and jury demonstrations.',
+        'Architecting distributed cloud environments on AWS, setting up multi-AZ VPC peering, least-privilege IAM matrices, containerized Docker microservices, and Kubernetes pod health monitoring.',
       deliverables: [
-        'Architected the Smart Campus Navigator platform with A* corridor graph routing.',
-        'Constructed real-time WebSocket communication channels and relational backends.',
-        'Defended engineering blueprints in front of senior industry technical juries.',
+        'Configured scalable AWS infrastructure following Well-Architected Framework guidelines.',
+        'Automated containerized application deployment with continuous integration pipelines.',
+        'Conducted zero-trust access audits and security compliance verification.',
       ],
     },
     {
@@ -130,7 +130,7 @@ export default function Experience() {
           >
             {[
               { id: 'all', label: 'All Operations' },
-              { id: 'leadership', label: 'Leadership & Marketing (CREST)' },
+              { id: 'leadership', label: 'Leadership & Community' },
               { id: 'engineering', label: 'Engineering & Hackathons' },
             ].map((t) => (
               <button

@@ -52,7 +52,7 @@ export default function TerminalComponent() {
           { type: 'text', text: '  Name: Antarip Chatterjee' },
           { type: 'text', text: '  Degree: B.Tech CSE (Cloud Computing) @ Lovely Professional University' },
           { type: 'text', text: '  Academic Standing: Top 1% Global Cohort' },
-          { type: 'text', text: '  Key Roles: Lead Cloud Systems Architect & Head of Marketing @ CREST' },
+          { type: 'text', text: '  Key Roles: Lead Cloud Systems Architect & IoT Researcher' },
           { type: 'text', text: '  Target: Summer 2027 Internship (Cloud Architecture / DevOps / SWE)' },
         ])
         break
@@ -95,8 +95,8 @@ export default function TerminalComponent() {
         setHistory((prev) => [
           ...prev,
           { type: 'highlight', text: '[LEADERSHIP & TRACK RECORD]' },
-          { type: 'text', text: '  • Head of Marketing @ CREST - Spearheading branding & tech outreach campaigns' },
           { type: 'text', text: '  • 5+ Hackathons: Lead Architect & Developer in national hackathon arenas' },
+          { type: 'text', text: '  • Patent-Pending IoT Inventor: Smart Microplastic Detector (ESP32)' },
           { type: 'text', text: '  • IIT Madras Certified: Data Analyst Credential' },
           { type: 'text', text: '  • Infosys Springboard Certified: Big Data, Data Science, Cybersecurity & Python' },
         ])

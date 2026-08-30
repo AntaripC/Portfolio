@@ -91,7 +91,7 @@ export default function Skills() {
       bg: 'rgba(180, 83, 9, 0.1)',
       icon: <Key size={20} />,
       skills: [
-        { name: 'Head of Marketing @ CREST', level: 'Leadership' },
+        { name: 'Cross-Functional Team Leadership', level: 'Leadership' },
         { name: 'Hackathon Sprint Squad Lead', level: '5+ Sprints' },
         { name: 'Zero-Trust Security Mentality', level: 'Strategic' },
         { name: 'Rapid Tech Adaptability', level: 'Top 1% Standing' },

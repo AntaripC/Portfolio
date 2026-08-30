@@ -238,7 +238,7 @@ export default function Hero() {
   const roles = [
     'Cloud Systems Architect',
     'IoT Spectral Prototyper (ESP32)',
-    'Head of Marketing @ CREST',
+    'Full-Stack & Systems Developer',
     'Top 1% B.Tech CSE @ LPU',
   ]
   const [roleIndex, setRoleIndex] = useState(0)
@@ -262,7 +262,7 @@ export default function Hero() {
   const stats = [
     { label: 'COHORT ACADEMIC STANDING', value: 'Top 1%', sub: 'Global Ranking @ LPU' },
     { label: 'PATENT INNOVATION', value: 'Patent Pending', sub: 'ESP32 Optical Spectrometry' },
-    { label: 'COMMUNITY & IMPACT', value: 'Head of Marketing', sub: 'CREST Student Org' },
+    { label: 'HACKATHON SPRINT LEAD', value: '5+ Sprints', sub: 'IITs & National Arenas' },
     { label: 'TARGET OPPORTUNITY', value: "Summer '27", sub: 'Cloud & SWE Internships' },
   ]
 
@@ -389,7 +389,7 @@ export default function Hero() {
                 maxWidth: '560px',
               }}
             >
-              Building resilient <strong>Cloud Infrastructure & Scalable Systems</strong> at LPU. Merging patent-pending <strong>ESP32 IoT hardware telemetry</strong> with high-pressure hackathon sprint execution and marketing leadership at CREST.
+              Building resilient <strong>Cloud Infrastructure & Scalable Systems</strong> at LPU. Merging patent-pending <strong>ESP32 IoT hardware telemetry</strong> with high-pressure hackathon sprint execution and collaborative technical leadership.
             </p>
 
             {/* Action Buttons Hub */}
