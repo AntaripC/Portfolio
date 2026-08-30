@@ -73,7 +73,7 @@ export default function Extracurricular() {
       sub: 'Technical Mentorship & Hackathons',
       color: 'var(--accent-amber)',
       icon: <Users size={20} />,
-      bgGlow: 'rgba(217, 119, 6, 0.08)',
+      bgGlow: 'rgba(59, 130, 246, 0.08)',
     },
   ]
 
@@ -336,7 +336,7 @@ export default function Extracurricular() {
                 background: 'var(--bg-card-elevated)',
                 padding: '2.5rem',
                 border: '1px solid var(--border-color)',
-                boxShadow: '0 15px 45px rgba(15, 23, 42, 0.08), inset 0 0 30px rgba(217, 119, 6, 0.02)',
+                boxShadow: '0 15px 45px rgba(15, 23, 42, 0.08), inset 0 0 30px rgba(59, 130, 246, 0.02)',
                 borderRadius: '16px',
               }}
             >
@@ -371,7 +371,7 @@ export default function Extracurricular() {
                     <div
                       style={{
                         padding: '0.65rem',
-                        background: 'rgba(217, 119, 6, 0.1)',
+                        background: 'rgba(59, 130, 246, 0.1)',
                         borderRadius: '10px',
                         border: '1px solid var(--border-color)',
                         color: 'var(--accent-primary)',
@@ -523,7 +523,7 @@ export default function Extracurricular() {
                     padding: '1.25rem',
                     display: 'flex',
                     flexDirection: 'column',
-                    boxShadow: 'inset 0 0 25px rgba(217, 119, 6, 0.03)',
+                    boxShadow: 'inset 0 0 25px rgba(59, 130, 246, 0.03)',
                   }}
                 >
                   {/* HUD Top Controls */}

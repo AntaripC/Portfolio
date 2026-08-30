@@ -106,7 +106,7 @@ export default function CloudInteractiveBackground() {
           endY: targetNode.y,
           progress: 0,
           speed: 0.025 + Math.random() * 0.02,
-          color: isDark ? '#00f0ff' : '#d97706',
+          color: isDark ? '#60a5fa' : '#3b82f6',
           size: 2.8,
         })
       }
@@ -123,7 +123,7 @@ export default function CloudInteractiveBackground() {
       mouse.y += (mouse.targetY - mouse.y) * 0.1
 
       // 1. Telemetry grid lines
-      ctx.strokeStyle = currentDark ? 'rgba(0, 240, 255, 0.02)' : 'rgba(217, 119, 6, 0.045)'
+      ctx.strokeStyle = currentDark ? 'rgba(96, 165, 250, 0.02)' : 'rgba(59, 130, 246, 0.045)'
       ctx.lineWidth = 1
       const gridSize = 80
       for (let x = 0; x < width; x += gridSize) {
@@ -161,14 +161,14 @@ export default function CloudInteractiveBackground() {
 
         const nodeColor = currentDark
           ? node.type === 'aws'
-            ? '#00f0ff'
+            ? '#60a5fa'
             : node.type === 'k8s'
             ? '#10b981'
             : node.type === 'gcp'
             ? '#a855f7'
             : '#38bdf8'
           : node.type === 'aws'
-          ? '#d97706' // Warm Amber
+          ? '#3b82f6' // Warm Amber
           : node.type === 'k8s'
           ? '#059669' // Emerald
           : node.type === 'gcp'
@@ -208,8 +208,8 @@ export default function CloudInteractiveBackground() {
             ctx.moveTo(nodes[i].x, nodes[i].y)
             ctx.lineTo(nodes[j].x, nodes[j].y)
             ctx.strokeStyle = currentDark
-              ? `rgba(0, 240, 255, ${alpha})`
-              : `rgba(217, 119, 6, ${alpha})`
+              ? `rgba(96, 165, 250, ${alpha})`
+              : `rgba(59, 130, 246, ${alpha})`
             ctx.lineWidth = 1
             ctx.stroke()
 
@@ -221,7 +221,7 @@ export default function CloudInteractiveBackground() {
                 endY: nodes[j].y,
                 progress: 0,
                 speed: 0.015 + Math.random() * 0.02,
-                color: currentDark ? '#00f0ff' : '#d97706',
+                color: currentDark ? '#60a5fa' : '#3b82f6',
                 size: 2.2,
               })
               packetCountTracker++
@@ -232,7 +232,7 @@ export default function CloudInteractiveBackground() {
 
       // 4. Mouse Edge Gateway Node
       if (mouse.active) {
-        const cursorColor = currentDark ? '#00f0ff' : '#d97706'
+        const cursorColor = currentDark ? '#60a5fa' : '#3b82f6'
         ctx.beginPath()
         ctx.arc(mouse.x, mouse.y, 6.5, 0, Math.PI * 2)
         ctx.fillStyle = cursorColor
@@ -272,7 +272,7 @@ export default function CloudInteractiveBackground() {
         })
 
         ctx.font = '600 10px "JetBrains Mono", monospace'
-        ctx.fillStyle = currentDark ? 'rgba(0, 240, 255, 0.85)' : 'rgba(217, 119, 6, 0.95)'
+        ctx.fillStyle = currentDark ? 'rgba(96, 165, 250, 0.85)' : 'rgba(59, 130, 246, 0.95)'
         ctx.fillText('EDGE-CURSOR-GATEWAY // ACTIVE', mouse.x + 12, mouse.y - 8)
       }
 
@@ -338,13 +338,13 @@ export default function CloudInteractiveBackground() {
           transition: 'background 0.4s ease',
           background: isDark
             ? `
-              radial-gradient(ellipse 80% 60% at 50% -15%, rgba(0, 240, 255, 0.07) 0%, transparent 60%),
+              radial-gradient(ellipse 80% 60% at 50% -15%, rgba(96, 165, 250, 0.07) 0%, transparent 60%),
               radial-gradient(ellipse 60% 50% at 90% 70%, rgba(16, 185, 129, 0.04) 0%, transparent 60%),
               radial-gradient(ellipse 70% 60% at 10% 85%, rgba(168, 85, 247, 0.04) 0%, transparent 60%),
               linear-gradient(180deg, #030712 0%, #060b17 50%, #030712 100%)
             `
             : `
-              radial-gradient(ellipse 85% 65% at 50% -15%, rgba(217, 119, 6, 0.12) 0%, transparent 60%),
+              radial-gradient(ellipse 85% 65% at 50% -15%, rgba(59, 130, 246, 0.12) 0%, transparent 60%),
               radial-gradient(ellipse 65% 55% at 90% 70%, rgba(2, 132, 199, 0.09) 0%, transparent 60%),
               radial-gradient(ellipse 75% 65% at 10% 85%, rgba(245, 158, 11, 0.08) 0%, transparent 60%),
               linear-gradient(180deg, #faf6f0 0%, #f3ece0 50%, #faf6f0 100%)

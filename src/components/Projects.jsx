@@ -46,7 +46,7 @@ export default function Projects() {
       icon: <Compass size={24} />,
       github: 'https://github.com/AntaripC',
       color: 'var(--accent-primary)',
-      bg: 'rgba(217, 119, 6, 0.1)',
+      bg: 'rgba(59, 130, 246, 0.1)',
       architecture: 'Leaflet Maps -> Graph Pathfinding -> Express API -> Peer Escrow',
     },
     {

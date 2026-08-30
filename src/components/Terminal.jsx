@@ -144,7 +144,7 @@ export default function TerminalComponent() {
             margin: '0 auto',
             background: 'var(--bg-card-elevated)',
             border: '1px solid var(--border-color)',
-            boxShadow: '0 10px 30px rgba(15, 23, 42, 0.08), inset 0 0 20px rgba(217, 119, 6, 0.02)',
+            boxShadow: '0 10px 30px rgba(15, 23, 42, 0.08), inset 0 0 20px rgba(59, 130, 246, 0.02)',
             padding: '1.5rem',
             borderRadius: '12px',
           }}
@@ -298,7 +298,7 @@ export default function TerminalComponent() {
               type="submit"
               disabled={isExecuting || !input.trim()}
               style={{
-                background: 'linear-gradient(135deg, var(--accent-primary), #b45309)',
+                background: 'linear-gradient(135deg, var(--accent-primary), #2563eb)',
                 border: 'none',
                 color: '#ffffff',
                 padding: '0.4rem 0.85rem',

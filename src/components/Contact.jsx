@@ -131,7 +131,7 @@ export default function Contact() {
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <div style={{ padding: '0.45rem', background: 'rgba(217, 119, 6, 0.1)', borderRadius: '6px', color: 'var(--accent-primary)' }}>
+                    <div style={{ padding: '0.45rem', background: 'rgba(59, 130, 246, 0.1)', borderRadius: '6px', color: 'var(--accent-primary)' }}>
                       <Mail size={16} />
                     </div>
                     <div>
@@ -166,7 +166,7 @@ export default function Contact() {
 
                 {/* LinkedIn Link */}
                 <a
-                  href="https://www.linkedin.com/in/antarip-chatterjee"
+                  href="https://www.linkedin.com/in/antarip-chatterjee-0205a9374/"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{

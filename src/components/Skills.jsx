@@ -13,7 +13,7 @@ export default function Skills() {
       category: 'Cloud',
       title: 'Cloud & Infrastructure',
       color: 'var(--accent-primary)',
-      bg: 'rgba(217, 119, 6, 0.1)',
+      bg: 'rgba(59, 130, 246, 0.1)',
       icon: <Cloud size={20} />,
       skills: [
         { name: 'AWS Core (EC2, S3, IAM, VPC)', level: 'Advanced' },
@@ -87,7 +87,7 @@ export default function Skills() {
       id: 'STRATEGY_LEAD',
       category: 'Leadership',
       title: 'Leadership & Strategy',
-      color: '#b45309',
+      color: '#2563eb',
       bg: 'rgba(180, 83, 9, 0.1)',
       icon: <Key size={20} />,
       skills: [

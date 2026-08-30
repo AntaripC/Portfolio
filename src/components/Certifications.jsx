@@ -14,7 +14,7 @@ export default function Certifications() {
       category: 'iitm',
       type: 'Data Analytics, Statistical Modeling & Insights',
       skills: ['Exploratory Data Analysis', 'Statistical Inference', 'Python Data Stacks'],
-      glow: 'rgba(217, 119, 6, 0.25)',
+      glow: 'rgba(59, 130, 246, 0.25)',
       color: 'var(--accent-primary)',
       badge: 'PREMIER INSTITUTE',
     },
@@ -70,7 +70,7 @@ export default function Certifications() {
       type: 'Data Structures, Algorithm Design & Problem Solving',
       skills: ['Data Structures', 'Dynamic Programming', 'Algorithmic Optimization'],
       glow: 'rgba(180, 83, 9, 0.25)',
-      color: '#b45309',
+      color: '#2563eb',
       badge: 'ALGORITHMS',
     },
   ]

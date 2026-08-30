@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react'
 import Lenis from '@studio-freight/lenis'
-import { ShieldCheck, Cloud, Terminal, Mail, Cpu, Sparkles } from 'lucide-react'
+import { Cloud, Terminal, ShieldCheck } from 'lucide-react'
 
-// Component imports
 import Preloader from './components/Preloader.jsx'
 import CursorGlow from './components/CursorGlow.jsx'
 import CloudInteractiveBackground from './components/CloudInteractiveBackground.jsx'
@@ -16,7 +15,6 @@ import Certifications from './components/Certifications.jsx'
 import Contact from './components/Contact.jsx'
 
 export default function App() {
-  // Initialize Lenis smooth scroll
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
@@ -36,10 +34,7 @@ export default function App() {
     }
 
     requestAnimationFrame(raf)
-
-    return () => {
-      lenis.destroy()
-    }
+    return () => lenis.destroy()
   }, [])
 
   return (
@@ -49,7 +44,6 @@ export default function App() {
       <CloudInteractiveBackground />
       <Navbar />
 
-      {/* Main Content Layout Sections */}
       <main style={{ position: 'relative', zIndex: 1 }}>
         <Hero />
         <About />
@@ -60,45 +54,52 @@ export default function App() {
         <Contact />
       </main>
 
-      {/* Modern Minimalist Footer */}
+      {/* Footer */}
       <footer
         style={{
-          background: 'var(--bg-card)',
-          padding: '3rem 0 2.5rem 0',
+          background: 'var(--bg-secondary)',
+          padding: '2.5rem 0 2rem 0',
           textAlign: 'center',
-          borderTop: '1px solid var(--border-color)',
+          borderTop: '1px solid var(--border-subtle)',
           position: 'relative',
           zIndex: 10,
-          backdropFilter: 'blur(12px)',
         }}
       >
         <div className="container">
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: '0.85rem',
-              marginBottom: '1.25rem',
-              flexWrap: 'wrap',
-            }}
-          >
-            <span className="cyber-tag" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
-              <ShieldCheck size={13} color="var(--accent-primary)" /> AWS_WELL_ARCH
-            </span>
-            <span className="cyber-tag green" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-green)' }}>
-              <Cloud size={13} color="var(--accent-green)" /> ESP32_TELEMETRY
-            </span>
-            <span className="cyber-tag purple" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-purple)' }}>
-              <Terminal size={13} color="var(--accent-purple)" /> K8S_CONTAINERIZED
-            </span>
+          <div style={{
+            display: 'flex', justifyContent: 'center', alignItems: 'center',
+            gap: '0.6rem', marginBottom: '1rem', flexWrap: 'wrap',
+          }}>
+            {[
+              { icon: <ShieldCheck size={13} />, label: 'AWS_ARCHITECT', color: 'var(--accent-primary)' },
+              { icon: <Cloud size={13} />, label: 'ESP32_IOT', color: 'var(--accent-green)' },
+              { icon: <Terminal size={13} />, label: 'KUBERNETES', color: 'var(--accent-purple)' },
+            ].map((tag, idx) => (
+              <span
+                key={idx}
+                style={{
+                  fontFamily: 'var(--font-mono)', fontSize: '0.72rem', fontWeight: '600',
+                  display: 'inline-flex', alignItems: 'center', gap: '0.3rem',
+                  padding: '0.25rem 0.6rem', borderRadius: 'var(--radius-full)',
+                  background: 'var(--bg-card)', border: '1px solid var(--border-subtle)',
+                  color: tag.color,
+                }}
+              >
+                {tag.icon} {tag.label}
+              </span>
+            ))}
           </div>
 
-          <p style={{ color: 'var(--text-primary)', fontSize: '0.95rem', fontFamily: 'var(--font-mono)', fontWeight: '600', marginBottom: '0.4rem' }}>
-            &copy; {new Date().getFullYear()} Antarip Chatterjee // Cloud Computing Engineer & Student Leader
+          <p style={{
+            color: 'var(--text-primary)', fontSize: '0.9rem',
+            fontWeight: '600', marginBottom: '0.35rem',
+          }}>
+            &copy; {new Date().getFullYear()} Antarip Chatterjee
           </p>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', fontFamily: 'var(--font-mono)' }}>
-            Lovely Professional University &bull; B.Tech CSE (Cloud Computing) &bull; Top 1% Cohort Standing
+          <p style={{
+            color: 'var(--text-muted)', fontSize: '0.78rem', fontFamily: 'var(--font-mono)',
+          }}>
+            LPU &bull; B.Tech CSE (Cloud Computing) &bull; Top 1% Cohort
           </p>
         </div>
       </footer>

@@ -2,58 +2,28 @@ import React, { useRef, useMemo, useState, useEffect } from 'react'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Float, ContactShadows, Environment, MeshDistortMaterial, Html, OrbitControls } from '@react-three/drei'
-import { Cloud as CloudIcon, Terminal, Mail, Compass, Award, Zap, ShieldCheck, ArrowRight, Sparkles, CheckCircle2, ChevronRight, Activity } from 'lucide-react'
+import { ArrowRight, Sparkles, ChevronDown, Github, Linkedin, Mail } from 'lucide-react'
 import * as THREE from 'three'
 
-/* ── Orbiting service node (sphere + HTML label) ── */
-function ServiceNode({ angle, radius, speed, color, label, yOffset = 0, onSelect }) {
+/* ── Orbiting service node ── */
+function ServiceNode({ angle, radius, speed, color, label, yOffset = 0 }) {
   const ref = useRef()
-  const glowRef = useRef()
-
   useFrame((state) => {
     const t = state.clock.getElapsedTime() * speed + angle
-    const x = Math.cos(t) * radius
-    const z = Math.sin(t) * radius
-    const y = Math.sin(t * 1.5) * 0.3 + yOffset
-    if (ref.current) ref.current.position.set(x, y, z)
-    if (glowRef.current) {
-      glowRef.current.scale.setScalar(1 + Math.sin(state.clock.getElapsedTime() * 3) * 0.15)
-    }
+    if (ref.current) ref.current.position.set(Math.cos(t) * radius, Math.sin(t * 1.5) * 0.3 + yOffset, Math.sin(t) * radius)
   })
-
   return (
     <group ref={ref}>
-      {/* Outer glow */}
-      <mesh ref={glowRef}>
-        <sphereGeometry args={[0.14, 16, 16]} />
-        <meshBasicMaterial color={color} transparent opacity={0.15} />
+      <mesh>
+        <sphereGeometry args={[0.07, 16, 16]} />
+        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={2} toneMapped={false} />
       </mesh>
-      {/* Core */}
-      <mesh onClick={onSelect} style={{ cursor: 'pointer' }}>
-        <sphereGeometry args={[0.08, 16, 16]} />
-        <meshStandardMaterial
-          color={color}
-          emissive={color}
-          emissiveIntensity={2.2}
-          toneMapped={false}
-        />
-      </mesh>
-      {/* Label */}
       <Html distanceFactor={6} style={{ pointerEvents: 'none' }}>
         <div style={{
-          fontFamily: 'var(--font-mono, monospace)',
-          fontSize: '9px',
-          fontWeight: 700,
-          color,
-          background: 'var(--bg-card-elevated)',
-          border: `1px solid ${color}50`,
-          padding: '2px 6px',
-          borderRadius: '4px',
-          whiteSpace: 'nowrap',
-          letterSpacing: '0.08em',
-          textShadow: `0 0 8px ${color}`,
-          transform: 'translateY(-18px)',
-          boxShadow: '0 2px 8px rgba(15, 23, 42, 0.1)',
+          fontFamily: 'var(--font-mono)', fontSize: '8px', fontWeight: 700, color,
+          background: 'var(--bg-card-elevated)', border: `1px solid ${color}40`,
+          padding: '2px 5px', borderRadius: '4px', whiteSpace: 'nowrap',
+          transform: 'translateY(-16px)', letterSpacing: '0.06em',
         }}>
           {label}
         </div>
@@ -62,7 +32,7 @@ function ServiceNode({ angle, radius, speed, color, label, yOffset = 0, onSelect
   )
 }
 
-/* ── Connection beam ring ── */
+/* ── Connection ring ── */
 function ConnectionRing({ radius, color, speed = 0.3, yOffset = 0 }) {
   const ref = useRef()
   useFrame((state) => {
@@ -73,21 +43,21 @@ function ConnectionRing({ radius, color, speed = 0.3, yOffset = 0 }) {
   })
   return (
     <mesh ref={ref} position={[0, yOffset, 0]} rotation={[Math.PI / 2, 0, 0]}>
-      <torusGeometry args={[radius, 0.008, 8, 64]} />
-      <meshBasicMaterial color={color} transparent opacity={0.3} />
+      <torusGeometry args={[radius, 0.006, 8, 64]} />
+      <meshBasicMaterial color={color} transparent opacity={0.25} />
     </mesh>
   )
 }
 
-/* ── Floating data particles ── */
-function DataParticles({ count = 45 }) {
+/* ── Floating particles ── */
+function DataParticles({ count = 35 }) {
   const ref = useRef()
   const positions = useMemo(() => {
     const pos = new Float32Array(count * 3)
     for (let i = 0; i < count; i++) {
       const theta = Math.random() * Math.PI * 2
       const phi = Math.acos(2 * Math.random() - 1)
-      const r = 1.5 + Math.random() * 1.5
+      const r = 1.5 + Math.random() * 1.2
       pos[i * 3] = r * Math.sin(phi) * Math.cos(theta)
       pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta)
       pos[i * 3 + 2] = r * Math.cos(phi)
@@ -95,16 +65,9 @@ function DataParticles({ count = 45 }) {
     return pos
   }, [count])
 
-  const sizes = useMemo(() => {
-    const s = new Float32Array(count)
-    for (let i = 0; i < count; i++) s[i] = 0.015 + Math.random() * 0.02
-    return s
-  }, [count])
-
   useFrame((state) => {
     if (ref.current) {
-      ref.current.rotation.y = state.clock.getElapsedTime() * 0.05
-      ref.current.rotation.x = Math.sin(state.clock.getElapsedTime() * 0.08) * 0.1
+      ref.current.rotation.y = state.clock.getElapsedTime() * 0.04
     }
   })
 
@@ -112,11 +75,10 @@ function DataParticles({ count = 45 }) {
     <group ref={ref}>
       {Array.from({ length: count }).map((_, i) => (
         <mesh key={i} position={[positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]]}>
-          <sphereGeometry args={[sizes[i], 6, 6]} />
+          <sphereGeometry args={[0.015 + Math.random() * 0.015, 6, 6]} />
           <meshBasicMaterial
-            color={i % 3 === 0 ? 'var(--accent-primary)' : i % 3 === 1 ? 'var(--accent-green)' : 'var(--accent-purple)'}
-            transparent
-            opacity={0.6}
+            color={i % 3 === 0 ? '#3b82f6' : i % 3 === 1 ? '#06b6d4' : '#8b5cf6'}
+            transparent opacity={0.5}
           />
         </mesh>
       ))}
@@ -124,145 +86,89 @@ function DataParticles({ count = 45 }) {
   )
 }
 
-/* ── Mouse-tracking wrapper ── */
+/* ── Mouse tracker ── */
 function MouseTracker({ children }) {
   const groupRef = useRef()
   const { viewport } = useThree()
-
   useFrame((state) => {
     if (groupRef.current) {
-      const targetX = (state.pointer.x * viewport.width) / 12
-      const targetY = (state.pointer.y * viewport.height) / 12
-      groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetX * 0.3, 0.05)
-      groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, -targetY * 0.2, 0.05)
+      groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, (state.pointer.x * viewport.width) / 14 * 0.3, 0.04)
+      groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, -(state.pointer.y * viewport.height) / 14 * 0.2, 0.04)
     }
   })
-
   return <group ref={groupRef}>{children}</group>
 }
 
-/* ── Main interactive cloud model ── */
-function CloudModel({ onSelectService }) {
+/* ── Cloud model ── */
+function CloudModel() {
   const cloudRef = useRef()
   const coreRef = useRef()
 
   useFrame((state) => {
     const t = state.clock.getElapsedTime()
-    if (cloudRef.current) {
-      cloudRef.current.rotation.y = t * 0.12
-    }
-    if (coreRef.current) {
-      coreRef.current.scale.setScalar(1 + Math.sin(t * 2) * 0.03)
-    }
+    if (cloudRef.current) cloudRef.current.rotation.y = t * 0.1
+    if (coreRef.current) coreRef.current.scale.setScalar(1 + Math.sin(t * 2) * 0.02)
   })
 
   const services = [
-    { label: 'AWS-IAM', color: 'var(--accent-primary)', angle: 0, radius: 2.1, speed: 0.35, yOffset: 0.2, id: 'aws' },
-    { label: 'K8S-POD', color: '#0284c7', angle: Math.PI * 0.5, radius: 1.9, speed: 0.42, yOffset: -0.1, id: 'k8s' },
-    { label: 'DOCKER', color: '#38bdf8', angle: Math.PI, radius: 2.2, speed: 0.28, yOffset: 0.3, id: 'docker' },
-    { label: 'GCP-VPC', color: '#7c3aed', angle: Math.PI * 1.5, radius: 2.0, speed: 0.38, yOffset: -0.2, id: 'gcp' },
-    { label: 'ESP32-IoT', color: '#059669', angle: Math.PI * 0.25, radius: 1.7, speed: 0.5, yOffset: 0.1, id: 'iot' },
-    { label: 'CI/CD', color: '#e11d48', angle: Math.PI * 1.25, radius: 1.8, speed: 0.32, yOffset: -0.3, id: 'cicd' },
+    { label: 'AWS', color: '#3b82f6', angle: 0, radius: 2, speed: 0.3, yOffset: 0.2 },
+    { label: 'K8S', color: '#06b6d4', angle: Math.PI * 0.5, radius: 1.8, speed: 0.38, yOffset: -0.1 },
+    { label: 'DOCKER', color: '#8b5cf6', angle: Math.PI, radius: 2.1, speed: 0.25, yOffset: 0.3 },
+    { label: 'GCP', color: '#10b981', angle: Math.PI * 1.5, radius: 1.9, speed: 0.35, yOffset: -0.2 },
+    { label: 'ESP32', color: '#f59e0b', angle: Math.PI * 0.25, radius: 1.6, speed: 0.45, yOffset: 0.1 },
+    { label: 'CI/CD', color: '#ef4444', angle: Math.PI * 1.25, radius: 1.7, speed: 0.28, yOffset: -0.3 },
   ]
 
   return (
     <MouseTracker>
-      <Float speed={1.5} rotationIntensity={0.3} floatIntensity={1.2}>
+      <Float speed={1.2} rotationIntensity={0.2} floatIntensity={0.8}>
         <group ref={cloudRef}>
-          {/* Cloud Core */}
           <group ref={coreRef}>
-            <mesh position={[0, 0, 0]}>
-              <sphereGeometry args={[0.72, 32, 32]} />
-              <MeshDistortMaterial
-                color="var(--bg-secondary)"
-                emissive="var(--accent-primary)"
-                emissiveIntensity={0.25}
-                distort={0.25}
-                speed={1.5}
-                roughness={0.2}
-                metalness={0.6}
-              />
+            <mesh>
+              <sphereGeometry args={[0.65, 32, 32]} />
+              <MeshDistortMaterial color="#1e293b" emissive="#3b82f6" emissiveIntensity={0.2} distort={0.2} speed={1.5} roughness={0.3} metalness={0.5} />
             </mesh>
-            <mesh position={[0.5, 0.1, 0]}>
-              <sphereGeometry args={[0.5, 24, 24]} />
-              <MeshDistortMaterial color="var(--bg-card)" distort={0.2} speed={1.8} roughness={0.3} />
+            <mesh position={[0.45, 0.1, 0]}>
+              <sphereGeometry args={[0.45, 24, 24]} />
+              <MeshDistortMaterial color="#1e293b" emissive="#06b6d4" emissiveIntensity={0.1} distort={0.18} speed={1.8} roughness={0.3} />
             </mesh>
-            <mesh position={[-0.45, 0.12, 0.1]}>
+            <mesh position={[-0.4, 0.12, 0.1]}>
+              <sphereGeometry args={[0.42, 24, 24]} />
+              <MeshDistortMaterial color="#1e293b" emissive="#8b5cf6" emissiveIntensity={0.1} distort={0.18} speed={1.6} roughness={0.3} />
+            </mesh>
+            <mesh position={[0, 0.3, 0]}>
               <sphereGeometry args={[0.48, 24, 24]} />
-              <MeshDistortMaterial color="var(--bg-card)" distort={0.2} speed={1.6} roughness={0.3} />
-            </mesh>
-            <mesh position={[0, 0.35, 0]}>
-              <sphereGeometry args={[0.52, 24, 24]} />
-              <MeshDistortMaterial color="var(--bg-secondary)" distort={0.22} speed={2} roughness={0.3} />
+              <MeshDistortMaterial color="#1e293b" emissive="#3b82f6" emissiveIntensity={0.15} distort={0.2} speed={2} roughness={0.3} />
             </mesh>
           </group>
 
-          {/* Central Holographic Photo Node attached to 3D Model */}
-          <Html position={[0, 0, 0.2]} center distanceFactor={5.2} style={{ pointerEvents: 'none' }}>
-            <div
-              style={{
-                width: '150px',
-                height: '150px',
-                borderRadius: '50%',
-                padding: '3px',
-                background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-green), #7c3aed)',
-                boxShadow: '0 0 30px var(--accent-glow), 0 0 50px rgba(217, 119, 6, 0.3)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                position: 'relative',
-                userSelect: 'none',
-              }}
-            >
-              <img
-                src="/antarip.jpg"
-                alt="Antarip Chatterjee"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  borderRadius: '50%',
-                  objectFit: 'cover',
-                  display: 'block',
-                  border: '2px solid rgba(255, 255, 255, 0.95)',
-                }}
-              />
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: '2px',
-                  right: '2px',
-                  width: '18px',
-                  height: '18px',
-                  borderRadius: '50%',
-                  backgroundColor: '#059669',
-                  border: '2.5px solid var(--bg-card)',
-                  boxShadow: '0 0 8px #059669',
-                }}
-              />
+          {/* Central photo */}
+          <Html position={[0, 0, 0.15]} center distanceFactor={5} style={{ pointerEvents: 'none' }}>
+            <div style={{
+              width: '140px', height: '140px', borderRadius: '50%', padding: '3px',
+              background: 'linear-gradient(135deg, #3b82f6, #06b6d4, #8b5cf6)',
+              boxShadow: '0 0 35px rgba(59, 130, 246, 0.4), 0 0 60px rgba(139, 92, 246, 0.2)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              position: 'relative', userSelect: 'none',
+            }}>
+              <img src="/antarip.jpg" alt="Antarip Chatterjee" style={{
+                width: '100%', height: '100%', borderRadius: '50%',
+                objectFit: 'cover', display: 'block', border: '2px solid rgba(255,255,255,0.9)',
+              }} />
+              <div style={{
+                position: 'absolute', bottom: '4px', right: '4px',
+                width: '16px', height: '16px', borderRadius: '50%',
+                backgroundColor: '#10b981', border: '2.5px solid #1e293b',
+                boxShadow: '0 0 8px #10b981',
+              }} />
             </div>
           </Html>
 
-          {/* Service Nodes */}
-          {services.map((svc, i) => (
-            <ServiceNode
-              key={i}
-              angle={svc.angle}
-              radius={svc.radius}
-              speed={svc.speed}
-              color={svc.color}
-              label={svc.label}
-              yOffset={svc.yOffset}
-              onSelect={() => onSelectService(svc)}
-            />
-          ))}
-
-          {/* Connection Rings */}
-          <ConnectionRing radius={1.7} color="var(--accent-primary)" speed={0.3} yOffset={0.1} />
-          <ConnectionRing radius={2.0} color="#0284c7" speed={-0.25} yOffset={-0.15} />
-          <ConnectionRing radius={2.2} color="var(--accent-green)" speed={0.2} yOffset={0.25} />
-
-          {/* Floating Data Particles */}
-          <DataParticles count={45} />
+          {services.map((svc, i) => <ServiceNode key={i} {...svc} />)}
+          <ConnectionRing radius={1.6} color="#3b82f6" speed={0.25} yOffset={0.1} />
+          <ConnectionRing radius={1.9} color="#06b6d4" speed={-0.2} yOffset={-0.1} />
+          <ConnectionRing radius={2.1} color="#8b5cf6" speed={0.15} yOffset={0.2} />
+          <DataParticles count={35} />
         </group>
       </Float>
     </MouseTracker>
@@ -271,45 +177,21 @@ function CloudModel({ onSelectService }) {
 
 export default function Hero() {
   const sectionRef = useRef(null)
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end start'],
-  })
-
-  const yBg = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] })
   const opacityText = useTransform(scrollYProgress, [0, 0.7], [1, 0])
 
-  // Animated Role Cycler
   const roles = [
     'Cloud Systems Architect',
-    'IoT Spectral Prototyper (ESP32)',
-    'Full-Stack & Systems Developer',
+    'IoT Prototyper & Innovator',
+    'Full-Stack Developer',
     'Top 1% B.Tech CSE @ LPU',
   ]
   const [roleIndex, setRoleIndex] = useState(0)
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setRoleIndex((prev) => (prev + 1) % roles.length)
-    }, 3000)
+    const interval = setInterval(() => setRoleIndex((prev) => (prev + 1) % roles.length), 3000)
     return () => clearInterval(interval)
   }, [roles.length])
-
-  // Interactive 3D Node Telemetry Inspector
-  const [activeService, setActiveService] = useState({
-    id: 'aws',
-    label: 'AWS Cloud Architecture',
-    color: 'var(--accent-primary)',
-    desc: 'Multi-AZ VPC peering, IAM zero-trust policies, automated S3 replication & EC2 microservices.',
-    status: '99.99% RESILIENT',
-  })
-
-  const stats = [
-    { label: 'COHORT ACADEMIC STANDING', value: 'Top 1%', sub: 'Global Ranking @ LPU' },
-    { label: 'PATENT INNOVATION', value: 'Patent Pending', sub: 'ESP32 Optical Spectrometry' },
-    { label: 'HACKATHON SPRINT LEAD', value: '5+ Sprints', sub: 'IITs & National Arenas' },
-    { label: 'TARGET OPPORTUNITY', value: "Summer '27", sub: 'Cloud & SWE Internships' },
-  ]
 
   return (
     <section
@@ -320,447 +202,277 @@ export default function Hero() {
         display: 'flex',
         alignItems: 'center',
         position: 'relative',
-        paddingTop: '6rem',
-        paddingBottom: '4rem',
+        paddingTop: '5rem',
+        paddingBottom: '3rem',
         overflow: 'hidden',
       }}
     >
       <div className="container" style={{ position: 'relative', zIndex: 2, width: '100%' }}>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-            gap: '3rem',
-            alignItems: 'center',
-          }}
-        >
-          {/* ========================================================================= */}
-          {/* LEFT COLUMN: HERO HEADLINE, ROLE CYCLER & ACTION DOCK */}
-          {/* ========================================================================= */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '3rem',
+          alignItems: 'center',
+          minHeight: 'calc(100vh - 10rem)',
+        }}>
+          {/* LEFT: Content */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: 'easeOut' }}
             style={{ opacity: opacityText }}
           >
-            {/* Live Status Pill */}
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                background: 'var(--bg-card)',
-                border: '1px solid var(--border-color)',
-                borderRadius: '50px',
-                padding: '0.4rem 0.95rem',
-                marginBottom: '1.25rem',
-                boxShadow: '0 4px 15px var(--accent-glow)',
-              }}
-            >
-              <span
-                style={{
-                  width: '8px',
-                  height: '8px',
-                  borderRadius: '50%',
-                  backgroundColor: 'var(--accent-green)',
-                  boxShadow: '0 0 8px var(--accent-green)',
-                }}
-              />
-              <span
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.78rem',
-                  color: 'var(--text-primary)',
-                  fontWeight: '600',
-                }}
-              >
-                AVAILABLE FOR SUMMER 2027 INTERNSHIP
+            {/* Status pill */}
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+              background: 'rgba(16, 185, 129, 0.08)', border: '1px solid var(--border-green)',
+              borderRadius: 'var(--radius-full)', padding: '0.4rem 0.95rem',
+              marginBottom: '1.5rem',
+            }}>
+              <span style={{
+                width: '7px', height: '7px', borderRadius: '50%',
+                backgroundColor: 'var(--accent-green)', boxShadow: '0 0 8px var(--accent-green)',
+              }} />
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.76rem', color: 'var(--accent-green)', fontWeight: '600' }}>
+                OPEN FOR SUMMER 2027 INTERNSHIP
               </span>
             </div>
 
-            {/* Name Title */}
-            <h1
-              style={{
-                fontSize: 'clamp(2.5rem, 5vw, 4.2rem)',
-                fontWeight: '800',
-                lineHeight: '1.1',
-                marginBottom: '0.75rem',
-                letterSpacing: '-0.03em',
-                color: 'var(--text-primary)',
-              }}
-            >
-              Antarip <span style={{ color: 'var(--accent-primary)' }}>Chatterjee</span>
+            {/* Name */}
+            <h1 style={{ marginBottom: '0.5rem', lineHeight: 1.05 }}>
+              Antarip<br />Chatterjee
             </h1>
 
-            {/* Dynamic Role Cycler */}
-            <div
-              style={{
-                height: '42px',
-                display: 'flex',
-                alignItems: 'center',
-                marginBottom: '1.25rem',
-              }}
-            >
+            {/* Role cycler */}
+            <div style={{ height: '38px', display: 'flex', alignItems: 'center', marginBottom: '1.25rem' }}>
               <AnimatePresence mode="wait">
                 <motion.div
                   key={roleIndex}
-                  initial={{ opacity: 0, y: 15 }}
+                  initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -15 }}
+                  exit={{ opacity: 0, y: -12 }}
                   transition={{ duration: 0.3 }}
                   style={{
-                    fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)',
-                    fontWeight: '700',
-                    fontFamily: 'var(--font-mono)',
-                    color: 'var(--accent-primary)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
+                    fontSize: 'clamp(1.1rem, 2vw, 1.5rem)',
+                    fontWeight: '600',
+                    color: 'var(--text-secondary)',
+                    display: 'flex', alignItems: 'center', gap: '0.5rem',
                   }}
                 >
-                  <span style={{ color: 'var(--text-muted)' }}>&gt;</span>
+                  <span style={{ color: 'var(--accent-primary)', fontFamily: 'var(--font-mono)' }}>{'>'}</span>
                   {roles[roleIndex]}
                 </motion.div>
               </AnimatePresence>
             </div>
 
-            {/* Bio Narrative */}
-            <p
-              style={{
-                color: 'var(--text-secondary)',
-                fontSize: '1.05rem',
-                lineHeight: '1.75',
-                marginBottom: '2rem',
-                maxWidth: '560px',
-              }}
-            >
-              Building resilient <strong>Cloud Infrastructure & Scalable Systems</strong> at LPU. Merging patent-pending <strong>ESP32 IoT hardware telemetry</strong> with high-pressure hackathon sprint execution and collaborative technical leadership.
+            {/* Bio */}
+            <p style={{
+              color: 'var(--text-secondary)', fontSize: '1.05rem', lineHeight: '1.75',
+              marginBottom: '2rem', maxWidth: '520px',
+            }}>
+              Building resilient <strong>Cloud Infrastructure</strong> and <strong>Scalable Systems</strong> at LPU.
+              Merging patent-pending <strong>ESP32 IoT telemetry</strong> with high-pressure hackathon sprints.
             </p>
 
-            {/* Action Buttons Hub */}
-            <div style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
-              <a href="#projects" className="btn btn-primary" style={{ padding: '0.75rem 1.4rem' }}>
-                <Compass size={16} /> Explore Flagship Builds
+            {/* CTA Buttons */}
+            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
+              <a href="#projects" className="btn btn-primary" style={{ padding: '0.8rem 1.5rem' }}>
+                View Projects <ArrowRight size={16} />
               </a>
-              <a href="#about" className="btn btn-outline" style={{ padding: '0.75rem 1.4rem' }}>
-                <Terminal size={16} /> Launch Command Console
-              </a>
-              <a href="#contact" className="btn btn-green" style={{ padding: '0.75rem 1.4rem' }}>
-                <Mail size={16} /> Connect Directly
+              <a href="#contact" className="btn btn-outline" style={{ padding: '0.8rem 1.5rem' }}>
+                <Mail size={16} /> Get in Touch
               </a>
             </div>
 
-            {/* Live Interactive Node Inspector Pill */}
-            <div
-              style={{
-                background: 'var(--bg-card)',
-                border: '1px solid var(--border-color)',
-                borderRadius: '10px',
-                padding: '0.85rem 1.1rem',
-                maxWidth: '540px',
-                boxShadow: '0 4px 20px rgba(15, 23, 42, 0.04)',
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-                  ACTIVE_TOPOLOGY_NODE:
-                </span>
-                <span
+            {/* Social links */}
+            <div style={{ display: 'flex', gap: '0.6rem' }}>
+              {[
+                { icon: <Github size={18} />, href: 'https://github.com/AntaripC', label: 'GitHub' },
+                { icon: <Linkedin size={18} />, href: 'https://www.linkedin.com/in/antarip-chatterjee-0205a9374/', label: 'LinkedIn' },
+                { icon: <Mail size={18} />, href: '#contact', label: 'Email' },
+              ].map((social, idx) => (
+                <a
+                  key={idx}
+                  href={social.href}
+                  target={social.href.startsWith('http') ? '_blank' : undefined}
+                  rel={social.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  aria-label={social.label}
                   style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.72rem',
-                    color: 'var(--accent-green)',
-                    fontWeight: '700',
+                    width: '42px', height: '42px', borderRadius: '50%',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    background: 'var(--bg-secondary)', border: '1px solid var(--border-subtle)',
+                    color: 'var(--text-secondary)', transition: 'all 0.25s ease',
+                    textDecoration: 'none',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = 'var(--accent-primary)'
+                    e.currentTarget.style.color = 'var(--accent-primary)'
+                    e.currentTarget.style.transform = 'translateY(-2px)'
+                    e.currentTarget.style.boxShadow = 'var(--shadow-glow)'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = 'var(--border-subtle)'
+                    e.currentTarget.style.color = 'var(--text-secondary)'
+                    e.currentTarget.style.transform = 'translateY(0)'
+                    e.currentTarget.style.boxShadow = 'none'
                   }}
                 >
-                  ● {activeService.status}
-                </span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                <div
-                  style={{
-                    width: '8px',
-                    height: '8px',
-                    borderRadius: '50%',
-                    backgroundColor: activeService.color,
-                  }}
-                />
-                <span style={{ fontWeight: '700', color: 'var(--text-primary)', fontSize: '0.9rem' }}>
-                  {activeService.label}
-                </span>
-              </div>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', margin: '0.3rem 0 0 0', lineHeight: '1.4' }}>
-                {activeService.desc}
-              </p>
+                  {social.icon}
+                </a>
+              ))}
             </div>
           </motion.div>
 
-          {/* ========================================================================= */}
-          {/* RIGHT COLUMN: 3D CLOUD TOPOLOGY CANVAS & INTERACTIVE NODE HOTSPOTS */}
-          {/* ========================================================================= */}
+          {/* RIGHT: 3D Canvas */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, delay: 0.2 }}
-            style={{
-              position: 'relative',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-            }}
+            style={{ position: 'relative' }}
           >
-            {/* 3D Canvas Viewport */}
-            <div
-              style={{
-                position: 'relative',
-                height: '420px',
-                width: '100%',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              {/* Subtle glow background */}
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  width: '380px',
-                  height: '380px',
-                  background: 'radial-gradient(circle, var(--accent-glow) 0%, rgba(5, 150, 105, 0.05) 50%, transparent 70%)',
-                  filter: 'blur(60px)',
-                  zIndex: 0,
-                }}
-              />
+            <div style={{
+              position: 'relative', height: '500px', width: '100%',
+              display: 'flex', justifyContent: 'center', alignItems: 'center',
+            }}>
+              {/* Background glow */}
+              <div style={{
+                position: 'absolute', top: '50%', left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: '400px', height: '400px',
+                background: 'radial-gradient(circle, rgba(59,130,246,0.12) 0%, rgba(139,92,246,0.06) 50%, transparent 70%)',
+                filter: 'blur(60px)', zIndex: 0,
+              }} />
 
               <div style={{ width: '100%', height: '100%', position: 'relative', zIndex: 2 }}>
-                <Canvas camera={{ position: [0, 0, 6], fov: 50 }}>
-                  <ambientLight intensity={0.7} />
-                  <directionalLight position={[10, 10, 10]} intensity={1.2} color="var(--accent-primary)" />
-                  <directionalLight position={[-10, -10, -10]} intensity={0.8} color="#059669" />
-                  <pointLight position={[0, 3, 0]} intensity={0.5} color="#7c3aed" />
-                  <CloudModel onSelectService={setActiveService} />
+                <Canvas camera={{ position: [0, 0, 5.5], fov: 50 }}>
+                  <ambientLight intensity={0.6} />
+                  <directionalLight position={[10, 10, 10]} intensity={1} color="#3b82f6" />
+                  <directionalLight position={[-10, -10, -10]} intensity={0.7} color="#06b6d4" />
+                  <pointLight position={[0, 3, 0]} intensity={0.4} color="#8b5cf6" />
+                  <CloudModel />
                   <Environment preset="city" />
-                  <ContactShadows
-                    position={[0, -2, 0]}
-                    opacity={0.3}
-                    scale={12}
-                    blur={3}
-                    far={5}
-                    color="var(--accent-primary)"
-                  />
-                  <OrbitControls
-                    enableZoom={false}
-                    enablePan={false}
-                    maxPolarAngle={Math.PI / 1.8}
-                    minPolarAngle={Math.PI / 3}
-                    autoRotate
-                    autoRotateSpeed={0.6}
-                  />
+                  <ContactShadows position={[0, -2, 0]} opacity={0.25} scale={10} blur={3} far={5} color="#3b82f6" />
+                  <OrbitControls enableZoom={false} enablePan={false} maxPolarAngle={Math.PI / 1.8} minPolarAngle={Math.PI / 3} autoRotate autoRotateSpeed={0.5} />
                 </Canvas>
               </div>
             </div>
 
-            {/* Profile Bio Card Directly Under 3D Model */}
+            {/* Bio card under 3D */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.3 }}
+              transition={{ duration: 0.7, delay: 0.4 }}
               style={{
-                background: 'var(--bg-card)',
-                backdropFilter: 'blur(16px)',
-                border: '1px solid var(--border-color)',
-                borderTop: '2px solid var(--accent-primary)',
-                borderRadius: '14px',
-                padding: '1.15rem 1.35rem',
-                marginTop: '0.5rem',
-                boxShadow: '0 8px 30px rgba(15, 23, 42, 0.06), 0 0 15px var(--accent-glow)',
-                position: 'relative',
-                zIndex: 3,
+                background: 'var(--bg-card)', backdropFilter: 'blur(16px)',
+                border: '1px solid var(--border-color)', borderRadius: 'var(--radius-lg)',
+                padding: '1rem 1.25rem', marginTop: '-1rem', position: 'relative', zIndex: 3,
+                boxShadow: 'var(--shadow-md)',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.75rem' }}>
-                <div
-                  style={{
-                    width: '62px',
-                    height: '62px',
-                    borderRadius: '50%',
-                    padding: '2px',
-                    background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-green))',
-                    boxShadow: '0 0 14px var(--accent-glow)',
-                    flexShrink: 0,
-                    position: 'relative',
-                  }}
-                >
-                  <img
-                    src="/antarip.jpg"
-                    alt="Antarip Chatterjee"
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      borderRadius: '50%',
-                      objectFit: 'cover',
-                      display: 'block',
-                    }}
-                  />
-                  <div
-                    style={{
-                      position: 'absolute',
-                      bottom: '0px',
-                      right: '0px',
-                      width: '13px',
-                      height: '13px',
-                      borderRadius: '50%',
-                      backgroundColor: '#059669',
-                      border: '2px solid var(--bg-card)',
-                      boxShadow: '0 0 6px #059669',
-                    }}
-                  />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                <div style={{
+                  width: '52px', height: '52px', borderRadius: '50%', padding: '2px',
+                  background: 'var(--gradient-primary)', boxShadow: 'var(--shadow-glow)', flexShrink: 0,
+                  position: 'relative',
+                }}>
+                  <img src="/antarip.jpg" alt="Antarip Chatterjee" style={{
+                    width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover', display: 'block',
+                  }} />
+                  <div style={{
+                    position: 'absolute', bottom: '0', right: '0',
+                    width: '12px', height: '12px', borderRadius: '50%',
+                    backgroundColor: '#10b981', border: '2px solid var(--bg-card)',
+                  }} />
                 </div>
-
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.3rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <h4 style={{ margin: 0, fontSize: '1.15rem', color: 'var(--text-primary)', fontWeight: '700' }}>
-                        Antarip Chatterjee
-                      </h4>
-                      {/* Capgemini Verified Badge */}
-                      <span
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '0.3rem',
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: '0.62rem',
-                          padding: '2px 7px',
-                          borderRadius: '10px',
-                          background: 'linear-gradient(135deg, rgba(0, 114, 198, 0.12), rgba(18, 170, 255, 0.10))',
-                          color: '#0072C6',
-                          border: '1px solid rgba(0, 114, 198, 0.3)',
-                          fontWeight: '700',
-                          letterSpacing: '0.04em',
-                          boxShadow: '0 0 8px rgba(0, 114, 198, 0.15)',
-                        }}
-                      >
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-                          <circle cx="12" cy="12" r="11" fill="#0072C6" />
-                          <path d="M7.5 12.5L10.5 15.5L16.5 9.5" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                        CAPGEMINI VERIFIED
-                      </span>
-                    </div>
-                    <span
-                      style={{
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.68rem',
-                        padding: '2px 8px',
-                        borderRadius: '12px',
-                        background: 'rgba(5, 150, 105, 0.12)',
-                        color: 'var(--accent-green)',
-                        border: '1px solid var(--border-green)',
-                        fontWeight: '600',
-                      }}
-                    >
-                      ● AVAILABLE SUMMER '27
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
+                    <span style={{ fontWeight: '700', fontSize: '0.95rem', color: 'var(--text-primary)' }}>
+                      Antarip Chatterjee
+                    </span>
+                    {/* Capgemini badge */}
+                    <span style={{
+                      display: 'inline-flex', alignItems: 'center', gap: '0.25rem',
+                      fontFamily: 'var(--font-mono)', fontSize: '0.58rem', padding: '1px 6px',
+                      borderRadius: '8px', background: 'rgba(0, 114, 198, 0.1)',
+                      color: '#0072C6', border: '1px solid rgba(0, 114, 198, 0.25)',
+                      fontWeight: '700',
+                    }}>
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="11" fill="#0072C6" />
+                        <path d="M7.5 12.5L10.5 15.5L16.5 9.5" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                      CAPGEMINI
                     </span>
                   </div>
-                  <div
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.78rem',
-                      color: 'var(--accent-primary)',
-                      marginTop: '0.15rem',
-                      fontWeight: '600',
-                    }}
-                  >
-                    Cloud Systems Architect & IoT Innovator
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--accent-primary)', fontWeight: '600' }}>
+                    Cloud Architect & IoT Innovator
                   </div>
-                  <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-                    B.Tech CSE (Cloud Computing) • LPU (Top 1% Global Cohort)
+                  <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                    B.Tech CSE (Cloud) • LPU Top 1%
                   </div>
                 </div>
-              </div>
-
-              {/* Bio Paragraph under Picture */}
-              <p
-                style={{
-                  fontSize: '0.84rem',
-                  lineHeight: '1.6',
-                  color: 'var(--text-secondary)',
-                  margin: '0 0 0.75rem 0',
-                  borderTop: '1px solid var(--border-subtle)',
-                  paddingTop: '0.65rem',
-                }}
-              >
-                Specializing in <strong>distributed cloud architectures (AWS & GCP)</strong>, <strong>containerized microservices (Docker & Kubernetes)</strong>, and <strong>patent-pending IoT spectral diagnostics (ESP32)</strong>. Passionate about architecting zero-trust resilient infrastructure and leading high-velocity hackathon engineering squads.
-              </p>
-
-              {/* Skill Tags */}
-              <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-                {[
-                  { label: 'AWS & Kubernetes', color: 'var(--accent-primary)' },
-                  { label: 'Patent-Pending IoT', color: 'var(--accent-green)' },
-                  { label: 'Top 1% Standing', color: 'var(--accent-purple)' },
-                  { label: 'Hackathon Lead', color: 'var(--accent-primary)' },
-                ].map((tag, idx) => (
-                  <span
-                    key={idx}
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.7rem',
-                      padding: '2px 8px',
-                      borderRadius: '4px',
-                      background: 'var(--bg-secondary)',
-                      border: '1px solid var(--border-color)',
-                      color: 'var(--text-secondary)',
-                      fontWeight: '500',
-                    }}
-                  >
-                    #{tag.label}
-                  </span>
-                ))}
               </div>
             </motion.div>
           </motion.div>
         </div>
 
-        {/* ========================================================================= */}
-        {/* BOTTOM METRICS DOCK (4-PILLAR STATS GRID) */}
-        {/* ========================================================================= */}
+        {/* Bottom metrics */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: '1.2rem',
-            marginTop: '3.5rem',
-            padding: '1.5rem',
-            background: 'var(--bg-card)',
-            border: '1px solid var(--border-color)',
-            borderRadius: '12px',
-            backdropFilter: 'blur(12px)',
-            boxShadow: '0 10px 30px rgba(15, 23, 42, 0.06)',
+            display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem',
+            marginTop: '2rem',
           }}
         >
-          {stats.map((stat, idx) => (
-            <div key={idx} style={{ borderLeft: '2px solid var(--accent-primary)', paddingLeft: '1rem' }}>
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', letterSpacing: '0.08em' }}>
-                {stat.label}
-              </div>
-              <div style={{ fontSize: '1.4rem', fontWeight: '700', color: 'var(--text-primary)', margin: '0.2rem 0', fontFamily: 'var(--font-main)' }}>
+          {[
+            { value: 'Top 1%', label: 'Cohort Standing' },
+            { value: 'Patent Pending', label: 'IoT Innovation' },
+            { value: '5+ Sprints', label: 'Hackathon Leads' },
+            { value: "Summer '27", label: 'Target Internship' },
+          ].map((stat, idx) => (
+            <div key={idx} style={{
+              background: 'var(--bg-card)', border: '1px solid var(--border-subtle)',
+              borderRadius: 'var(--radius-md)', padding: '1rem 1.25rem',
+              backdropFilter: 'blur(12px)',
+            }}>
+              <div style={{
+                fontSize: '1.25rem', fontWeight: '800', color: 'var(--text-primary)',
+                background: 'var(--gradient-primary)', WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+              }}>
                 {stat.value}
               </div>
-              <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                {stat.sub}
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', marginTop: '0.2rem' }}>
+                {stat.label}
               </div>
             </div>
           ))}
         </motion.div>
       </div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5 }}
+        style={{
+          position: 'absolute', bottom: '2rem', left: '50%',
+          transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column',
+          alignItems: 'center', gap: '0.3rem', zIndex: 10,
+        }}
+      >
+        <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', letterSpacing: '0.1em' }}>
+          SCROLL
+        </span>
+        <motion.div
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+        >
+          <ChevronDown size={18} color="var(--text-muted)" />
+        </motion.div>
+      </motion.div>
     </section>
   )
 }

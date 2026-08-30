@@ -17,7 +17,7 @@ export default function Experience() {
       duration: '2025 – Present',
       location: 'National Arenas',
       color: 'var(--accent-primary)',
-      bg: 'rgba(217, 119, 6, 0.1)',
+      bg: 'rgba(59, 130, 246, 0.1)',
       icon: <Trophy size={20} />,
       impactMetrics: ['5+ National Sprints', 'High-Velocity MVPs', 'A* Pathfinding Graph Engine'],
       description:

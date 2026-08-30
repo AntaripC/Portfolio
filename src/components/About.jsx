@@ -514,7 +514,7 @@ export default function About() {
                     style={{ display: 'flex', flexDirection: 'column', flex: 1 }}
                   >
                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', marginBottom: '0.85rem' }}>
-                      <div style={{ padding: '0.6rem', background: 'rgba(217, 119, 6, 0.1)', borderRadius: '8px', color: 'var(--accent-primary)', border: '1px solid var(--border-color)' }}>
+                      <div style={{ padding: '0.6rem', background: 'rgba(59, 130, 246, 0.1)', borderRadius: '8px', color: 'var(--accent-primary)', border: '1px solid var(--border-color)' }}>
                         <GraduationCap size={22} />
                       </div>
                       <div>
@@ -716,7 +716,7 @@ export default function About() {
                   type="submit"
                   disabled={isExecuting || !input.trim()}
                   style={{
-                    background: 'linear-gradient(135deg, var(--accent-primary), #b45309)',
+                    background: 'linear-gradient(135deg, var(--accent-primary), #2563eb)',
                     border: 'none',
                     color: '#ffffff',
                     padding: '0.35rem 0.75rem',
