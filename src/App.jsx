@@ -5,7 +5,7 @@ import { ShieldCheck, Cloud, Terminal, Mail, Cpu } from 'lucide-react'
 // Component imports
 import Preloader from './components/Preloader.jsx'
 import CursorGlow from './components/CursorGlow.jsx'
-import ParticlesBackground from './components/ParticlesBackground.jsx'
+import CloudInteractiveBackground from './components/CloudInteractiveBackground.jsx'
 import Navbar from './components/Navbar.jsx'
 import Hero from './components/Hero.jsx'
 import TerminalComponent from './components/Terminal.jsx'
@@ -48,7 +48,7 @@ export default function App() {
     <>
       <Preloader />
       <CursorGlow />
-      <ParticlesBackground />
+      <CloudInteractiveBackground />
       <Navbar />
 
       {/* Ticker / Running Telemetry Bar */}
