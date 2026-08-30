@@ -91,11 +91,15 @@ body::before {
   content: " ";
   z-index: 999;
   pointer-events: none;
-  opacity: 0.08;
+  opacity: 0;
   background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%) 0 0 / 100% 4px;
   display: block;
   position: fixed;
   inset: 0;
+}
+
+[data-theme='dark'] body::before {
+  opacity: 0.08;
 }
 
 html.lenis, html.lenis body {

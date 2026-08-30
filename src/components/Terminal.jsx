@@ -1,17 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { Terminal as TerminalIcon, ShieldAlert, CheckCircle2, Play } from 'lucide-react'
+import React, { useState, useRef, useEffect } from 'react'
+import { Terminal as TerminalIcon, Play, ShieldAlert, Cpu, CheckCircle2, Cloud, Sparkles } from 'lucide-react'
 
-export default function Terminal() {
+export default function TerminalComponent() {
   const [input, setInput] = useState('')
   const [history, setHistory] = useState([
-    {
-      type: 'system',
-      text: 'ANTARIP-OS Cloud Operations Kernel v5.15-aws // Initialized Security & Telemetry Engine',
-    },
-    {
-      type: 'info',
-      text: 'Type "help" or click one of the quick command buttons below to query diagnostics.',
-    },
+    { type: 'system', text: 'INIT // SECURE_CLOUD_OS_V4.19 [KERNEL: x86_64-aws-k8s]' },
+    { type: 'system', text: 'AUTHENTICATION STATUS: VERIFIED (Antarip Chatterjee // Lead Cloud Engineer)' },
+    { type: 'info', text: "Type 'help' to inspect command capabilities or 'cloud-audit' to verify telemetry." },
   ])
   const [isExecuting, setIsExecuting] = useState(false)
   const bottomRef = useRef(null)
@@ -20,101 +15,117 @@ export default function Terminal() {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [history])
 
-  const handleCommand = (cmd) => {
-    const cleanCmd = cmd.trim().toLowerCase()
-    if (!cleanCmd) return
+  const handleCommand = (cmdText) => {
+    const trimmed = cmdText.trim().toLowerCase()
+    if (!trimmed) return
 
-    setHistory((prev) => [...prev, { type: 'user', text: `$ ${cmd}` }])
+    setHistory((prev) => [...prev, { type: 'user', text: `$ ${cmdText}` }])
+    setInput('')
     setIsExecuting(true)
 
     setTimeout(() => {
-      let output = []
-      switch (cleanCmd) {
-        case 'help':
-          output = [
-            { type: 'info', text: 'AVAILABLE DIAGNOSTIC OPERATIONS:' },
-            { type: 'text', text: '  whoami       - Print operative background & credentials' },
-            { type: 'text', text: '  skills       - List programming stacks & cloud toolkit' },
-            { type: 'text', text: '  cloud-audit  - Execute simulated AWS/Kubernetes Well-Architected check' },
-            { type: 'text', text: '  patent-iot   - Inspect Smart Microplastic Detector specs' },
-            { type: 'text', text: '  experience   - Display student projects, certs & hackathons' },
-            { type: 'text', text: '  contact      - Output verified secure communication channels' },
-            { type: 'text', text: '  clear        - Clear console buffer' },
-          ]
-          break
-        case 'whoami':
-          output = [
-            { type: 'highlight', text: '>> IDENTITY: Antarip Chatterjee (Cloud Engineer & CSE Undergraduate)' },
-            { type: 'text', text: '>> ACADEMICS: B.Tech Computer Science Engineering (Cloud Computing) @ LPU (Expected 2029)' },
-            { type: 'text', text: '>> TRACK RECORD: Top 1% academic standing globally in LPU cohort' },
-            { type: 'text', text: '>> CORE AREAS: Distributed Systems, DevOps, IoT Hardware Engineering, Robotics & Automation' },
-            { type: 'text', text: '>> OBJECTIVE: Seeking Summer 2027 Internships (Cloud Infrastructure / DevOps / SWE)' },
-          ]
-          break
-        case 'skills':
-          output = [
-            { type: 'highlight', text: '[CLOUD & INFRA]: AWS, Google Cloud Platform, Kubernetes, Docker, Cloud Security' },
-            { type: 'highlight', text: '[DEVELOPMENT]: Python, JavaScript, C/C++, SQL, HTML5, CSS3, JSON, Bash Scripting' },
-            { type: 'highlight', text: '[DATABASES & WEB]: MongoDB, Node.js, Relational DBs (RDBMS), Software Engineering' },
-            { type: 'highlight', text: '[IOT & ROBOTICS]: ESP32, Sensor Telemetry, Hardware Automation, Hardware Security' },
-          ]
-          break
-        case 'cloud-audit':
-          output = [
-            { type: 'warning', text: '[*] Launching Automated Cloud Infrastructure Compliance Scan (Well-Architected)...' },
-            { type: 'text', text: '  > aws iam get-credential-report --output json // checking security compliance' },
-            { type: 'text', text: '  > checkov -d terraform/ --framework terraform // checking configuration security' },
-            { type: 'text', text: '  > [AWS IAM Guardrails]: PASS (MFA enforced for all IAM Users)' },
-            { type: 'text', text: '  > [Cost Leakage Daemon]: PASS (0 Orphaned EBS Volumes detected)' },
-            { type: 'text', text: '  > [K8s Namespace Isolation]: PASS (RBAC permissions mapped correctly)' },
-            { type: 'success', text: '[+] AUDIT COMPLETED: Architecture compliant with cloud security standards.' },
-          ]
-          break
-        case 'patent-iot':
-          output = [
-            { type: 'highlight', text: '>> DISCOVERY: Smart Microplastic Detector (Patent Pending Research)' },
-            { type: 'text', text: '>> OVERVIEW: Real-time microplastic detector using cost-efficient spectral hardware' },
-            { type: 'text', text: '>> COMPONENT STACK: ESP32 + Turbidity Sensor + AS7262 Spectral Sensor' },
-            { type: 'text', text: '>> DATA PIPELINE: Real-time ThingSpeak cloud logging + automated Telegram emergency alerts' },
-            { type: 'success', text: '>> STATUS: Patent documentation filed; system prototypes actively being tested' },
-          ]
-          break
-        case 'experience':
-          output = [
-            { type: 'highlight', text: '1. IoT Patent Innovator (2025 - Present) | Inventor of Smart Microplastic Detector' },
-            { type: 'highlight', text: '2. Professional Certifications (2025) | IIT Madras Data Analyst & Infosys Certified (Cybersecurity, Data Science)' },
-            { type: 'highlight', text: '3. Team Lead @ Hackathons (2025 - Present) | Directed 5 developer teams to successful deliveries' },
-          ]
-          break
-        case 'contact':
-          output = [
-            { type: 'info', text: 'SECURE COMMUNICATION PORTALS:' },
-            { type: 'text', text: '  Email:    hello@antarip.dev' },
-            { type: 'text', text: '  GitHub:   https://github.com/AntaripC' },
-            { type: 'text', text: '  LinkedIn: https://linkedin.com/in/antarip-chatterjee (Placeholder)' },
-            { type: 'text', text: '  Location: India' },
-          ]
-          break
-        case 'clear':
-          setHistory([])
-          setIsExecuting(false)
-          setInput('')
-          return
-        default:
-          output = [
-            { type: 'error', text: `Command not recognized: "${cmd}". Type "help" to see available commands.` },
-          ]
-          break
-      }
-      setHistory((prev) => [...prev, ...output])
+      processCommand(trimmed)
       setIsExecuting(false)
-    }, 350)
+    }, 250)
+  }
 
-    setInput('')
+  const processCommand = (cmd) => {
+    switch (cmd) {
+      case 'help':
+        setHistory((prev) => [
+          ...prev,
+          { type: 'system', text: '=== AVAILABLE SYSTEM UTILITIES ===' },
+          { type: 'info', text: '  whoami       - Operative profile & academic identity' },
+          { type: 'info', text: '  cloud-audit  - Scan AWS/GCP IAM roles, VPC subnets & K8s pods' },
+          { type: 'info', text: '  skills       - Query active engineering competencies' },
+          { type: 'info', text: '  patent-iot   - Inspect Smart Microplastic Detector IoT telemetry' },
+          { type: 'info', text: '  experience   - Display technical leadership & hackathon record' },
+          { type: 'info', text: '  contact      - Open direct communication channel' },
+          { type: 'info', text: '  clear        - Flush terminal buffer' },
+        ])
+        break
+
+      case 'whoami':
+        setHistory((prev) => [
+          ...prev,
+          { type: 'highlight', text: '[PROFILE IDENTIFIER]' },
+          { type: 'text', text: '  Name: Antarip Chatterjee' },
+          { type: 'text', text: '  Degree: B.Tech CSE (Cloud Computing) @ Lovely Professional University' },
+          { type: 'text', text: '  Academic Standing: Top 1% Global Cohort' },
+          { type: 'text', text: '  Key Roles: Lead Cloud Systems Architect & Head of Marketing @ CREST' },
+          { type: 'text', text: '  Target: Summer 2027 Internship (Cloud Architecture / DevOps / SWE)' },
+        ])
+        break
+
+      case 'cloud-audit':
+        setHistory((prev) => [
+          ...prev,
+          { type: 'highlight', text: '[EXECUTING CLOUD SECURITY & COMPLIANCE SCAN...]' },
+          { type: 'success', text: '  ✓ AWS IAM Zero-Trust Matrix: PASS (Least-privilege enforced)' },
+          { type: 'success', text: '  ✓ VPC Multi-AZ Peering: ACTIVE (us-east-1a / us-east-1b)' },
+          { type: 'success', text: '  ✓ Kubernetes Node Pods: 100% HEALTHY (0 CrashLoopBackOff)' },
+          { type: 'success', text: '  ✓ Docker Daemon CI/CD Pipeline: GitHub Actions Secure Sync' },
+          { type: 'info', text: '  -> AUDIT RESULT: Infrastructure Ready for Enterprise Deployment.' },
+        ])
+        break
+
+      case 'skills':
+        setHistory((prev) => [
+          ...prev,
+          { type: 'highlight', text: '[ACTIVE STACK & TOOLCHAIN]' },
+          { type: 'text', text: '  Cloud & DevOps: AWS (EC2, S3, IAM, VPC), GCP, Docker, Kubernetes, CI/CD' },
+          { type: 'text', text: '  Languages: Python, C/C++, JavaScript, SQL' },
+          { type: 'text', text: '  Backend & Data: Node.js, Express, MongoDB, MySQL, Pandas' },
+          { type: 'text', text: '  Embedded IoT: ESP32, AS7262 Spectrometer, ThingSpeak, Microcontroller Firmware' },
+        ])
+        break
+
+      case 'patent-iot':
+        setHistory((prev) => [
+          ...prev,
+          { type: 'highlight', text: '[PATENT INNOVATION // IOT HARDWARE]' },
+          { type: 'text', text: '  Invention: Smart Microplastic Detector' },
+          { type: 'text', text: '  Core Microcontroller: ESP32 with 6-Channel Optical Spectroscopy (AS7262)' },
+          { type: 'text', text: '  Telemetry Stream: Live ThingSpeak Cloud Analytics & Automated Telegram Bot Alerts' },
+          { type: 'success', text: '  Status: Patent Application Filed & Verified Prototype Operational.' },
+        ])
+        break
+
+      case 'experience':
+        setHistory((prev) => [
+          ...prev,
+          { type: 'highlight', text: '[LEADERSHIP & TRACK RECORD]' },
+          { type: 'text', text: '  • Head of Marketing @ CREST - Spearheading branding & tech outreach campaigns' },
+          { type: 'text', text: '  • 5+ Hackathons: Lead Architect & Developer in national hackathon arenas' },
+          { type: 'text', text: '  • IIT Madras Certified: Data Analyst Credential' },
+          { type: 'text', text: '  • Infosys Springboard Certified: Big Data, Data Science, Cybersecurity & Python' },
+        ])
+        break
+
+      case 'contact':
+        setHistory((prev) => [
+          ...prev,
+          { type: 'info', text: '  Email: antarippro@gmail.com' },
+          { type: 'info', text: '  GitHub: https://github.com/AntaripC' },
+          { type: 'info', text: '  Status: Open for Summer 2027 Internship Opportunities' },
+        ])
+        break
+
+      case 'clear':
+        setHistory([])
+        break
+
+      default:
+        setHistory((prev) => [
+          ...prev,
+          { type: 'error', text: `Command not recognized: '${cmd}'. Type 'help' for available commands.` },
+        ])
+        break
+    }
   }
 
   return (
-    <section id="terminal-section" className="section" style={{ paddingTop: '4rem', paddingBottom: '6rem' }}>
+    <section id="terminal-section" className="section" style={{ position: 'relative' }}>
       <div className="container">
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
           <div className="cyber-tag" style={{ marginBottom: '0.75rem' }}>
@@ -131,9 +142,9 @@ export default function Terminal() {
           style={{
             maxWidth: '960px',
             margin: '0 auto',
-            background: 'rgba(3, 7, 18, 0.95)',
-            border: '1px solid rgba(0, 240, 255, 0.3)',
-            boxShadow: '0 0 40px rgba(0, 240, 255, 0.15), inset 0 0 20px rgba(0, 240, 255, 0.05)',
+            background: 'var(--bg-card-elevated)',
+            border: '1px solid var(--border-color)',
+            boxShadow: '0 10px 30px rgba(15, 23, 42, 0.08), inset 0 0 20px rgba(217, 119, 6, 0.02)',
             padding: '1.5rem',
             borderRadius: '12px',
           }}
@@ -146,7 +157,7 @@ export default function Terminal() {
               alignItems: 'center',
               justifyContent: 'space-between',
               paddingBottom: '0.75rem',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+              borderBottom: '1px solid var(--border-subtle)',
             }}
           >
             <div className="terminal-dots">
@@ -158,23 +169,15 @@ export default function Terminal() {
               </span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--accent-green)', fontSize: '0.75rem' }}>
-              <span
-                style={{
-                  width: '6px',
-                  height: '6px',
-                  borderRadius: '50%',
-                  backgroundColor: 'var(--accent-green)',
-                  boxShadow: '0 0 8px var(--accent-green)',
-                }}
-              />
-              SECURE_SESSION: AES_256
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--accent-green)', boxShadow: '0 0 8px var(--accent-green)' }} />
+              CONSOLE_ONLINE
             </div>
           </div>
 
-          {/* Console History Output */}
+          {/* Console Buffer / Output View */}
           <div
             style={{
-              minHeight: '260px',
+              minHeight: '220px',
               maxHeight: '380px',
               overflowY: 'auto',
               padding: '1rem 0',
@@ -187,8 +190,8 @@ export default function Terminal() {
           >
             {history.map((line, idx) => {
               let color = 'var(--text-primary)'
-              if (line.type === 'system') color = 'var(--accent-cyan)'
-              if (line.type === 'user') color = '#38bdf8'
+              if (line.type === 'system') color = 'var(--accent-primary)'
+              if (line.type === 'user') color = 'var(--accent-cyan)'
               if (line.type === 'info') color = 'var(--accent-amber)'
               if (line.type === 'highlight') color = 'var(--accent-purple)'
               if (line.type === 'success') color = 'var(--accent-green)'
@@ -211,7 +214,7 @@ export default function Terminal() {
               flexWrap: 'wrap',
               gap: '0.5rem',
               paddingTop: '1rem',
-              borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+              borderTop: '1px solid var(--border-subtle)',
               marginBottom: '1rem',
             }}
           >
@@ -231,23 +234,24 @@ export default function Terminal() {
                 onClick={() => handleCommand(btn.label)}
                 disabled={isExecuting}
                 style={{
-                  background: 'rgba(0, 240, 255, 0.08)',
-                  border: '1px solid rgba(0, 240, 255, 0.25)',
-                  color: 'var(--accent-cyan)',
+                  background: 'var(--bg-secondary)',
+                  border: '1px solid var(--border-color)',
+                  color: 'var(--accent-primary)',
                   padding: '0.3rem 0.65rem',
                   borderRadius: '6px',
                   fontFamily: 'var(--font-mono)',
                   fontSize: '0.78rem',
+                  fontWeight: '600',
                   cursor: 'pointer',
                   transition: 'all 0.2s',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(0, 240, 255, 0.2)'
-                  e.currentTarget.style.borderColor = 'var(--accent-cyan)'
+                  e.currentTarget.style.borderColor = 'var(--accent-primary)'
+                  e.currentTarget.style.boxShadow = '0 0 10px var(--accent-glow)'
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(0, 240, 255, 0.08)'
-                  e.currentTarget.style.borderColor = 'rgba(0, 240, 255, 0.25)'
+                  e.currentTarget.style.borderColor = 'var(--border-color)'
+                  e.currentTarget.style.boxShadow = 'none'
                 }}
               >
                 $ {btn.label}
@@ -261,7 +265,15 @@ export default function Terminal() {
               e.preventDefault()
               handleCommand(input)
             }}
-            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              background: 'var(--bg-secondary)',
+              padding: '0.5rem 0.85rem',
+              borderRadius: '8px',
+              border: '1px solid var(--border-subtle)',
+            }}
           >
             <span style={{ color: 'var(--accent-green)', fontFamily: 'var(--font-mono)', fontWeight: 'bold' }}>
               antarip@infra-ops:~$
@@ -286,13 +298,14 @@ export default function Terminal() {
               type="submit"
               disabled={isExecuting || !input.trim()}
               style={{
-                background: 'rgba(0, 240, 255, 0.15)',
-                border: '1px solid var(--accent-cyan)',
-                color: 'var(--accent-cyan)',
-                padding: '0.4rem 0.8rem',
+                background: 'linear-gradient(135deg, var(--accent-primary), #b45309)',
+                border: 'none',
+                color: '#ffffff',
+                padding: '0.4rem 0.85rem',
                 borderRadius: '6px',
                 fontFamily: 'var(--font-mono)',
                 fontSize: '0.8rem',
+                fontWeight: '700',
                 cursor: isExecuting ? 'not-allowed' : 'pointer',
                 display: 'flex',
                 alignItems: 'center',

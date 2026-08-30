@@ -125,9 +125,9 @@ export default function Certifications() {
                       fontSize: '0.75rem',
                       fontFamily: 'var(--font-mono)',
                       padding: '0.3rem 0.65rem',
-                      background: 'rgba(3, 7, 18, 0.8)',
+                      background: 'var(--bg-secondary)',
                       borderRadius: '4px',
-                      border: '1px solid rgba(255, 255, 255, 0.08)',
+                      border: '1px solid var(--border-subtle)',
                       width: 'fit-content',
                       marginTop: 'auto',
                     }}

@@ -206,10 +206,10 @@ export default function Projects() {
                           fontSize: '0.75rem',
                           fontFamily: 'var(--font-mono)',
                           color: 'var(--text-secondary)',
-                          background: 'rgba(3, 7, 18, 0.8)',
+                          background: 'var(--bg-secondary)',
                           padding: '0.2rem 0.5rem',
                           borderRadius: '4px',
-                          border: '1px solid rgba(255, 255, 255, 0.08)',
+                          border: '1px solid var(--border-subtle)',
                         }}
                       >
                         #{tag}

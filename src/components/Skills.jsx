@@ -136,8 +136,8 @@ export default function Skills() {
                       }}
                       style={{
                         padding: '0.3rem 0.65rem',
-                        background: 'rgba(3, 7, 18, 0.7)',
-                        border: '1px solid rgba(255, 255, 255, 0.08)',
+                        background: 'var(--bg-secondary)',
+                        border: '1px solid var(--border-subtle)',
                         borderRadius: '4px',
                         fontFamily: 'var(--font-mono)',
                         fontSize: '0.8rem',

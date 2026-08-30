@@ -100,7 +100,7 @@ export default function App() {
       {/* Footer */}
       <footer
         style={{
-          background: 'rgba(3, 7, 18, 0.95)',
+          background: 'var(--bg-card)',
           padding: '2.5rem 0',
           textAlign: 'center',
           borderTop: '1px solid var(--border-color)',

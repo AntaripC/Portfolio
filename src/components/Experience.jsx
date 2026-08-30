@@ -123,7 +123,7 @@ export default function Experience() {
                         gap: '0.4rem',
                         color: 'var(--text-primary)',
                         fontSize: '0.82rem',
-                        background: 'rgba(3, 7, 18, 0.8)',
+                        background: 'var(--bg-secondary)',
                         padding: '0.35rem 0.8rem',
                         borderRadius: '6px',
                         border: '1px solid var(--border-color)',

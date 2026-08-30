@@ -21,13 +21,13 @@ export default function Preloader() {
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: '#02040a',
+            backgroundColor: 'var(--bg-primary)',
             zIndex: 99999,
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            color: 'white',
+            color: 'var(--text-primary)',
           }}
         >
           <div style={{ overflow: 'hidden' }}>
@@ -37,7 +37,7 @@ export default function Preloader() {
               transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
               style={{
                 fontSize: 'clamp(2rem, 5vw, 4rem)',
-                background: 'linear-gradient(135deg, #ffffff 30%, var(--accent-primary))',
+                background: 'linear-gradient(135deg, var(--text-primary) 30%, var(--accent-primary))',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 margin: 0,

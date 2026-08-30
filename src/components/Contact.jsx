@@ -189,7 +189,7 @@ export default function Contact() {
                     style={{
                       width: '100%',
                       padding: '0.75rem 0.9rem',
-                      background: 'rgba(3, 7, 18, 0.8)',
+                      background: 'var(--bg-input)',
                       border: '1px solid var(--border-color)',
                       borderRadius: '6px',
                       color: 'var(--text-primary)',
@@ -214,7 +214,7 @@ export default function Contact() {
                     style={{
                       width: '100%',
                       padding: '0.75rem 0.9rem',
-                      background: 'rgba(3, 7, 18, 0.8)',
+                      background: 'var(--bg-input)',
                       border: '1px solid var(--border-color)',
                       borderRadius: '6px',
                       color: 'var(--text-primary)',
@@ -239,7 +239,7 @@ export default function Contact() {
                     style={{
                       width: '100%',
                       padding: '0.75rem 0.9rem',
-                      background: 'rgba(3, 7, 18, 0.8)',
+                      background: 'var(--bg-input)',
                       border: '1px solid var(--border-color)',
                       borderRadius: '6px',
                       color: 'var(--text-primary)',

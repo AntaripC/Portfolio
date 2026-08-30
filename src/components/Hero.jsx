@@ -45,7 +45,7 @@ function ServiceNode({ angle, radius, speed, color, label, yOffset = 0 }) {
           fontSize: '9px',
           fontWeight: 700,
           color,
-          background: 'rgba(3,7,18,0.85)',
+          background: 'var(--bg-card-elevated)',
           border: `1px solid ${color}50`,
           padding: '2px 6px',
           borderRadius: '3px',
@@ -487,12 +487,12 @@ export default function Hero() {
                 alignItems: 'center',
                 gap: '0.85rem',
                 padding: '0.6rem 1.1rem 0.6rem 0.6rem',
-                background: 'rgba(3, 7, 18, 0.9)',
+                background: 'var(--bg-card-elevated)',
                 backdropFilter: 'blur(16px)',
                 border: '1px solid var(--border-color)',
                 borderRadius: '50px',
                 zIndex: 4,
-                boxShadow: '0 10px 30px rgba(0,0,0,0.8), 0 0 15px rgba(0, 240, 255, 0.2)',
+                boxShadow: '0 10px 30px rgba(15, 23, 42, 0.1), 0 0 15px var(--accent-glow)',
               }}
               whileHover={{ scale: 1.05 }}
             >
@@ -503,15 +503,15 @@ export default function Hero() {
                   height: '52px',
                   borderRadius: '50%',
                   backgroundColor: 'var(--bg-secondary)',
-                  border: '2px solid var(--accent-cyan)',
+                  border: '2px solid var(--accent-primary)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontWeight: '700',
-                  color: 'var(--accent-cyan)',
+                  color: 'var(--accent-primary)',
                   fontFamily: 'var(--font-mono)',
                   fontSize: '1.1rem',
-                  boxShadow: '0 0 10px rgba(0, 240, 255, 0.2)',
+                  boxShadow: '0 0 10px var(--accent-glow)',
                   overflow: 'hidden',
                 }}
               >
@@ -573,14 +573,15 @@ export default function Hero() {
             gap: '1.2rem',
             marginTop: '3.5rem',
             padding: '1.5rem',
-            background: 'rgba(8, 14, 28, 0.65)',
+            background: 'var(--bg-card)',
             border: '1px solid var(--border-color)',
             borderRadius: '12px',
             backdropFilter: 'blur(12px)',
+            boxShadow: '0 10px 30px rgba(15, 23, 42, 0.06)',
           }}
         >
           {stats.map((stat, idx) => (
-            <div key={idx} style={{ borderLeft: '2px solid var(--accent-cyan)', paddingLeft: '1rem' }}>
+            <div key={idx} style={{ borderLeft: '2px solid var(--accent-primary)', paddingLeft: '1rem' }}>
               <div
                 style={{
                   fontSize: '0.72rem',

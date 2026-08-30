@@ -1,279 +1,203 @@
-import React, { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import React, { useRef, useState } from 'react'
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import {
-  Trophy,
   Users,
+  Target,
+  Trophy,
+  Zap,
+  Globe,
+  Share2,
+  TrendingUp,
   Award,
-  Sparkles,
-  Cpu,
-  ShieldCheck,
-  Compass,
-  Code2,
-  GitPullRequest,
-  Layers,
   Terminal,
+  Calendar,
+  Compass,
+  CheckCircle2,
+  ArrowRight,
+  Sparkles,
   ExternalLink,
   Github,
-  Activity,
-  Wifi,
-  Radio,
-  BookOpen,
-  Send,
-  Zap,
-  Workflow,
-  Binary,
-  ChevronRight,
-  CheckCircle2,
-  Target,
-  Presentation,
-  GraduationCap,
-  Globe,
   MapPin,
   Flame,
-  ArrowRight,
-  ShieldAlert
+  ShieldCheck,
+  Code2,
+  ChevronRight,
+  BookOpen,
+  GraduationCap
 } from 'lucide-react'
-import { TiltCard } from './About.jsx'
+import { TiltCard } from './About'
 
 export default function Extracurricular() {
-  // State for interactive tab switching on the Featured Hackathon Project HUD
-  const [activeHudTab, setActiveHudTab] = useState('routing')
+  const sectionRef = useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  })
 
-  // State for interactive node details in Leadership Pipeline
+  const yParallax = useTransform(scrollYProgress, [0, 1], [40, -40])
+
+  // Interactive HUD tab for Smart Campus Navigator
+  const [activeHudTab, setActiveHudTab] = useState('routing')
+  // Interactive Node selection for Leadership matrix
   const [selectedNode, setSelectedNode] = useState(0)
 
-  // 1. Statistics Data
+  // 1. Core Metrics & Stats
   const stats = [
     {
-      value: '5+',
-      label: 'HACKATHONS',
-      sub: 'National & University Arenas',
-      detail: 'IIT Madras, IIT Ropar, NITK Surathkal & Global Challenges',
+      num: '5+',
+      label: 'HACKATHONS EXECUTED',
+      sub: 'IITs & Premier Universities',
+      color: 'var(--accent-primary)',
       icon: <Trophy size={20} />,
-      color: 'var(--accent-cyan)',
-      borderColor: 'rgba(0, 240, 255, 0.4)',
-      bgGlow: 'rgba(0, 240, 255, 0.08)',
+      bgGlow: 'var(--accent-glow)',
     },
     {
-      value: '1+',
-      label: 'TEAM LEADERSHIP',
-      sub: 'Lead Developer & Coordinator',
-      detail: 'Sprint planning, task delegation, Git workflows & jury pitches',
-      icon: <Users size={20} />,
-      color: 'var(--accent-green)',
-      borderColor: 'rgba(16, 185, 129, 0.4)',
-      bgGlow: 'rgba(16, 185, 129, 0.08)',
-    },
-    {
-      value: '1',
-      label: 'PATENT INNOVATION',
+      num: '1',
+      label: 'PATENT INNOVATION (ESP32)',
       sub: 'Smart Microplastic Detector',
-      detail: 'ESP32 + Spectral Sensor + ThingSpeak cloud telemetry',
-      icon: <Cpu size={20} />,
-      color: 'var(--accent-purple)',
-      borderColor: 'rgba(168, 85, 247, 0.4)',
-      bgGlow: 'rgba(168, 85, 247, 0.08)',
+      color: 'var(--accent-green)',
+      icon: <Zap size={20} />,
+      bgGlow: 'rgba(5, 150, 105, 0.08)',
     },
     {
-      value: '10+',
-      label: 'TECHNICAL MODULES',
-      sub: 'Production & Prototype Builds',
-      detail: 'Cloud pipelines, mapping algorithms, IoT hardware & security',
-      icon: <Layers size={20} />,
+      num: 'Top 1%',
+      label: 'ACADEMIC RANKING',
+      sub: 'B.Tech CSE @ LPU Global Cohort',
+      color: 'var(--accent-purple)',
+      icon: <Award size={20} />,
+      bgGlow: 'rgba(124, 58, 237, 0.08)',
+    },
+    {
+      num: '500+',
+      label: 'COMMUNITY & LEADERSHIP',
+      sub: 'Head of Marketing @ CREST',
       color: 'var(--accent-amber)',
-      borderColor: 'rgba(251, 191, 36, 0.4)',
-      bgGlow: 'rgba(251, 191, 36, 0.08)',
+      icon: <Users size={20} />,
+      bgGlow: 'rgba(217, 119, 6, 0.08)',
     },
   ]
 
-  // 3. Technical Leadership Nodes
+  // 2. CREST Head of Marketing Leadership Pillars
   const leadershipNodes = [
     {
-      id: '01',
-      title: 'Hackathon Team Leader',
-      tag: 'VISION & MILESTONE ALIGNMENT',
-      shortDesc: 'Unifying engineers around a sharp MVP scope under high-pressure 24–48h clocks.',
+      id: 'brand',
+      title: 'Brand Growth & Outreach Campaigns',
+      tag: 'OUTREACH ARCHITECTURE',
+      role: 'Head of Marketing @ CREST',
+      logId: 'NODE // MKT_01',
+      color: 'var(--accent-primary)',
+      icon: <TrendingUp size={22} />,
+      shortDesc: 'Spearheading marketing operations, digital visibility campaigns, and brand storytelling for CREST across university platforms.',
       details: [
-        'Establish core architectural milestones and clear MVP deliverables within the first 60 minutes.',
-        'Foster active communication, morale, and focus under strict deadline constraints.',
-        'Lead synchronization standups every 4 hours to eliminate cross-module roadblocks.',
+        'Orchestrated multi-channel marketing campaigns, expanding CREST student footprint and engagement.',
+        'Established consistent brand voice, visual aesthetics, and promotional roadmaps for tech initiatives.',
+        'Collaborated with design & editorial squads to launch high-conversion media assets and banners.',
       ],
+    },
+    {
+      id: 'operations',
+      title: 'Cross-Functional Team Leadership',
+      tag: 'ORGANIZATIONAL GOVERNANCE',
+      role: 'Core Management Squad',
+      logId: 'NODE // OPS_02',
+      color: 'var(--accent-green)',
       icon: <Users size={22} />,
-      color: '#00f0ff',
-      logId: 'LEAD_01 // SPRINT_ORCHESTRATION',
+      shortDesc: 'Managing cross-disciplinary sub-teams across content, social media, outreach, and ground public relations.',
+      details: [
+        'Directed weekly syncs, sprint delegations, and task pipelines ensuring 100% on-time event promotions.',
+        'Mentored junior marketing associates on outreach copywriting, engagement analytics, and PR management.',
+        'Bridged communication between faculty advisors, student executive council, and external participants.',
+      ],
     },
     {
-      id: '02',
-      title: 'Solution Architecture',
-      tag: 'SYSTEM & CLOUD BLUEPRINTING',
-      shortDesc: 'Designing decoupled frontend, backend APIs, database schemas & hardware telemetry.',
-      details: [
-        'Architect modular REST/JSON interfaces ensuring backend and frontend develop concurrently.',
-        'Select optimal tech stacks balancing rapid hackathon iteration speed and system stability.',
-        'Integrate cloud endpoints, caching layers, and database relations for scalable performance.',
-      ],
-      icon: <Workflow size={22} />,
-      color: '#10b981',
-      logId: 'LEAD_02 // SYSTEM_DESIGN',
-    },
-    {
-      id: '03',
-      title: 'Project Planning & Delegation',
-      tag: 'GIT GITFLOW & TASK BREAKDOWN',
-      shortDesc: 'Structuring atomic tasks, managing branch merges, and preventing merge conflicts.',
-      details: [
-        'Break broad features into discrete, actionable developer tasks based on teammate strengths.',
-        'Implement structured Git branch policies (feature branches, PR code reviews) under time limits.',
-        'Continuously track progress against timeline gates to guarantee a finished submission.',
-      ],
-      icon: <GitPullRequest size={22} />,
-      color: '#a855f7',
-      logId: 'LEAD_03 // PIPELINE_GOVERNANCE',
-    },
-    {
-      id: '04',
-      title: 'Problem Solving & Rapid Debugging',
-      tag: 'CRISIS RESOLUTION',
-      shortDesc: 'Diagnosing edge cases, optimizing query latencies, and sensor calibration.',
-      details: [
-        'Rapid root-cause analysis during unexpected build errors, API drops, or hardware timeouts.',
-        'Refactor bottlenecks and implement resilient fallback mechanisms for mission-critical flows.',
-        'Ensure end-to-end integration stability before the final freeze window.',
-      ],
-      icon: <Zap size={22} />,
-      color: '#fbbf24',
-      logId: 'LEAD_04 // RUNTIME_TRIAGE',
-    },
-    {
-      id: '05',
-      title: 'Team Collaboration',
-      tag: 'CROSS-FUNCTIONAL SYNERGY',
-      shortDesc: 'Synchronizing UI/UX, backend logic, and hardware into a polished prototype.',
-      details: [
-        'Bridge communication between hardware sensor testers and software web developers.',
-        'Conduct live peer testing sessions to validate UX clarity and edge cases.',
-        'Cultivate a culture of mutual respect, shared accountability, and relentless drive.',
-      ],
+      id: 'events',
+      title: 'Flagship Event Promotions & Media',
+      tag: 'EVENT EXECUTION & SCALE',
+      role: 'Campaign Director',
+      logId: 'NODE // EVT_03',
+      color: 'var(--accent-purple)',
       icon: <Sparkles size={22} />,
-      color: '#38bdf8',
-      logId: 'LEAD_05 // SYNERGY_SYNC',
-    },
-    {
-      id: '06',
-      title: 'Technical Presentation',
-      tag: 'JURY PITCH & ARCHITECTURE DEFENSE',
-      shortDesc: 'Delivering live demos, defending tech trade-offs, and articulating real-world ROI.',
+      shortDesc: 'Driving attendee registrations, sponsorship pitches, and digital buzz for university seminars and tech workshops.',
       details: [
-        'Distill complex cloud & algorithmic architectures into crisp 3-minute executive pitches.',
-        'Demonstrate zero-failure live working prototypes to technical juries and industry mentors.',
-        'Field deep technical questions on scalability, security posture, and production roadmaps.',
+        'Executed end-to-end promotional funnels yielding packed attendee turnouts for flagship workshops.',
+        'Analyzed post-campaign performance data to optimize messaging resonance and social reach.',
+        'Coordinated with sponsor liaisons and campus community networks to amplify sponsor visibility.',
       ],
-      icon: <Presentation size={22} />,
-      color: '#f43f5e',
-      logId: 'LEAD_06 // DEFENSE_&_COMMUNICATION',
     },
   ]
 
-  // Track Record Arena List
+  // 3. Verified Hackathons & Competitions Track Record
   const trackRecord = [
     {
-      event: 'IIT Madras — Road Safety Hackathon 2026',
-      role: 'Hackathon Competitor & Dev',
-      badge: 'NATIONAL LEVEL',
-      color: '#00f0ff',
-      summary: 'Engineered real-world, cloud-integrated architectures addressing critical road safety telemetry and incident response.',
-      tags: ['Cloud Telemetry', 'IoT Sensors', 'Incident Routing'],
+      event: 'Smart Campus Navigator // Flagship Hackathon',
+      badge: 'FLAGSHIP SPRINT',
+      role: 'Lead Architect & Full Stack Dev',
+      color: 'var(--accent-primary)',
+      summary: 'Engineered a unified campus navigation graph and peer food-delivery ecosystem under 36 hours. Delivered real-time route pathfinding and order coordination.',
+      tags: ['JavaScript', 'Node.js', 'Campus Navigation', 'Leaflet.js', 'Express API'],
     },
     {
-      event: 'IIT Ropar — National Hackathon',
-      role: 'Team Lead & Lead Developer',
-      badge: 'TEAM LEADER',
-      color: '#10b981',
-      summary: 'Directed a cross-functional developer team, managing Git repos, task delegations, and delivery of a cloud-native utility model.',
-      tags: ['Sprint Management', 'Gitflow', 'System Architecture'],
+      event: 'Smart Microplastic Detector (ESP32) // Hardware Hackathon',
+      badge: 'PATENT INNOVATION',
+      role: 'IoT Firmware & Hardware Lead',
+      color: 'var(--accent-green)',
+      summary: 'Prototyped a portable water quality diagnostic unit using ESP32, AS7262 6-channel optical spectrometry, and ThingSpeak cloud telemetry.',
+      tags: ['ESP32', 'C/C++', 'AS7262 Sensor', 'ThingSpeak Cloud', 'Telegram Bot'],
     },
     {
-      event: 'NITK Surathkal — Hack the Thread',
-      role: 'Competitive Programmer',
-      badge: 'ALGORITHMS',
-      color: '#a855f7',
-      summary: 'Tackled complex graph algorithms, logical optimization, and high-performance code execution assessments.',
-      tags: ['Data Structures', 'Graph Algorithms', 'Optimization'],
-    },
-    {
-      event: 'Solution Challenge 2026',
-      role: 'Architect & Prototyper',
-      badge: 'SUSTAINABILITY',
-      color: '#fbbf24',
-      summary: 'Co-authored sustainable cloud-integrated hardware solutions combining sensor telemetry streams with automated dashboards.',
-      tags: ['ESP32', 'Cloud Analytics', 'Automation'],
-    },
-    {
-      event: 'College TechFest — Flagship Operations',
-      role: 'Core Technical Organizer',
-      badge: 'COMMUNITY OPS',
-      color: '#38bdf8',
-      summary: 'Coordinated technical logistics, database infrastructure logs, and participant routing for university-wide tech competitions.',
-      tags: ['Infrastructure Ops', 'Team Coordination', 'Event Logistics'],
+      event: 'IIT & National Arena Hackathons (5+ Completed)',
+      badge: 'NATIONAL COMPETITOR',
+      role: 'Team Lead & Backend Engineer',
+      color: 'var(--accent-purple)',
+      summary: 'Competed across 5+ intense 24-48h hackathons, architecting backend microservices, real-time data feeds, and jury demo defenses.',
+      tags: ['Team Leadership', 'Gitflow', 'Rapid MVP', 'High Pressure', 'Jury Defense'],
     },
   ]
 
   return (
-    <section id="extracurricular" className="section" style={{ position: 'relative', overflow: 'hidden' }}>
-      {/* Background ambient lighting */}
-      <div
-        style={{
-          position: 'absolute',
-          top: '20%',
-          right: '-10%',
-          width: '500px',
-          height: '500px',
-          background: 'radial-gradient(circle, rgba(0, 240, 255, 0.05) 0%, rgba(16, 185, 129, 0.02) 50%, transparent 70%)',
-          filter: 'blur(70px)',
-          pointerEvents: 'none',
-          zIndex: 0,
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '15%',
-          left: '-10%',
-          width: '450px',
-          height: '450px',
-          background: 'radial-gradient(circle, rgba(168, 85, 247, 0.05) 0%, transparent 70%)',
-          filter: 'blur(70px)',
-          pointerEvents: 'none',
-          zIndex: 0,
-        }}
-      />
-
+    <section
+      id="leadership"
+      className="section"
+      ref={sectionRef}
+      style={{ position: 'relative', overflow: 'hidden' }}
+    >
       <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         {/* ========================================================================= */}
-        {/* 1. SECTION HEADER & PHILOSOPHY BANNER */}
+        {/* 1. SECTION HEADER */}
         {/* ========================================================================= */}
         <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
           <div className="section-subtitle">
-            <Trophy size={14} /> ARENA // HACKATHONS_&_TECH_LEADERSHIP
+            <Trophy size={14} /> EXTRACURRICULAR // SPRINT_LEADERSHIP & HACKATHONS
           </div>
           <h2 style={{ marginBottom: '1rem' }}>Hackathons & Tech Leadership</h2>
-          
-          {/* Introductory Mission Tag */}
+          <p
+            style={{
+              color: 'var(--text-secondary)',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.95rem',
+              maxWidth: '750px',
+              margin: '0 auto',
+            }}
+          >
+            Proven track record of high-speed execution under 24–48h hackathon clocks, student organization leadership as Head of Marketing @ CREST, and patent-pending IoT engineering.
+          </p>
+
+          {/* Core Philosophy Banner Pill */}
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.75rem',
-              background: 'rgba(3, 7, 18, 0.85)',
-              border: '1px solid rgba(0, 240, 255, 0.3)',
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border-color)',
               borderRadius: '50px',
               padding: '0.65rem 1.4rem',
               backdropFilter: 'blur(12px)',
-              boxShadow: '0 0 25px rgba(0, 240, 255, 0.12)',
+              boxShadow: '0 4px 20px var(--accent-glow)',
               marginTop: '0.5rem',
             }}
           >
@@ -324,11 +248,12 @@ export default function Extracurricular() {
                 borderTopColor={stat.color}
                 style={{
                   height: '100%',
-                  background: 'rgba(6, 11, 24, 0.85)',
+                  background: 'var(--bg-card)',
                   padding: '1.5rem',
                   display: 'flex',
                   flexDirection: 'column',
-                  boxShadow: `0 8px 30px rgba(0, 0, 0, 0.7), inset 0 0 15px ${stat.bgGlow}`,
+                  border: '1px solid var(--border-color)',
+                  boxShadow: '0 10px 30px rgba(15, 23, 42, 0.06)',
                 }}
               >
                 <div className="terminal-header" style={{ marginBottom: '0.85rem' }}>
@@ -337,7 +262,7 @@ export default function Extracurricular() {
                     <span className="terminal-dot dot-yellow" />
                     <span className="terminal-dot dot-green" />
                   </div>
-                  <span style={{ color: stat.color, fontSize: '0.72rem' }}>METRIC // 0{idx + 1}</span>
+                  <span style={{ color: stat.color, fontSize: '0.72rem', fontWeight: '600' }}>METRIC // 0{idx + 1}</span>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
@@ -348,76 +273,70 @@ export default function Extracurricular() {
                       fontFamily: 'var(--font-main)',
                       color: stat.color,
                       lineHeight: '1',
-                      textShadow: `0 0 20px ${stat.color}50`,
                     }}
                   >
-                    {stat.value}
+                    {stat.num}
                   </span>
                   <div
                     style={{
-                      padding: '0.6rem',
-                      background: stat.bgGlow,
+                      padding: '0.65rem',
+                      background: 'var(--bg-secondary)',
                       borderRadius: '8px',
                       color: stat.color,
-                      border: `1px solid ${stat.color}30`,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
+                      border: '1px solid var(--border-subtle)',
                     }}
                   >
                     {stat.icon}
                   </div>
                 </div>
 
-                <h3 style={{ fontSize: '1rem', color: 'var(--text-primary)', marginBottom: '0.2rem', letterSpacing: '0.04em' }}>
-                  {stat.label}
-                </h3>
-                <span
+                <div
                   style={{
-                    color: stat.color,
+                    fontSize: '0.88rem',
+                    fontWeight: '700',
                     fontFamily: 'var(--font-mono)',
-                    fontSize: '0.8rem',
-                    fontWeight: '600',
-                    marginBottom: '0.65rem',
-                    display: 'block',
+                    color: 'var(--text-primary)',
+                    letterSpacing: '0.04em',
+                    marginBottom: '0.35rem',
                   }}
                 >
+                  {stat.label}
+                </div>
+
+                <div style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', marginTop: 'auto' }}>
                   {stat.sub}
-                </span>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', lineHeight: '1.5', marginTop: 'auto' }}>
-                  {stat.detail}
-                </p>
+                </div>
               </TiltCard>
             </motion.div>
           ))}
         </div>
 
         {/* ========================================================================= */}
-        {/* 3. FEATURED HACKATHON PROJECT: SMART CAMPUS NAVIGATOR */}
+        {/* 3. FLAGSHIP HACKATHON BUILD: SMART CAMPUS NAVIGATOR (INTERACTIVE DOSSIER) */}
         {/* ========================================================================= */}
-        <div style={{ marginBottom: '5.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.2rem' }}>
-            <div className="cyber-tag" style={{ fontSize: '0.82rem' }}>
-              <Compass size={14} style={{ marginRight: '0.3rem' }} /> FEATURED HACKATHON ECOSYSTEM
+        <div style={{ marginBottom: '5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+            <div className="cyber-tag" style={{ fontSize: '0.85rem' }}>
+              <Compass size={14} style={{ marginRight: '0.3rem' }} /> FLAGSHIP HACKATHON INNOVATION
             </div>
-            <span style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.78rem' }}>
-              FLAGSHIP_PROTOTYPE // 01
+            <span style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.8rem' }}>
+              CAMPUS_ECOSYSTEM_DOSSIER
             </span>
           </div>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 35 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.6 }}
           >
             <TiltCard
-              borderTopColor="var(--accent-cyan)"
+              borderTopColor="var(--accent-primary)"
               style={{
-                background: 'linear-gradient(145deg, rgba(8, 14, 28, 0.95) 0%, rgba(3, 7, 18, 0.98) 100%)',
+                background: 'var(--bg-card-elevated)',
                 padding: '2.5rem',
-                border: '1px solid rgba(0, 240, 255, 0.3)',
-                boxShadow: '0 20px 60px rgba(0, 0, 0, 0.85), inset 0 0 30px rgba(0, 240, 255, 0.06)',
+                border: '1px solid var(--border-color)',
+                boxShadow: '0 15px 45px rgba(15, 23, 42, 0.08), inset 0 0 30px rgba(217, 119, 6, 0.02)',
                 borderRadius: '16px',
               }}
             >
@@ -452,10 +371,10 @@ export default function Extracurricular() {
                     <div
                       style={{
                         padding: '0.65rem',
-                        background: 'rgba(0, 240, 255, 0.12)',
+                        background: 'rgba(217, 119, 6, 0.1)',
                         borderRadius: '10px',
-                        border: '1px solid rgba(0, 240, 255, 0.3)',
-                        color: 'var(--accent-cyan)',
+                        border: '1px solid var(--border-color)',
+                        color: 'var(--accent-primary)',
                       }}
                     >
                       <Compass size={28} />
@@ -464,7 +383,7 @@ export default function Extracurricular() {
                       <h3 style={{ fontSize: '1.75rem', color: 'var(--text-primary)', margin: 0 }}>
                         Smart Campus Navigator
                       </h3>
-                      <span style={{ color: 'var(--accent-cyan)', fontFamily: 'var(--font-mono)', fontSize: '0.85rem' }}>
+                      <span style={{ color: 'var(--accent-primary)', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', fontWeight: '600' }}>
                         Intelligent Navigation & Food-Delivery Ecosystem
                       </span>
                     </div>
@@ -486,15 +405,15 @@ export default function Extracurricular() {
                     <div
                       style={{
                         padding: '0.85rem',
-                        background: 'rgba(3, 7, 18, 0.7)',
-                        border: '1px solid rgba(0, 240, 255, 0.15)',
+                        background: 'var(--bg-secondary)',
+                        border: '1px solid var(--border-color)',
                         borderRadius: '8px',
                       }}
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--accent-cyan)', marginBottom: '0.3rem', fontSize: '0.85rem', fontWeight: '600' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--accent-primary)', marginBottom: '0.3rem', fontSize: '0.85rem', fontWeight: '600' }}>
                         <MapPin size={15} /> Route Navigation
                       </div>
-                      <p style={{ color: 'var(--text-muted)', fontSize: '0.76rem', margin: 0, lineHeight: '1.4' }}>
+                      <p style={{ color: 'var(--text-secondary)', fontSize: '0.76rem', margin: 0, lineHeight: '1.4' }}>
                         Graph pathfinding between blocks, labs & accessible elevators.
                       </p>
                     </div>
@@ -502,15 +421,15 @@ export default function Extracurricular() {
                     <div
                       style={{
                         padding: '0.85rem',
-                        background: 'rgba(3, 7, 18, 0.7)',
-                        border: '1px solid rgba(16, 185, 129, 0.15)',
+                        background: 'var(--bg-secondary)',
+                        border: '1px solid var(--border-green)',
                         borderRadius: '8px',
                       }}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--accent-green)', marginBottom: '0.3rem', fontSize: '0.85rem', fontWeight: '600' }}>
                         <Flame size={15} /> Outlet Discovery
                       </div>
-                      <p style={{ color: 'var(--text-muted)', fontSize: '0.76rem', margin: 0, lineHeight: '1.4' }}>
+                      <p style={{ color: 'var(--text-secondary)', fontSize: '0.76rem', margin: 0, lineHeight: '1.4' }}>
                         Live menu aggregation, wait times & digital food court ordering.
                       </p>
                     </div>
@@ -518,15 +437,15 @@ export default function Extracurricular() {
                     <div
                       style={{
                         padding: '0.85rem',
-                        background: 'rgba(3, 7, 18, 0.7)',
-                        border: '1px solid rgba(168, 85, 247, 0.15)',
+                        background: 'var(--bg-secondary)',
+                        border: '1px solid var(--border-purple)',
                         borderRadius: '8px',
                       }}
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#a855f7', marginBottom: '0.3rem', fontSize: '0.85rem', fontWeight: '600' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--accent-purple)', marginBottom: '0.3rem', fontSize: '0.85rem', fontWeight: '600' }}>
                         <Users size={15} /> Peer Delivery
                       </div>
-                      <p style={{ color: 'var(--text-muted)', fontSize: '0.76rem', margin: 0, lineHeight: '1.4' }}>
+                      <p style={{ color: 'var(--text-secondary)', fontSize: '0.76rem', margin: 0, lineHeight: '1.4' }}>
                         Connects student delivery partners heading in the same direction.
                       </p>
                     </div>
@@ -534,15 +453,15 @@ export default function Extracurricular() {
                     <div
                       style={{
                         padding: '0.85rem',
-                        background: 'rgba(3, 7, 18, 0.7)',
-                        border: '1px solid rgba(251, 191, 36, 0.15)',
+                        background: 'var(--bg-secondary)',
+                        border: '1px solid var(--border-color)',
                         borderRadius: '8px',
                       }}
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#fbbf24', marginBottom: '0.3rem', fontSize: '0.85rem', fontWeight: '600' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--accent-amber)', marginBottom: '0.3rem', fontSize: '0.85rem', fontWeight: '600' }}>
                         <ShieldCheck size={15} /> Secure Payment
                       </div>
-                      <p style={{ color: 'var(--text-muted)', fontSize: '0.76rem', margin: 0, lineHeight: '1.4' }}>
+                      <p style={{ color: 'var(--text-secondary)', fontSize: '0.76rem', margin: 0, lineHeight: '1.4' }}>
                         Tokenized transactions & verified order delivery confirmation.
                       </p>
                     </div>
@@ -559,13 +478,13 @@ export default function Extracurricular() {
                           key={tIdx}
                           style={{
                             padding: '0.3rem 0.65rem',
-                            background: 'rgba(0, 240, 255, 0.06)',
-                            border: '1px solid rgba(0, 240, 255, 0.25)',
-                            color: 'var(--accent-cyan)',
+                            background: 'var(--bg-secondary)',
+                            border: '1px solid var(--border-color)',
+                            color: 'var(--accent-primary)',
                             borderRadius: '4px',
                             fontFamily: 'var(--font-mono)',
                             fontSize: '0.8rem',
-                            fontWeight: '500',
+                            fontWeight: '600',
                           }}
                         >
                           ${' '}{tag}
@@ -598,13 +517,13 @@ export default function Extracurricular() {
                 {/* Right Side: Interactive Live Telemetry HUD */}
                 <div
                   style={{
-                    background: 'rgba(3, 7, 18, 0.95)',
-                    border: '1px solid rgba(0, 240, 255, 0.2)',
+                    background: 'var(--bg-secondary)',
+                    border: '1px solid var(--border-color)',
                     borderRadius: '12px',
                     padding: '1.25rem',
                     display: 'flex',
                     flexDirection: 'column',
-                    boxShadow: 'inset 0 0 25px rgba(0, 240, 255, 0.04)',
+                    boxShadow: 'inset 0 0 25px rgba(217, 119, 6, 0.03)',
                   }}
                 >
                   {/* HUD Top Controls */}
@@ -613,7 +532,7 @@ export default function Extracurricular() {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between',
-                      borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                      borderBottom: '1px solid var(--border-subtle)',
                       paddingBottom: '0.75rem',
                       marginBottom: '1rem',
                       flexWrap: 'wrap',
@@ -635,12 +554,13 @@ export default function Extracurricular() {
                           onClick={() => setActiveHudTab(tab.id)}
                           style={{
                             padding: '0.25rem 0.6rem',
-                            background: activeHudTab === tab.id ? 'rgba(0, 240, 255, 0.2)' : 'transparent',
-                            border: `1px solid ${activeHudTab === tab.id ? 'var(--accent-cyan)' : 'rgba(255, 255, 255, 0.1)'}`,
-                            color: activeHudTab === tab.id ? 'var(--accent-cyan)' : 'var(--text-secondary)',
+                            background: activeHudTab === tab.id ? 'var(--bg-card)' : 'transparent',
+                            border: `1px solid ${activeHudTab === tab.id ? 'var(--accent-primary)' : 'var(--border-subtle)'}`,
+                            color: activeHudTab === tab.id ? 'var(--accent-primary)' : 'var(--text-secondary)',
                             borderRadius: '4px',
                             fontFamily: 'var(--font-mono)',
                             fontSize: '0.72rem',
+                            fontWeight: '600',
                             cursor: 'pointer',
                             transition: 'all 0.2s',
                           }}
@@ -656,8 +576,8 @@ export default function Extracurricular() {
                     style={{
                       flex: 1,
                       minHeight: '260px',
-                      background: 'rgba(1, 4, 10, 0.9)',
-                      border: '1px solid rgba(0, 240, 255, 0.1)',
+                      background: 'var(--bg-card)',
+                      border: '1px solid var(--border-subtle)',
                       borderRadius: '8px',
                       padding: '1rem',
                       fontFamily: 'var(--font-mono)',
@@ -675,32 +595,23 @@ export default function Extracurricular() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -10 }}
                           transition={{ duration: 0.25 }}
-                          style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}
                         >
-                          <div style={{ color: 'var(--accent-cyan)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <Activity size={14} className="pulse" />
-                            <span>[ENGINE]: A*_Graph_Pathfinding_Active</span>
+                          <div style={{ color: 'var(--accent-primary)', marginBottom: '0.5rem', fontWeight: '700' }}>
+                            // ACTIVE_GRAPH_PATHFINDING
                           </div>
-                          <div style={{ color: 'var(--text-secondary)', fontSize: '0.78rem' }}>
-                            &gt; Origin: Block_34 (CSE_Auditorium)
+                          <div style={{ color: 'var(--text-secondary)', lineHeight: '1.6' }}>
+                            <div>[ORIGIN] Block 34 (Computer Science Dept)</div>
+                            <div>[DESTINATION] Central Food Court (Block 12)</div>
+                            <div style={{ color: 'var(--accent-green)', margin: '0.35rem 0' }}>
+                              ⚡ Optimal Path: B34 → Skybridge 3 → Core Mall → Food Hall [380m • 4.2 min]
+                            </div>
+                            <div style={{ color: 'var(--text-muted)', fontSize: '0.74rem' }}>
+                              Accessibility Mode: Ramp & Elevator Enabled
+                            </div>
                           </div>
-                          <div style={{ color: 'var(--text-secondary)', fontSize: '0.78rem' }}>
-                            &gt; Destination: Block_38 (IoT_Cloud_Lab)
-                          </div>
-                          <div style={{ color: 'var(--accent-green)', fontSize: '0.78rem' }}>
-                            &gt; Path Calculated: 34-F1 -&gt; Skybridge_B -&gt; 38-F3 (Ramp_Accessible)
-                          </div>
-                          <div style={{ borderTop: '1px dashed rgba(0, 240, 255, 0.2)', paddingTop: '0.5rem', marginTop: '0.3rem', display: 'flex', justifyContent: 'space-between' }}>
-                            <span style={{ color: 'var(--text-muted)' }}>Estimated Transit:</span>
-                            <span style={{ color: 'var(--accent-cyan)', fontWeight: 'bold' }}>3.2 mins</span>
-                          </div>
-                          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <span style={{ color: 'var(--text-muted)' }}>Distance / Elevation:</span>
-                            <span style={{ color: 'var(--text-primary)' }}>240m // +12m Ramps</span>
-                          </div>
-                          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <span style={{ color: 'var(--text-muted)' }}>Obstacle Avoidance:</span>
-                            <span style={{ color: 'var(--accent-green)' }}>ACTIVE (0 Congestions)</span>
+                          <div style={{ borderTop: '1px dashed var(--border-subtle)', paddingTop: '0.5rem', marginTop: '0.5rem', display: 'flex', justifyContent: 'space-between' }}>
+                            <span style={{ color: 'var(--text-muted)' }}>GPS_ACCURACY: 2.1m</span>
+                            <span style={{ color: 'var(--accent-green)' }}>PATH_OPTIMAL: 100%</span>
                           </div>
                         </motion.div>
                       )}
@@ -712,28 +623,23 @@ export default function Extracurricular() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -10 }}
                           transition={{ duration: 0.25 }}
-                          style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}
                         >
-                          <div style={{ color: 'var(--accent-green)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <Zap size={14} />
-                            <span>[DISPATCH]: Peer_Delivery_Mesh_Connected</span>
+                          <div style={{ color: 'var(--accent-green)', marginBottom: '0.5rem', fontWeight: '700' }}>
+                            // REAL_TIME_PEER_DISPATCH
                           </div>
-                          <div style={{ color: 'var(--text-secondary)', fontSize: '0.78rem' }}>
-                            &gt; Active Outlets: 12 Campus Cafeterias
+                          <div style={{ color: 'var(--text-secondary)', lineHeight: '1.6' }}>
+                            <div>ORDER_ID: #LPU-FD-8942</div>
+                            <div>OUTLET: Campus Deli &bull; 2x Hot Roast Sandwiches</div>
+                            <div style={{ color: 'var(--accent-primary)', margin: '0.35rem 0' }}>
+                              🛵 Peer Courier: Rahul S. (Heading to Block 34 in 5 min)
+                            </div>
+                            <div style={{ color: 'var(--text-muted)', fontSize: '0.74rem' }}>
+                              Status: Picked Up &bull; PIN-Verified Handover Required
+                            </div>
                           </div>
-                          <div style={{ color: 'var(--text-secondary)', fontSize: '0.78rem' }}>
-                            &gt; Matched Partner: Student_ID #8924 (Heading to Block_38)
-                          </div>
-                          <div style={{ color: '#a855f7', fontSize: '0.78rem' }}>
-                            &gt; Handshake: AES_256 Dynamic QR Token Validated
-                          </div>
-                          <div style={{ borderTop: '1px dashed rgba(16, 185, 129, 0.2)', paddingTop: '0.5rem', marginTop: '0.3rem', display: 'flex', justifyContent: 'space-between' }}>
-                            <span style={{ color: 'var(--text-muted)' }}>Order ID:</span>
-                            <span style={{ color: 'var(--accent-green)' }}>#NAV-8942-FD</span>
-                          </div>
-                          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <span style={{ color: 'var(--text-muted)' }}>Delivery Latency:</span>
-                            <span style={{ color: 'var(--accent-cyan)' }}>6.5 mins average</span>
+                          <div style={{ borderTop: '1px dashed var(--border-subtle)', paddingTop: '0.5rem', marginTop: '0.5rem', display: 'flex', justifyContent: 'space-between' }}>
+                            <span style={{ color: 'var(--text-muted)' }}>PAYMENT: UPI_ESCROW</span>
+                            <span style={{ color: 'var(--accent-green)' }}>DELIVERY_FEE: ₹15 (Earned)</span>
                           </div>
                         </motion.div>
                       )}
@@ -745,40 +651,29 @@ export default function Extracurricular() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -10 }}
                           transition={{ duration: 0.25 }}
-                          style={{ fontSize: '0.75rem', color: '#38bdf8', overflowX: 'auto', lineHeight: '1.5' }}
                         >
-                          <pre style={{ margin: 0, fontFamily: 'var(--font-mono)' }}>
+                          <div style={{ color: 'var(--accent-purple)', marginBottom: '0.4rem', fontWeight: '700' }}>
+                            // JSON_DATA_CONTRACT (SCHEMAS)
+                          </div>
+                          <pre
+                            style={{
+                              margin: 0,
+                              color: 'var(--text-secondary)',
+                              fontSize: '0.72rem',
+                              lineHeight: '1.45',
+                              overflowX: 'auto',
+                            }}
+                          >
 {`{
-  "project": "Smart Campus Navigator",
-  "status": "HACKATHON_PROTOTYPE",
-  "engine": {
-    "routing": "A* Dynamic Graph",
-    "map_layer": "Leaflet.js + GPS Nodes",
-    "backend": "Node.js / Express microservice",
-    "storage": "JSON / IndexedDB caching"
-  },
-  "security": "Encrypted Token Auth"
+  "orderId": "NAV-8942",
+  "route": { "source": "B34", "target": "B12", "distanceMeters": 380 },
+  "courier": { "peerId": "USER_719", "authBadge": true },
+  "telemetry": { "lat": 31.2536, "lng": 75.7037, "status": "TRANSIT" }
 }`}
                           </pre>
                         </motion.div>
                       )}
                     </AnimatePresence>
-                  </div>
-
-                  {/* Telemetry bottom line */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      marginTop: '0.85rem',
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.72rem',
-                      color: 'var(--text-muted)',
-                    }}
-                  >
-                    <span>PING: 14ms // HTTPS_2.0</span>
-                    <span style={{ color: 'var(--accent-cyan)' }}>NODE_ID: LPU_SRV_04</span>
                   </div>
                 </div>
               </div>
@@ -787,36 +682,24 @@ export default function Extracurricular() {
         </div>
 
         {/* ========================================================================= */}
-        {/* 4. TECHNICAL LEADERSHIP MATRIX & SPRINT PIPELINE */}
+        {/* 4. CREST MARKETING LEADERSHIP MATRIX */}
         {/* ========================================================================= */}
-        <div style={{ marginBottom: '5.5rem' }}>
-          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <div className="section-subtitle">
-              <Workflow size={14} /> LEADERSHIP_PIPELINE // SPRINT_EXECUTION
+        <div style={{ marginBottom: '5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.75rem', flexWrap: 'wrap', gap: '1rem' }}>
+            <div>
+              <div className="section-subtitle" style={{ justifyContent: 'flex-start', margin: 0, marginBottom: '0.5rem' }}>
+                <TrendingUp size={14} /> LEADERSHIP_POSITION // HEAD_OF_MARKETING
+              </div>
+              <h3 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', margin: 0 }}>
+                CREST — Marketing & Brand Leadership
+              </h3>
             </div>
-            <h2 style={{ marginBottom: '0.75rem' }}>Technical Leadership & Execution</h2>
-            <p
-              style={{
-                color: 'var(--text-secondary)',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.92rem',
-                maxWidth: '680px',
-                margin: '0 auto',
-                lineHeight: '1.6',
-              }}
-            >
-              How I lead hackathon teams from rapid ideation to scalable system architecture, high-pressure execution, and jury defense.
-            </p>
+            <div className="cyber-tag" style={{ margin: 0 }}>
+              <Users size={14} style={{ marginRight: '0.3rem' }} /> CORE STUDENT EXECUTIVE
+            </div>
           </div>
 
-          {/* Connected Interactive Leadership Pipeline */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-              gap: '1.5rem',
-            }}
-          >
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
             {leadershipNodes.map((node, index) => {
               const isSelected = selectedNode === index
               return (
@@ -833,9 +716,9 @@ export default function Extracurricular() {
                     borderTopColor={node.color}
                     style={{
                       height: '100%',
-                      background: isSelected ? 'rgba(8, 16, 36, 0.95)' : 'rgba(6, 11, 24, 0.75)',
-                      border: `1px solid ${isSelected ? node.color : 'rgba(255, 255, 255, 0.08)'}`,
-                      boxShadow: isSelected ? `0 10px 30px -5px ${node.color}40, inset 0 0 15px ${node.color}15` : 'none',
+                      background: isSelected ? 'var(--bg-card-elevated)' : 'var(--bg-card)',
+                      border: `1px solid ${isSelected ? node.color : 'var(--border-subtle)'}`,
+                      boxShadow: isSelected ? '0 10px 30px rgba(15, 23, 42, 0.08)' : 'none',
                       transition: 'all 0.3s ease',
                       padding: '1.75rem',
                       display: 'flex',
@@ -848,17 +731,17 @@ export default function Extracurricular() {
                         <span className="terminal-dot dot-yellow" />
                         <span className="terminal-dot dot-green" />
                       </div>
-                      <span style={{ color: node.color, fontSize: '0.72rem' }}>{node.logId}</span>
+                      <span style={{ color: node.color, fontSize: '0.72rem', fontWeight: '600' }}>{node.logId}</span>
                     </div>
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '0.85rem' }}>
                       <div
                         style={{
                           padding: '0.6rem',
-                          background: `${node.color}15`,
+                          background: 'var(--bg-secondary)',
                           color: node.color,
                           borderRadius: '8px',
-                          border: `1px solid ${node.color}35`,
+                          border: '1px solid var(--border-subtle)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -892,7 +775,7 @@ export default function Extracurricular() {
                     {/* Bullet Points */}
                     <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
                       {node.details.map((item, dIdx) => (
-                        <div key={dIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                        <div key={dIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
                           <ChevronRight size={13} style={{ color: node.color, marginTop: '0.2rem', flexShrink: 0 }} />
                           <span style={{ lineHeight: '1.4' }}>{item}</span>
                         </div>
@@ -921,12 +804,12 @@ export default function Extracurricular() {
                 borderTopColor="#f43f5e"
                 style={{
                   height: '100%',
-                  background: 'rgba(8, 14, 28, 0.85)',
+                  background: 'var(--bg-card)',
                   padding: '2.2rem',
                   display: 'flex',
                   flexDirection: 'column',
                   border: '1px solid rgba(244, 63, 94, 0.25)',
-                  boxShadow: '0 15px 40px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(244, 63, 94, 0.05)',
+                  boxShadow: '0 15px 40px rgba(15, 23, 42, 0.06)',
                 }}
               >
                 <div className="terminal-header" style={{ marginBottom: '1.2rem' }}>
@@ -935,67 +818,64 @@ export default function Extracurricular() {
                     <span className="terminal-dot dot-yellow" />
                     <span className="terminal-dot dot-green" />
                   </div>
-                  <span style={{ color: '#f43f5e', fontSize: '0.72rem' }}>IP_RESEARCH // PATENT_PENDING</span>
+                  <span style={{ color: '#f43f5e', fontSize: '0.72rem', fontWeight: '600' }}>IP_RESEARCH // PATENT_PENDING</span>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '1rem' }}>
                   <div
                     style={{
                       padding: '0.75rem',
-                      background: 'rgba(244, 63, 94, 0.12)',
+                      background: 'rgba(244, 63, 94, 0.1)',
                       color: '#f43f5e',
                       borderRadius: '10px',
                       border: '1px solid rgba(244, 63, 94, 0.3)',
                     }}
                   >
-                    <Cpu size={26} />
+                    <Zap size={26} />
                   </div>
                   <div>
                     <span className="cyber-tag red" style={{ fontSize: '0.72rem', marginBottom: '0.2rem' }}>
-                      <Award size={12} style={{ marginRight: '0.2rem' }} /> PATENT-PENDING HARDWARE
+                      PATENT APPLICATION FILED
                     </span>
                     <h3 style={{ fontSize: '1.35rem', color: 'var(--text-primary)', margin: 0 }}>
-                      Smart Microplastic Detector
+                      Smart Microplastic Detector (ESP32)
                     </h3>
                   </div>
                 </div>
 
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: '1.7', marginBottom: '1.25rem' }}>
-                  An ESP32-based environmental monitoring and diagnostic system designed for real-time microplastic detection in fluid environments. Integrates multi-spectral optical data with automated cloud alerting.
+                  Designed and prototyped an autonomous embedded spectral device to detect and quantify microplastic concentration levels in aquatic samples in real time.
                 </p>
 
-                {/* Technical Bullet Highlights */}
+                {/* Bullet Highlights */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', marginBottom: '1.5rem' }}>
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.6rem', fontSize: '0.84rem', color: 'var(--text-secondary)' }}>
                     <CheckCircle2 size={15} style={{ color: '#f43f5e', marginTop: '0.15rem', flexShrink: 0 }} />
-                    <span><strong>AS7262 Spectral & Turbidity Sensing:</strong> 6-channel optical wavelength analysis quantifying microplastic light dispersion.</span>
+                    <span><strong>6-Channel Optical Spectroscopy:</strong> Integrated AS7262 multi-spectral sensor with custom optical flow-cell algorithms.</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.6rem', fontSize: '0.84rem', color: 'var(--text-secondary)' }}>
                     <CheckCircle2 size={15} style={{ color: '#f43f5e', marginTop: '0.15rem', flexShrink: 0 }} />
-                    <span><strong>Cloud Telemetry via WiFi:</strong> Real-time HTTP streaming to ThingSpeak cloud analytics pipelines.</span>
+                    <span><strong>Real-time Cloud Streams:</strong> Automated WiFi telemetry pushing contamination metrics directly to ThingSpeak Cloud.</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.6rem', fontSize: '0.84rem', color: 'var(--text-secondary)' }}>
                     <CheckCircle2 size={15} style={{ color: '#f43f5e', marginTop: '0.15rem', flexShrink: 0 }} />
-                    <span><strong>Telegram Emergency Bot:</strong> Instant push alerts dispatched to authorities when contamination thresholds spike.</span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.6rem', fontSize: '0.84rem', color: 'var(--text-secondary)' }}>
-                    <CheckCircle2 size={15} style={{ color: '#f43f5e', marginTop: '0.15rem', flexShrink: 0 }} />
-                    <span><strong>Microplastic Index (MPI) Algorithm:</strong> Dynamic mathematical index computed directly on edge firmware.</span>
+                    <span><strong>Instant Emergency Alerts:</strong> Automated Telegram Bot dispatches threshold warnings whenever high microplastic indices are detected.</span>
                   </div>
                 </div>
 
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: 'auto' }}>
-                  {['ESP32', 'AS7262 Sensor', 'ThingSpeak', 'Telegram API', 'Patent IP'].map((t, idx) => (
+                  {['ESP32 Microcontroller', 'C/C++ Firmware', 'AS7262 Spectroscopy', 'ThingSpeak IoT', 'Telegram Bot'].map((t, idx) => (
                     <span
                       key={idx}
                       style={{
                         fontSize: '0.74rem',
                         fontFamily: 'var(--font-mono)',
                         color: '#f43f5e',
-                        background: 'rgba(244, 63, 94, 0.08)',
+                        background: 'var(--bg-secondary)',
                         border: '1px solid rgba(244, 63, 94, 0.25)',
                         padding: '0.25rem 0.55rem',
                         borderRadius: '4px',
+                        fontWeight: '600',
                       }}
                     >
                       #{t}
@@ -1005,7 +885,7 @@ export default function Extracurricular() {
               </TiltCard>
             </motion.div>
 
-            {/* Card B: Tech Community / Teaching Experience */}
+            {/* Card B: Tech Teaching & Social Responsibility */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -1016,12 +896,12 @@ export default function Extracurricular() {
                 borderTopColor="#10b981"
                 style={{
                   height: '100%',
-                  background: 'rgba(8, 14, 28, 0.85)',
+                  background: 'var(--bg-card)',
                   padding: '2.2rem',
                   display: 'flex',
                   flexDirection: 'column',
                   border: '1px solid rgba(16, 185, 129, 0.25)',
-                  boxShadow: '0 15px 40px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(16, 185, 129, 0.05)',
+                  boxShadow: '0 15px 40px rgba(15, 23, 42, 0.06)',
                 }}
               >
                 <div className="terminal-header" style={{ marginBottom: '1.2rem' }}>
@@ -1030,14 +910,14 @@ export default function Extracurricular() {
                     <span className="terminal-dot dot-yellow" />
                     <span className="terminal-dot dot-green" />
                   </div>
-                  <span style={{ color: '#10b981', fontSize: '0.72rem' }}>COMMUNITY // CDP_OUTREACH</span>
+                  <span style={{ color: '#10b981', fontSize: '0.72rem', fontWeight: '600' }}>COMMUNITY // CDP_OUTREACH</span>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '1rem' }}>
                   <div
                     style={{
                       padding: '0.75rem',
-                      background: 'rgba(16, 185, 129, 0.12)',
+                      background: 'rgba(16, 185, 129, 0.1)',
                       color: '#10b981',
                       borderRadius: '10px',
                       border: '1px solid rgba(16, 185, 129, 0.3)',
@@ -1083,10 +963,11 @@ export default function Extracurricular() {
                         fontSize: '0.74rem',
                         fontFamily: 'var(--font-mono)',
                         color: '#10b981',
-                        background: 'rgba(16, 185, 129, 0.08)',
+                        background: 'var(--bg-secondary)',
                         border: '1px solid rgba(16, 185, 129, 0.25)',
                         padding: '0.25rem 0.55rem',
                         borderRadius: '4px',
+                        fontWeight: '600',
                       }}
                     >
                       #{t}
@@ -1111,7 +992,7 @@ export default function Extracurricular() {
                 Verified Hackathon & Competition Arena
               </h3>
             </div>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', color: 'var(--accent-cyan)' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.82rem', color: 'var(--accent-primary)', fontWeight: '600' }}>
               5+ SPRINT DELIVERIES // ALL VERIFIED
             </span>
           </div>
@@ -1127,8 +1008,8 @@ export default function Extracurricular() {
               >
                 <div
                   style={{
-                    background: 'rgba(6, 11, 24, 0.8)',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    background: 'var(--bg-card)',
+                    border: '1px solid var(--border-subtle)',
                     borderLeft: `3px solid ${tr.color}`,
                     borderRadius: '10px',
                     padding: '1.4rem',
@@ -1136,6 +1017,7 @@ export default function Extracurricular() {
                     display: 'flex',
                     flexDirection: 'column',
                     transition: 'all 0.25s ease',
+                    boxShadow: '0 4px 15px rgba(15, 23, 42, 0.04)',
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.borderColor = tr.color
@@ -1143,10 +1025,10 @@ export default function Extracurricular() {
                     e.currentTarget.style.boxShadow = `0 10px 25px -5px ${tr.color}30`
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.border = '1px solid rgba(255, 255, 255, 0.08)'
+                    e.currentTarget.style.border = '1px solid var(--border-subtle)'
                     e.currentTarget.style.borderLeft = `3px solid ${tr.color}`
                     e.currentTarget.style.transform = 'translateY(0)'
-                    e.currentTarget.style.boxShadow = 'none'
+                    e.currentTarget.style.boxShadow = '0 4px 15px rgba(15, 23, 42, 0.04)'
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.6rem' }}>
@@ -1157,7 +1039,7 @@ export default function Extracurricular() {
                         fontWeight: '700',
                         color: tr.color,
                         padding: '0.2rem 0.5rem',
-                        background: `${tr.color}15`,
+                        background: 'var(--bg-secondary)',
                         borderRadius: '4px',
                         border: `1px solid ${tr.color}30`,
                       }}
@@ -1184,11 +1066,11 @@ export default function Extracurricular() {
                         style={{
                           fontSize: '0.72rem',
                           fontFamily: 'var(--font-mono)',
-                          color: 'var(--text-muted)',
-                          background: 'rgba(3, 7, 18, 0.8)',
+                          color: 'var(--text-secondary)',
+                          background: 'var(--bg-secondary)',
                           padding: '0.15rem 0.45rem',
                           borderRadius: '3px',
-                          border: '1px solid rgba(255, 255, 255, 0.06)',
+                          border: '1px solid var(--border-subtle)',
                         }}
                       >
                         {tag}
