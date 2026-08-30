@@ -94,6 +94,11 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   font-family: var(--font-main);
+  background-image: 
+    radial-gradient(rgba(59, 130, 246, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.02) 1px, transparent 1px),
+    linear-gradient(rgba(15, 23, 42, 0.02) 1px, transparent 1px);
+  background-size: 32px 32px, 64px 64px, 64px 64px;
   line-height: 1.6;
   position: relative;
   overflow-x: hidden;
@@ -102,6 +107,31 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+[data-theme='dark'] body {
+  background-image: 
+    radial-gradient(rgba(96, 165, 250, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.012) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.012) 1px, transparent 1px);
+}
+
+/* Scanline overlay (dark mode CRT effect) */
+body::before {
+  content: " ";
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.12) 50%) 0 0 / 100% 4px;
+  display: block;
+  position: fixed;
+  inset: 0;
+  animation: scanline-flicker 8s ease-in-out infinite;
+}
+
+[data-theme='dark'] body::before {
+  opacity: 0.06;
+}
+
+/* Dot grid overlay */
 body::after {
   content: "";
   position: fixed;
@@ -110,12 +140,11 @@ body::after {
   background-size: 40px 40px;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.5;
+  opacity: 0.4;
+  animation: grid-fade 3s ease-in-out;
 }
 
-body::before {
-  display: none;
-}
+/* scanline defined above */
 
 html.lenis, html.lenis body {
   height: auto;
@@ -232,9 +261,47 @@ h2::after {
   box-shadow: var(--shadow-lg), 0 0 0 1px rgba(96, 165, 250, 0.04);
 }
 
-.glass-card::before, .cyber-card::before,
+/* Corner bracket decorations */
+.glass-card::before, .cyber-card::before {
+  content: "";
+  border-top: 2px solid var(--accent-primary);
+  border-left: 2px solid var(--accent-primary);
+  pointer-events: none;
+  border-top-left-radius: 16px;
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  transform: translate(-2px, -2px);
+}
+
 .glass-card::after, .cyber-card::after {
-  display: none;
+  content: "";
+  border-bottom: 2px solid var(--accent-primary);
+  border-right: 2px solid var(--accent-primary);
+  pointer-events: none;
+  border-bottom-right-radius: 16px;
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  transform: translate(2px, 2px);
+}
+
+.glass-card:hover::before, .cyber-card:hover::before {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+.glass-card:hover::after, .cyber-card:hover::after {
+  opacity: 1;
+  transform: translate(0, 0);
 }
 
 .glass-card:hover, .cyber-card:hover {
@@ -598,4 +665,156 @@ nav {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
+}
+
+@keyframes scanline-flicker {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 0.04; }
+  75% { opacity: 0.07; }
+}
+
+[data-theme='dark'] body::before {
+  animation: scanline-flicker 8s ease-in-out infinite;
+}
+
+@keyframes grid-fade {
+  0% { opacity: 0; }
+  100% { opacity: 0.4; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes border-glow {
+  0%, 100% { border-color: var(--border-color); }
+  50% { border-color: var(--accent-primary); box-shadow: 0 0 15px var(--accent-glow); }
+}
+
+@keyframes slide-up {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin-slow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes bounce-subtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes text-glow {
+  0%, 100% { text-shadow: 0 0 10px var(--accent-glow); }
+  50% { text-shadow: 0 0 25px var(--accent-glow), 0 0 40px var(--accent-glow-purple); }
+}
+
+@keyframes card-entrance {
+  0% { opacity: 0; transform: translateY(20px) scale(0.97); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes border-trace {
+  0% { clip-path: inset(0 100% 100% 0); }
+  25% { clip-path: inset(0 0 100% 0); }
+  50% { clip-path: inset(0 0 0 0); }
+  75% { clip-path: inset(0 0 0 0); }
+  100% { clip-path: inset(0 100% 100% 0); }
+}
+
+/* ═══════════════════════════════════════════════════ */
+/* ANIMATED UTILITY CLASSES                            */
+/* ═══════════════════════════════════════════════════ */
+
+/* Buttons - hover glow pulse */
+.btn {
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn:active {
+  transform: translateY(0) scale(0.97);
+}
+
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-primary:hover::after {
+  opacity: 1;
+}
+
+/* Tags - subtle hover lift */
+.cyber-tag {
+  transition: all 0.25s ease;
+}
+
+.cyber-tag:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px var(--accent-glow);
+}
+
+/* Nav links - animated underline on hover */
+.nav-links a {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Section heading gradient bar animation */
+h2::before {
+  animation: shimmer 3s ease-in-out infinite;
+  background-size: 200% 100%;
+  background-image: linear-gradient(90deg, var(--accent-primary), var(--accent-cyan), var(--accent-purple), var(--accent-primary));
+}
+
+/* Section subtitle icon spin */
+.section-subtitle svg {
+  animation: spin-slow 8s linear infinite;
+}
+
+/* Logo gradient animation */
+.logo span {
+  background-size: 200% 200%;
+  animation: gradient-shift 4s ease-in-out infinite;
+}
+
+/* Theme toggle smooth spin */
+.theme-toggle-btn svg {
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.theme-toggle-btn:hover svg {
+  transform: rotate(20deg) scale(1.15);
+}
+
+/* Scrollbar glow on hover */
+::-webkit-scrollbar-thumb {
+  transition: background 0.3s ease;
+}
+
+/* Interactive link shimmer */
+a {
+  transition: color 0.25s ease;
+}
+
+/* Terminal dots breathing */
+.dot-green {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* Glass card entrance */
+.glass-card, .cyber-card {
+  animation: card-entrance 0.6s ease-out both;
+}
+
+/* Status badge pulse */
+.desktop-only-badge span:first-child {
+  animation: pulse-glow 2s ease-in-out infinite;
 }
