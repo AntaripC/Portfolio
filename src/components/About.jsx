@@ -294,16 +294,16 @@ export default function About() {
                     Completed 2025
                   </span>
                   <h3 style={{ fontSize: '1.2rem', color: 'var(--text-primary)', marginTop: '0.2rem' }}>
-                    Narayana E Techno School
+                    Krishnath College School
                   </h3>
                   <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', fontFamily: 'var(--font-mono)' }}>
-                    Senior Secondary (12th Grade)
+                    Senior Secondary (12th Grade) • Advanced PCMB
                   </p>
                 </div>
               </div>
 
               <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
-                Rigorous STEM curriculum focusing on Advanced Mathematics and Computer Science fundamentals.
+                Rigorous STEM curriculum focusing on Advanced PCMB (Physics, Chemistry, Mathematics, Biology) and Analytical Problem Solving.
               </p>
             </TiltCard>
 
