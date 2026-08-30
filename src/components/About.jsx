@@ -27,7 +27,7 @@ import {
 } from 'lucide-react'
 
 // Custom TiltCard component for interactive 3D parallax hover effect
-export function TiltCard({ children, borderTopColor = 'var(--accent-cyan)', style = {}, ...props }) {
+export function TiltCard({ children, borderTopColor = 'var(--accent-primary)', style = {}, ...props }) {
   const cardRef = useRef(null)
   const x = useMotionValue(0.5)
   const y = useMotionValue(0.5)
@@ -81,16 +81,9 @@ export default function About() {
 
   const yText = useTransform(scrollYProgress, [0, 1], [30, -30])
 
-  // Interactive Tab State inside Executive Bio
   const [activeBioTab, setActiveBioTab] = useState('cloud')
-
-  // Interactive Attribute Selector State
   const [selectedAttribute, setSelectedAttribute] = useState(0)
-
-  // Interactive Hobby Selector State
   const [activeHobby, setActiveHobby] = useState(0)
-
-  // Filter view mode state
   const [viewFilter, setViewFilter] = useState('all')
 
   const attributesData = [
@@ -98,7 +91,7 @@ export default function About() {
       id: 'cloud',
       name: 'Cloud Systems Architect',
       tag: 'INFRASTRUCTURE & RESILIENCE',
-      color: 'var(--accent-cyan)',
+      color: 'var(--accent-primary)',
       desc: 'Architecting containerized cloud topologies on AWS & GCP with zero-trust security postures, automated CI/CD pipelines, and cost-efficient distributed deployments.',
       metrics: ['AWS IAM & RBAC', 'Docker & Kubernetes', 'Infrastructure as Code', 'High Availability'],
       icon: <Cpu size={18} />,
@@ -116,7 +109,7 @@ export default function About() {
       id: 'lead',
       name: 'High-Pressure Team Lead',
       tag: 'SPRINT EXECUTION & MENTORSHIP',
-      color: '#a855f7',
+      color: 'var(--accent-purple)',
       desc: 'Directed 5+ developer squads in national hackathons (IITs & university arenas), synchronizing Git workflows, task delegation, and rapid MVP delivery.',
       metrics: ['IIT Hackathons Lead', 'Gitflow Governance', 'Cross-Disciplinary Sync', 'Jury Demo Defense'],
       icon: <UsersIcon size={18} />,
@@ -125,7 +118,7 @@ export default function About() {
       id: 'data',
       name: 'Distributed Data Telemetry',
       tag: 'REAL-TIME DATA STREAMING',
-      color: '#fbbf24',
+      color: 'var(--accent-amber)',
       desc: 'Building high-throughput analytical data pipelines, RDBMS relations, MongoDB architectures, and graph-based pathfinding algorithms.',
       metrics: ['Node.js & Express REST', 'RDBMS & MongoDB', 'Data Pipelines', 'A* Pathfinding Graphs'],
       icon: <Activity size={18} />,
@@ -134,7 +127,7 @@ export default function About() {
       id: 'learner',
       name: 'Fast & Versatile Learner',
       tag: 'ADAPTIVE PROBLEM SOLVER',
-      color: '#38bdf8',
+      color: 'var(--accent-cyan)',
       desc: 'Standing in the Top 1% of cohort globally at LPU with credentials in Big Data, Data Science, and Cybersecurity from IIT Madras & Infosys.',
       metrics: ['Top 1% Global Cohort', 'IIT Madras Certified', 'Rapid Tech Adaptability', 'STEM Academic Rigor'],
       icon: <Award size={18} />,
@@ -146,7 +139,7 @@ export default function About() {
       title: 'Tech & Gadget Prototyping',
       category: 'HARDWARE LAB',
       icon: <Cpu size={22} />,
-      color: 'var(--accent-cyan)',
+      color: 'var(--accent-primary)',
       detail: 'Tinkering with microcontrollers, breakout boards, sensors, and hardware circuits to test real-world physical computing concepts.',
       stats: 'ESP32 • Arduino • Sensors',
     },
@@ -162,7 +155,7 @@ export default function About() {
       title: 'Exploring Tech Architecture',
       category: 'SYSTEM STUDY',
       icon: <Layers size={22} />,
-      color: '#a855f7',
+      color: 'var(--accent-purple)',
       detail: 'Deep-diving into whitepapers, cloud infrastructure benchmarks, high-scale distributed designs, and edge computing innovations.',
       stats: 'Distributed Specs • Cloud Benchmarks',
     },
@@ -170,7 +163,7 @@ export default function About() {
       title: 'IoT Device Tinkering',
       category: 'AUTOMATION & ROBOTICS',
       icon: <Zap size={22} />,
-      color: '#fbbf24',
+      color: 'var(--accent-amber)',
       detail: 'Building autonomous sensor nodes, wireless telemetry relays, and smart ambient monitors for real-time environment intelligence.',
       stats: 'Wireless Relays • Cloud Telemetry',
     },
@@ -178,34 +171,6 @@ export default function About() {
 
   return (
     <section id="about" className="section" ref={sectionRef} style={{ position: 'relative', overflow: 'hidden' }}>
-      {/* Ambient background glows */}
-      <div
-        style={{
-          position: 'absolute',
-          top: '10%',
-          left: '-5%',
-          width: '500px',
-          height: '500px',
-          background: 'radial-gradient(circle, rgba(0, 240, 255, 0.05) 0%, rgba(16, 185, 129, 0.02) 50%, transparent 70%)',
-          filter: 'blur(80px)',
-          pointerEvents: 'none',
-          zIndex: 0,
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '10%',
-          right: '-5%',
-          width: '500px',
-          height: '500px',
-          background: 'radial-gradient(circle, rgba(168, 85, 247, 0.05) 0%, transparent 70%)',
-          filter: 'blur(80px)',
-          pointerEvents: 'none',
-          zIndex: 0,
-        }}
-      />
-
       <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         {/* ========================================================================= */}
         {/* SECTION HEADER & INTERACTIVE MODE SELECTOR */}
@@ -222,12 +187,12 @@ export default function About() {
               display: 'inline-flex',
               flexWrap: 'wrap',
               gap: '0.5rem',
-              background: 'rgba(3, 7, 18, 0.85)',
-              border: '1px solid rgba(0, 240, 255, 0.25)',
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border-color)',
               padding: '0.35rem 0.5rem',
               borderRadius: '50px',
               backdropFilter: 'blur(12px)',
-              boxShadow: '0 0 20px rgba(0, 240, 255, 0.1)',
+              boxShadow: '0 4px 20px var(--accent-glow)',
             }}
           >
             {[
@@ -241,9 +206,9 @@ export default function About() {
                 key={f.id}
                 onClick={() => setViewFilter(f.id)}
                 style={{
-                  background: viewFilter === f.id ? 'linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(16, 185, 129, 0.2))' : 'transparent',
-                  color: viewFilter === f.id ? 'var(--accent-cyan)' : 'var(--text-secondary)',
-                  border: `1px solid ${viewFilter === f.id ? 'var(--accent-cyan)' : 'transparent'}`,
+                  background: viewFilter === f.id ? 'linear-gradient(135deg, var(--bg-secondary), var(--bg-card))' : 'transparent',
+                  color: viewFilter === f.id ? 'var(--accent-primary)' : 'var(--text-secondary)',
+                  border: `1px solid ${viewFilter === f.id ? 'var(--accent-primary)' : 'transparent'}`,
                   borderRadius: '30px',
                   padding: '0.4rem 0.9rem',
                   fontFamily: 'var(--font-mono)',
@@ -274,12 +239,12 @@ export default function About() {
               transition={{ duration: 0.6 }}
             >
               <TiltCard
-                borderTopColor="var(--accent-cyan)"
+                borderTopColor="var(--accent-primary)"
                 style={{
-                  background: 'linear-gradient(145deg, rgba(8, 14, 28, 0.95) 0%, rgba(3, 7, 18, 0.98) 100%)',
+                  background: 'var(--bg-card-elevated)',
                   padding: '2.5rem',
-                  border: '1px solid rgba(0, 240, 255, 0.25)',
-                  boxShadow: '0 20px 50px rgba(0, 0, 0, 0.8), inset 0 0 25px rgba(0, 240, 255, 0.05)',
+                  border: '1px solid var(--border-color)',
+                  boxShadow: '0 15px 45px rgba(15, 23, 42, 0.08), inset 0 0 25px rgba(217, 119, 6, 0.02)',
                   borderRadius: '16px',
                 }}
               >
@@ -318,9 +283,7 @@ export default function About() {
                         fontSize: 'clamp(1.5rem, 2.5vw, 2.2rem)',
                         marginBottom: '1rem',
                         lineHeight: '1.25',
-                        background: 'linear-gradient(135deg, var(--text-primary) 30%, var(--accent-cyan) 100%)',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
+                        color: 'var(--text-primary)',
                       }}
                     >
                       Building Scalable Infrastructures & Autonomous Systems
@@ -332,7 +295,7 @@ export default function About() {
                         display: 'flex',
                         gap: '0.4rem',
                         marginBottom: '1.5rem',
-                        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                        borderBottom: '1px solid var(--border-subtle)',
                         paddingBottom: '0.5rem',
                       }}
                     >
@@ -349,12 +312,13 @@ export default function About() {
                             alignItems: 'center',
                             gap: '0.4rem',
                             padding: '0.4rem 0.8rem',
-                            background: activeBioTab === tab.id ? 'rgba(0, 240, 255, 0.15)' : 'transparent',
-                            border: `1px solid ${activeBioTab === tab.id ? 'var(--accent-cyan)' : 'transparent'}`,
-                            color: activeBioTab === tab.id ? 'var(--accent-cyan)' : 'var(--text-secondary)',
+                            background: activeBioTab === tab.id ? 'var(--bg-secondary)' : 'transparent',
+                            border: `1px solid ${activeBioTab === tab.id ? 'var(--accent-primary)' : 'transparent'}`,
+                            color: activeBioTab === tab.id ? 'var(--accent-primary)' : 'var(--text-secondary)',
                             borderRadius: '6px',
                             fontFamily: 'var(--font-mono)',
                             fontSize: '0.78rem',
+                            fontWeight: '600',
                             cursor: 'pointer',
                             transition: 'all 0.2s',
                           }}
@@ -417,24 +381,24 @@ export default function About() {
                         gap: '0.85rem',
                         marginTop: '1.5rem',
                         paddingTop: '1.25rem',
-                        borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+                        borderTop: '1px solid var(--border-subtle)',
                       }}
                     >
-                      <div style={{ background: 'rgba(3, 7, 18, 0.7)', padding: '0.65rem 0.85rem', borderRadius: '8px', border: '1px solid rgba(0, 240, 255, 0.2)' }}>
+                      <div style={{ background: 'var(--bg-secondary)', padding: '0.65rem 0.85rem', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
                         <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>COHORT STANDING</span>
-                        <div style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--accent-cyan)', marginTop: '0.15rem' }}>Top 1%</div>
+                        <div style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--accent-primary)', marginTop: '0.15rem' }}>Top 1%</div>
                         <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>Global Rank @ LPU</span>
                       </div>
 
-                      <div style={{ background: 'rgba(3, 7, 18, 0.7)', padding: '0.65rem 0.85rem', borderRadius: '8px', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+                      <div style={{ background: 'var(--bg-secondary)', padding: '0.65rem 0.85rem', borderRadius: '8px', border: '1px solid var(--border-green)' }}>
                         <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>RESEARCH IP</span>
                         <div style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--accent-green)', marginTop: '0.15rem' }}>Patent Pending</div>
                         <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>IoT Spectral Detector</span>
                       </div>
 
-                      <div style={{ background: 'rgba(3, 7, 18, 0.7)', padding: '0.65rem 0.85rem', borderRadius: '8px', border: '1px solid rgba(168, 85, 247, 0.2)' }}>
+                      <div style={{ background: 'var(--bg-secondary)', padding: '0.65rem 0.85rem', borderRadius: '8px', border: '1px solid var(--border-purple)' }}>
                         <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>COMMUNITY LEAD</span>
-                        <div style={{ fontSize: '1.15rem', fontWeight: '700', color: '#a855f7', marginTop: '0.15rem' }}>CREST Head</div>
+                        <div style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--accent-purple)', marginTop: '0.15rem' }}>CREST Head</div>
                         <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>Marketing & Outreach</span>
                       </div>
                     </div>
@@ -443,17 +407,17 @@ export default function About() {
                   {/* Right Column: Interactive Operative HUD & Telemetry Screen */}
                   <div
                     style={{
-                      background: 'rgba(3, 7, 18, 0.95)',
-                      border: '1px solid rgba(0, 240, 255, 0.2)',
+                      background: 'var(--bg-secondary)',
+                      border: '1px solid var(--border-color)',
                       borderRadius: '12px',
                       padding: '1.5rem',
                       display: 'flex',
                       flexDirection: 'column',
-                      boxShadow: 'inset 0 0 30px rgba(0, 240, 255, 0.04)',
+                      boxShadow: 'inset 0 0 20px rgba(217, 119, 6, 0.04)',
                     }}
                   >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', paddingBottom: '0.65rem' }}>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent-cyan)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.65rem' }}>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent-primary)', fontWeight: '700' }}>
                         TELEMETRY // LIVE_PROFILE_KERNEL
                       </span>
                       <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-muted)' }}>
@@ -463,39 +427,39 @@ export default function About() {
 
                     {/* Spec details lines */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontFamily: 'var(--font-mono)', fontSize: '0.82rem', flex: 1 }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0', borderBottom: '1px dashed rgba(255, 255, 255, 0.06)' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0', borderBottom: '1px dashed var(--border-subtle)' }}>
                         <span style={{ color: 'var(--text-muted)' }}>OPERATIVE_NAME:</span>
                         <span style={{ color: 'var(--text-primary)', fontWeight: '600' }}>Antarip Chatterjee</span>
                       </div>
 
-                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0', borderBottom: '1px dashed rgba(255, 255, 255, 0.06)' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0', borderBottom: '1px dashed var(--border-subtle)' }}>
                         <span style={{ color: 'var(--text-muted)' }}>PRIMARY_STACK:</span>
-                        <span style={{ color: 'var(--accent-cyan)' }}>AWS • GCP • Python • Node.js</span>
+                        <span style={{ color: 'var(--accent-primary)', fontWeight: '600' }}>AWS • GCP • Python • Node.js</span>
                       </div>
 
-                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0', borderBottom: '1px dashed rgba(255, 255, 255, 0.06)' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0', borderBottom: '1px dashed var(--border-subtle)' }}>
                         <span style={{ color: 'var(--text-muted)' }}>SPECIALIZATION:</span>
-                        <span style={{ color: 'var(--accent-green)' }}>Cloud Computing & IoT Hardware</span>
+                        <span style={{ color: 'var(--accent-green)', fontWeight: '600' }}>Cloud Computing & IoT Hardware</span>
                       </div>
 
-                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0', borderBottom: '1px dashed rgba(255, 255, 255, 0.06)' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0', borderBottom: '1px dashed var(--border-subtle)' }}>
                         <span style={{ color: 'var(--text-muted)' }}>ACADEMIC_INSTITUTE:</span>
                         <span style={{ color: 'var(--text-primary)' }}>Lovely Professional University</span>
                       </div>
 
-                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0', borderBottom: '1px dashed rgba(255, 255, 255, 0.06)' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0', borderBottom: '1px dashed var(--border-subtle)' }}>
                         <span style={{ color: 'var(--text-muted)' }}>TARGET_OPPORTUNITY:</span>
-                        <span style={{ color: '#a855f7', fontWeight: '600' }}>Summer 2027 Internship</span>
+                        <span style={{ color: 'var(--accent-purple)', fontWeight: '600' }}>Summer 2027 Internship</span>
                       </div>
 
                       <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0' }}>
                         <span style={{ color: 'var(--text-muted)' }}>LOCATION_MOBILITY:</span>
-                        <span style={{ color: '#fbbf24' }}>India // Global Remote</span>
+                        <span style={{ color: 'var(--accent-amber)', fontWeight: '600' }}>India // Global Remote</span>
                       </div>
                     </div>
 
                     {/* Interactive Action Buttons */}
-                    <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                    <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px solid var(--border-subtle)' }}>
                       <a
                         href="#projects"
                         className="btn btn-primary"
@@ -544,14 +508,14 @@ export default function About() {
                   transition={{ duration: 0.5 }}
                 >
                   <TiltCard
-                    borderTopColor="var(--accent-cyan)"
+                    borderTopColor="var(--accent-primary)"
                     style={{
                       height: '100%',
-                      background: 'rgba(8, 14, 28, 0.85)',
+                      background: 'var(--bg-card)',
                       padding: '2rem',
                       display: 'flex',
                       flexDirection: 'column',
-                      border: '1px solid rgba(0, 240, 255, 0.2)',
+                      border: '1px solid var(--border-color)',
                     }}
                   >
                     <div className="terminal-header" style={{ marginBottom: '1.2rem' }}>
@@ -560,17 +524,17 @@ export default function About() {
                         <span className="terminal-dot dot-yellow" />
                         <span className="terminal-dot dot-green" />
                       </div>
-                      <span style={{ color: 'var(--accent-cyan)', fontSize: '0.72rem' }}>EDU_RECORD // 01</span>
+                      <span style={{ color: 'var(--accent-primary)', fontSize: '0.72rem' }}>EDU_RECORD // 01</span>
                     </div>
 
                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', marginBottom: '1rem' }}>
                       <div
                         style={{
                           padding: '0.75rem',
-                          background: 'rgba(0, 240, 255, 0.1)',
+                          background: 'rgba(217, 119, 6, 0.1)',
                           borderRadius: '10px',
-                          color: 'var(--accent-cyan)',
-                          border: '1px solid rgba(0, 240, 255, 0.25)',
+                          color: 'var(--accent-primary)',
+                          border: '1px solid var(--border-color)',
                         }}
                       >
                         <GraduationCap size={28} />
@@ -579,7 +543,7 @@ export default function About() {
                         <span
                           style={{
                             fontSize: '0.74rem',
-                            color: 'var(--accent-cyan)',
+                            color: 'var(--accent-primary)',
                             fontWeight: '600',
                             textTransform: 'uppercase',
                             fontFamily: 'var(--font-mono)',
@@ -590,7 +554,7 @@ export default function About() {
                         <h3 style={{ fontSize: '1.3rem', color: 'var(--text-primary)', marginTop: '0.15rem' }}>
                           Lovely Professional University (LPU)
                         </h3>
-                        <p style={{ color: 'var(--accent-green)', fontSize: '0.95rem', fontFamily: 'var(--font-mono)', fontWeight: '500' }}>
+                        <p style={{ color: 'var(--accent-green)', fontSize: '0.95rem', fontFamily: 'var(--font-mono)', fontWeight: '600' }}>
                           B.Tech Computer Science & Engineering (Cloud Computing)
                         </p>
                       </div>
@@ -599,7 +563,7 @@ export default function About() {
                     {/* Academic Accomplishments List */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', marginTop: '0.5rem', marginBottom: '1.25rem' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.88rem', color: 'var(--text-secondary)' }}>
-                        <Award size={16} color="var(--accent-cyan)" style={{ flexShrink: 0 }} />
+                        <Award size={16} color="var(--accent-primary)" style={{ flexShrink: 0 }} />
                         <span><strong>Academic Rank:</strong> Ranked in the Top 1% of cohort globally</span>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.88rem', color: 'var(--text-secondary)' }}>
@@ -609,7 +573,7 @@ export default function About() {
                     </div>
 
                     {/* Core Curricular Pillars */}
-                    <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                    <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid var(--border-subtle)' }}>
                       <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', display: 'block', marginBottom: '0.4rem' }}>
                         ADVANCED_MODULES:
                       </span>
@@ -620,11 +584,11 @@ export default function About() {
                             style={{
                               fontSize: '0.72rem',
                               fontFamily: 'var(--font-mono)',
-                              color: 'var(--accent-cyan)',
-                              background: 'rgba(0, 240, 255, 0.06)',
+                              color: 'var(--accent-primary)',
+                              background: 'var(--bg-secondary)',
                               padding: '0.2rem 0.5rem',
                               borderRadius: '4px',
-                              border: '1px solid rgba(0, 240, 255, 0.2)',
+                              border: '1px solid var(--border-color)',
                             }}
                           >
                             #{tag}
@@ -646,11 +610,11 @@ export default function About() {
                     borderTopColor="var(--accent-green)"
                     style={{
                       height: '100%',
-                      background: 'rgba(8, 14, 28, 0.85)',
+                      background: 'var(--bg-card)',
                       padding: '2rem',
                       display: 'flex',
                       flexDirection: 'column',
-                      border: '1px solid rgba(16, 185, 129, 0.2)',
+                      border: '1px solid var(--border-green)',
                     }}
                   >
                     <div className="terminal-header" style={{ marginBottom: '1.2rem' }}>
@@ -666,10 +630,10 @@ export default function About() {
                       <div
                         style={{
                           padding: '0.75rem',
-                          background: 'rgba(16, 185, 129, 0.1)',
+                          background: 'rgba(5, 150, 105, 0.1)',
                           borderRadius: '10px',
                           color: 'var(--accent-green)',
-                          border: '1px solid rgba(16, 185, 129, 0.25)',
+                          border: '1px solid var(--border-green)',
                         }}
                       >
                         <School size={28} />
@@ -689,7 +653,7 @@ export default function About() {
                         <h3 style={{ fontSize: '1.3rem', color: 'var(--text-primary)', marginTop: '0.15rem' }}>
                           Krishnath College School
                         </h3>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', fontFamily: 'var(--font-mono)' }}>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', fontFamily: 'var(--font-mono)', fontWeight: '600' }}>
                           Senior Secondary (12th Grade) • Advanced PCMB
                         </p>
                       </div>
@@ -700,7 +664,7 @@ export default function About() {
                     </p>
 
                     {/* PCMB Pillar Chips */}
-                    <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                    <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid var(--border-subtle)' }}>
                       <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', display: 'block', marginBottom: '0.4rem' }}>
                         CORE_CURRICULUM:
                       </span>
@@ -712,10 +676,10 @@ export default function About() {
                               fontSize: '0.72rem',
                               fontFamily: 'var(--font-mono)',
                               color: 'var(--accent-green)',
-                              background: 'rgba(16, 185, 129, 0.06)',
+                              background: 'var(--bg-secondary)',
                               padding: '0.2rem 0.5rem',
                               borderRadius: '4px',
-                              border: '1px solid rgba(16, 185, 129, 0.2)',
+                              border: '1px solid var(--border-green)',
                             }}
                           >
                             #{tag}
@@ -738,12 +702,12 @@ export default function About() {
               transition={{ duration: 0.6 }}
             >
               <TiltCard
-                borderTopColor="#a855f7"
+                borderTopColor="var(--accent-purple)"
                 style={{
-                  background: 'rgba(8, 14, 28, 0.9)',
+                  background: 'var(--bg-card-elevated)',
                   padding: '2.2rem',
-                  border: '1px solid rgba(168, 85, 247, 0.25)',
-                  boxShadow: '0 15px 40px rgba(0, 0, 0, 0.75), inset 0 0 20px rgba(168, 85, 247, 0.04)',
+                  border: '1px solid var(--border-purple)',
+                  boxShadow: '0 15px 40px rgba(15, 23, 42, 0.08)',
                   borderRadius: '16px',
                 }}
               >
@@ -753,7 +717,7 @@ export default function About() {
                     <span className="terminal-dot dot-yellow" />
                     <span className="terminal-dot dot-green" />
                   </div>
-                  <span style={{ color: '#a855f7', fontSize: '0.72rem' }}>MATRIX // CORE_ATTRIBUTES_&_MINDSET</span>
+                  <span style={{ color: 'var(--accent-purple)', fontSize: '0.72rem' }}>MATRIX // CORE_ATTRIBUTES_&_MINDSET</span>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
@@ -765,7 +729,7 @@ export default function About() {
                       Click on any capability node to inspect technical execution and toolchains.
                     </p>
                   </div>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: '#a855f7' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent-purple)', fontWeight: '600' }}>
                     SELECT_TO_INSPECT
                   </span>
                 </div>
@@ -783,15 +747,15 @@ export default function About() {
                           alignItems: 'center',
                           gap: '0.5rem',
                           padding: '0.55rem 1rem',
-                          background: isSelected ? `${attr.color}20` : 'rgba(3, 7, 18, 0.8)',
-                          border: `1px solid ${isSelected ? attr.color : 'rgba(255, 255, 255, 0.1)'}`,
+                          background: isSelected ? 'var(--bg-secondary)' : 'var(--bg-card)',
+                          border: `1px solid ${isSelected ? attr.color : 'var(--border-subtle)'}`,
                           color: isSelected ? attr.color : 'var(--text-secondary)',
                           borderRadius: '8px',
                           fontFamily: 'var(--font-mono)',
                           fontSize: '0.82rem',
                           fontWeight: isSelected ? '700' : '500',
                           cursor: 'pointer',
-                          boxShadow: isSelected ? `0 0 15px ${attr.color}30` : 'none',
+                          boxShadow: isSelected ? '0 4px 15px var(--accent-glow)' : 'none',
                           transition: 'all 0.25s ease',
                         }}
                       >
@@ -811,11 +775,11 @@ export default function About() {
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.25 }}
                     style={{
-                      background: 'rgba(3, 7, 18, 0.95)',
-                      border: `1px solid ${attributesData[selectedAttribute].color}40`,
+                      background: 'var(--bg-secondary)',
+                      border: '1px solid var(--border-color)',
                       borderRadius: '10px',
                       padding: '1.4rem',
-                      boxShadow: `inset 0 0 20px ${attributesData[selectedAttribute].color}08`,
+                      boxShadow: 'inset 0 0 20px rgba(217, 119, 6, 0.03)',
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem', flexWrap: 'wrap', gap: '0.5rem' }}>
@@ -826,9 +790,9 @@ export default function About() {
                           color: attributesData[selectedAttribute].color,
                           fontWeight: '700',
                           padding: '0.2rem 0.55rem',
-                          background: `${attributesData[selectedAttribute].color}15`,
+                          background: 'var(--bg-card)',
                           borderRadius: '4px',
-                          border: `1px solid ${attributesData[selectedAttribute].color}30`,
+                          border: `1px solid ${attributesData[selectedAttribute].color}`,
                         }}
                       >
                         {attributesData[selectedAttribute].tag}
@@ -853,10 +817,11 @@ export default function About() {
                             fontSize: '0.78rem',
                             fontFamily: 'var(--font-mono)',
                             color: attributesData[selectedAttribute].color,
-                            background: 'rgba(255, 255, 255, 0.03)',
-                            border: `1px solid ${attributesData[selectedAttribute].color}30`,
+                            background: 'var(--bg-card)',
+                            border: '1px solid var(--border-subtle)',
                             padding: '0.25rem 0.6rem',
                             borderRadius: '4px',
+                            fontWeight: '600',
                           }}
                         >
                           <CheckCircle2 size={12} />
@@ -887,14 +852,14 @@ export default function About() {
                 transition={{ duration: 0.5 }}
               >
                 <TiltCard
-                  borderTopColor="#a855f7"
+                  borderTopColor="var(--accent-purple)"
                   style={{
                     height: '100%',
-                    background: 'rgba(8, 14, 28, 0.85)',
+                    background: 'var(--bg-card)',
                     padding: '2rem',
                     display: 'flex',
                     flexDirection: 'column',
-                    border: '1px solid rgba(168, 85, 247, 0.2)',
+                    border: '1px solid var(--border-purple)',
                   }}
                 >
                   <div className="terminal-header" style={{ marginBottom: '1.2rem' }}>
@@ -903,17 +868,17 @@ export default function About() {
                       <span className="terminal-dot dot-yellow" />
                       <span className="terminal-dot dot-green" />
                     </div>
-                    <span style={{ color: '#a855f7', fontSize: '0.72rem' }}>TARGET_OP // SUMMER_2027</span>
+                    <span style={{ color: 'var(--accent-purple)', fontSize: '0.72rem' }}>TARGET_OP // SUMMER_2027</span>
                   </div>
 
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', marginBottom: '1rem' }}>
                     <div
                       style={{
                         padding: '0.75rem',
-                        background: 'rgba(168, 85, 247, 0.1)',
+                        background: 'rgba(124, 58, 237, 0.1)',
                         borderRadius: '10px',
-                        color: '#a855f7',
-                        border: '1px solid rgba(168, 85, 247, 0.25)',
+                        color: 'var(--accent-purple)',
+                        border: '1px solid var(--border-purple)',
                       }}
                     >
                       <Briefcase size={28} />
@@ -935,21 +900,21 @@ export default function About() {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem', marginBottom: '1.5rem', fontFamily: 'var(--font-mono)', fontSize: '0.8rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-secondary)' }}>
                       <span>&gt; ROLES:</span>
-                      <span style={{ color: 'var(--text-primary)' }}>Cloud / DevOps / SWE / IoT</span>
+                      <span style={{ color: 'var(--text-primary)', fontWeight: '600' }}>Cloud / DevOps / SWE / IoT</span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-secondary)' }}>
                       <span>&gt; AVAILABILITY:</span>
-                      <span style={{ color: 'var(--accent-green)' }}>Summer 2027 (Onsite / Remote)</span>
+                      <span style={{ color: 'var(--accent-green)', fontWeight: '600' }}>Summer 2027 (Onsite / Remote)</span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-secondary)' }}>
                       <span>&gt; MOBILITY:</span>
-                      <span style={{ color: 'var(--accent-cyan)' }}>Open to Global Relocation</span>
+                      <span style={{ color: 'var(--accent-primary)', fontWeight: '600' }}>Open to Global Relocation</span>
                     </div>
                   </div>
 
                   <a
                     href="#contact"
-                    className="btn btn-green"
+                    className="btn btn-primary"
                     style={{ marginTop: 'auto', fontSize: '0.85rem', width: '100%', justifyContent: 'center' }}
                   >
                     <Briefcase size={16} /> Dispatch Internship Offer
@@ -965,14 +930,14 @@ export default function About() {
                 transition={{ duration: 0.5, delay: 0.1 }}
               >
                 <TiltCard
-                  borderTopColor="#10b981"
+                  borderTopColor="var(--accent-green)"
                   style={{
                     height: '100%',
-                    background: 'rgba(8, 14, 28, 0.85)',
+                    background: 'var(--bg-card)',
                     padding: '2rem',
                     display: 'flex',
                     flexDirection: 'column',
-                    border: '1px solid rgba(16, 185, 129, 0.2)',
+                    border: '1px solid var(--border-green)',
                   }}
                 >
                   <div className="terminal-header" style={{ marginBottom: '1.2rem' }}>
@@ -981,17 +946,17 @@ export default function About() {
                       <span className="terminal-dot dot-yellow" />
                       <span className="terminal-dot dot-green" />
                     </div>
-                    <span style={{ color: '#10b981', fontSize: '0.72rem' }}>PASSIONS // CREATIVE_LAB</span>
+                    <span style={{ color: 'var(--accent-green)', fontSize: '0.72rem' }}>PASSIONS // CREATIVE_LAB</span>
                   </div>
 
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
                     <div
                       style={{
                         padding: '0.65rem',
-                        background: 'rgba(16, 185, 129, 0.12)',
+                        background: 'rgba(5, 150, 105, 0.12)',
                         borderRadius: '10px',
                         color: 'var(--accent-green)',
-                        border: '1px solid rgba(16, 185, 129, 0.3)',
+                        border: '1px solid var(--border-green)',
                       }}
                     >
                       <Heart size={22} />
@@ -1000,7 +965,7 @@ export default function About() {
                       <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', margin: 0 }}>
                         Hobbies & Explorations
                       </h3>
-                      <span style={{ color: 'var(--accent-green)', fontSize: '0.78rem', fontFamily: 'var(--font-mono)' }}>
+                      <span style={{ color: 'var(--accent-green)', fontSize: '0.78rem', fontFamily: 'var(--font-mono)', fontWeight: '600' }}>
                         HARDWARE • MEDIA • ARCHITECTURE
                       </span>
                     </div>
@@ -1016,8 +981,8 @@ export default function About() {
                           onClick={() => setActiveHobby(hIdx)}
                           style={{
                             padding: '0.85rem',
-                            background: isHovered ? `${hobby.color}15` : 'rgba(3, 7, 18, 0.7)',
-                            border: `1px solid ${isHovered ? hobby.color : 'rgba(255, 255, 255, 0.08)'}`,
+                            background: isHovered ? 'var(--bg-secondary)' : 'var(--bg-card)',
+                            border: `1px solid ${isHovered ? hobby.color : 'var(--border-subtle)'}`,
                             borderRadius: '8px',
                             cursor: 'pointer',
                             transition: 'all 0.25s ease',
@@ -1042,8 +1007,8 @@ export default function About() {
                     style={{
                       marginTop: 'auto',
                       padding: '0.85rem 1rem',
-                      background: 'rgba(3, 7, 18, 0.9)',
-                      border: '1px solid rgba(255, 255, 255, 0.08)',
+                      background: 'var(--bg-secondary)',
+                      border: '1px solid var(--border-subtle)',
                       borderRadius: '8px',
                     }}
                   >
@@ -1065,7 +1030,6 @@ export default function About() {
   )
 }
 
-// Small helper component icon if not directly exported
 function UsersIcon(props) {
   return <Briefcase {...props} />
 }
