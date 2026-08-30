@@ -517,7 +517,34 @@ nav {
   background: var(--accent-primary);
 }
 
+@media (min-width: 1025px) {
+  .bento-span-8 {
+    grid-column: span 8 !important;
+  }
+  .bento-span-4 {
+    grid-column: span 4 !important;
+  }
+  .bento-span-7 {
+    grid-column: span 7 !important;
+  }
+  .bento-span-5 {
+    grid-column: span 5 !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  .bento-span-8,
+  .bento-span-4,
+  .bento-span-7,
+  .bento-span-5 {
+    grid-column: span 12 !important;
+  }
+}
+
 @media (max-width: 860px) {
+  .desktop-only-badge {
+    display: none !important;
+  }
   .nav-links {
     display: none;
   }
@@ -541,3 +568,4 @@ nav {
     padding: 5rem 0;
   }
 }
+

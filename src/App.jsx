@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import Lenis from '@studio-freight/lenis'
-import { ShieldCheck, Cloud, Terminal, Mail, Cpu } from 'lucide-react'
+import { ShieldCheck, Cloud, Terminal, Mail, Cpu, Sparkles } from 'lucide-react'
 
 // Component imports
 import Preloader from './components/Preloader.jsx'
@@ -8,13 +8,11 @@ import CursorGlow from './components/CursorGlow.jsx'
 import CloudInteractiveBackground from './components/CloudInteractiveBackground.jsx'
 import Navbar from './components/Navbar.jsx'
 import Hero from './components/Hero.jsx'
-import TerminalComponent from './components/Terminal.jsx'
 import About from './components/About.jsx'
+import Projects from './components/Projects.jsx'
 import Skills from './components/Skills.jsx'
 import Experience from './components/Experience.jsx'
-import Projects from './components/Projects.jsx'
 import Certifications from './components/Certifications.jsx'
-import Extracurricular from './components/Extracurricular.jsx'
 import Contact from './components/Contact.jsx'
 
 export default function App() {
@@ -51,61 +49,27 @@ export default function App() {
       <CloudInteractiveBackground />
       <Navbar />
 
-      {/* Ticker / Running Telemetry Bar */}
-      <div className="telemetry-bar" style={{ marginTop: '64px' }}>
-        <div
-          style={{
-            display: 'flex',
-            gap: '3rem',
-            animation: 'none',
-            padding: '0 2rem',
-            alignItems: 'center',
-            width: '100%',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-          }}
-        >
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', color: 'var(--accent-green)' }}>
-            <span
-              style={{
-                width: '6px',
-                height: '6px',
-                borderRadius: '50%',
-                backgroundColor: 'var(--accent-green)',
-                boxShadow: '0 0 6px var(--accent-green)',
-              }}
-            />
-            CLOUD_STATUS: SECURED
-          </span>
-          <span style={{ color: 'var(--accent-cyan)' }}>NODE: LPU_CLOUD_LAB [TOP 1%]</span>
-          <span style={{ color: 'var(--accent-purple)' }}>INFRA: AWS_WELL_ARCH_ENGAGED</span>
-          <span style={{ color: 'var(--accent-amber)' }}>TELEMETRY: ThingSpeak_ESP32_ACTIVE</span>
-          <span style={{ color: 'var(--text-primary)' }}>TARGET: SUMMER_2027_INTERN</span>
-        </div>
-      </div>
-
-      {/* Main Content Sections */}
-      <main>
+      {/* Main Content Layout Sections */}
+      <main style={{ position: 'relative', zIndex: 1 }}>
         <Hero />
-        <TerminalComponent />
         <About />
+        <Projects />
         <Skills />
         <Experience />
-        <Projects />
         <Certifications />
-        <Extracurricular />
         <Contact />
       </main>
 
-      {/* Footer */}
+      {/* Modern Minimalist Footer */}
       <footer
         style={{
           background: 'var(--bg-card)',
-          padding: '2.5rem 0',
+          padding: '3rem 0 2.5rem 0',
           textAlign: 'center',
           borderTop: '1px solid var(--border-color)',
           position: 'relative',
           zIndex: 10,
+          backdropFilter: 'blur(12px)',
         }}
       >
         <div className="container">
@@ -114,26 +78,27 @@ export default function App() {
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              gap: '1rem',
-              marginBottom: '1rem',
+              gap: '0.85rem',
+              marginBottom: '1.25rem',
               flexWrap: 'wrap',
             }}
           >
-            <span className="cyber-tag">
-              <ShieldCheck size={12} /> CLOUD_SECURITY
+            <span className="cyber-tag" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-color)' }}>
+              <ShieldCheck size={13} color="var(--accent-primary)" /> AWS_WELL_ARCH
             </span>
-            <span className="cyber-tag green">
-              <Cloud size={12} /> SECURE_REDUNDANCY
+            <span className="cyber-tag green" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-green)' }}>
+              <Cloud size={13} color="var(--accent-green)" /> ESP32_TELEMETRY
             </span>
-            <span className="cyber-tag purple">
-              <Terminal size={12} /> SEC_OPS_CONSOLE
+            <span className="cyber-tag purple" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-purple)' }}>
+              <Terminal size={13} color="var(--accent-purple)" /> K8S_CONTAINERIZED
             </span>
           </div>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', fontFamily: 'var(--font-mono)' }}>
-            &copy; {new Date().getFullYear()} Antarip Chatterjee // Cloud Computing Engineer & CSE Student.
+
+          <p style={{ color: 'var(--text-primary)', fontSize: '0.95rem', fontFamily: 'var(--font-mono)', fontWeight: '600', marginBottom: '0.4rem' }}>
+            &copy; {new Date().getFullYear()} Antarip Chatterjee // Cloud Computing Engineer & Student Leader
           </p>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginTop: '0.4rem', fontFamily: 'var(--font-mono)' }}>
-            LPU &bull; B.Tech CSE (Cloud Computing) &bull; IoT & Robotics Prototyper
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', fontFamily: 'var(--font-mono)' }}>
+            Lovely Professional University &bull; B.Tech CSE (Cloud Computing) &bull; Top 1% Cohort Standing
           </p>
         </div>
       </footer>

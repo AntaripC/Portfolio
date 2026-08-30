@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence } from 'framer-motion'
 import {
   User,
@@ -15,7 +15,8 @@ import {
   Sparkles,
   Camera,
   Layers,
-  Terminal,
+  Terminal as TerminalIcon,
+  Play,
   Activity,
   CheckCircle2,
   ArrowRight,
@@ -23,7 +24,8 @@ import {
   FileCode2,
   Share2,
   MapPin,
-  Calendar
+  Calendar,
+  ChevronRight
 } from 'lucide-react'
 
 // Custom TiltCard component for interactive 3D parallax hover effect
@@ -33,8 +35,8 @@ export function TiltCard({ children, borderTopColor = 'var(--accent-primary)', s
   const y = useMotionValue(0.5)
 
   const springConfig = { damping: 20, stiffness: 200, mass: 0.5 }
-  const rotateX = useSpring(useTransform(y, [0, 1], [8, -8]), springConfig)
-  const rotateY = useSpring(useTransform(x, [0, 1], [-8, 8]), springConfig)
+  const rotateX = useSpring(useTransform(y, [0, 1], [6, -6]), springConfig)
+  const rotateY = useSpring(useTransform(x, [0, 1], [-6, 6]), springConfig)
 
   function handleMouseMove(e) {
     if (!cardRef.current) return
@@ -79,12 +81,114 @@ export default function About() {
     offset: ['start end', 'end start'],
   })
 
-  const yText = useTransform(scrollYProgress, [0, 1], [30, -30])
-
+  // Perspective Tab in Master Bio
   const [activeBioTab, setActiveBioTab] = useState('cloud')
+  // Academic switcher tab (LPU vs Krishnath College School)
+  const [activeEduTab, setActiveEduTab] = useState('lpu')
+  // Interactive Core Attribute selector
   const [selectedAttribute, setSelectedAttribute] = useState(0)
+  // Interactive Hobby selector
   const [activeHobby, setActiveHobby] = useState(0)
-  const [viewFilter, setViewFilter] = useState('all')
+
+  // Built-in Console State
+  const [input, setInput] = useState('')
+  const [history, setHistory] = useState([
+    { type: 'system', text: 'INIT // SECURE_CLOUD_OS_V4.19 [KERNEL: x86_64-aws-k8s]' },
+    { type: 'system', text: 'AUTH: VERIFIED (Antarip Chatterjee // Lead Cloud Systems Engineer)' },
+    { type: 'info', text: "Type 'help' to inspect command capabilities or click Quick Run below." },
+  ])
+  const [isExecuting, setIsExecuting] = useState(false)
+  const bottomRef = useRef(null)
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [history])
+
+  const handleCommand = (cmdText) => {
+    const trimmed = cmdText.trim().toLowerCase()
+    if (!trimmed) return
+
+    setHistory((prev) => [...prev, { type: 'user', text: `$ ${cmdText}` }])
+    setInput('')
+    setIsExecuting(true)
+
+    setTimeout(() => {
+      processCommand(trimmed)
+      setIsExecuting(false)
+    }, 250)
+  }
+
+  const processCommand = (cmd) => {
+    switch (cmd) {
+      case 'help':
+        setHistory((prev) => [
+          ...prev,
+          { type: 'system', text: '=== AVAILABLE SYSTEM UTILITIES ===' },
+          { type: 'info', text: '  whoami       - Operative profile & academic identity' },
+          { type: 'info', text: '  cloud-audit  - Scan AWS/GCP IAM roles, VPC subnets & K8s pods' },
+          { type: 'info', text: '  skills       - Query active engineering competencies' },
+          { type: 'info', text: '  patent-iot   - Inspect Smart Microplastic Detector IoT telemetry' },
+          { type: 'info', text: '  clear        - Flush terminal buffer' },
+        ])
+        break
+
+      case 'whoami':
+        setHistory((prev) => [
+          ...prev,
+          { type: 'highlight', text: '[PROFILE IDENTIFIER]' },
+          { type: 'text', text: '  Name: Antarip Chatterjee' },
+          { type: 'text', text: '  Degree: B.Tech CSE (Cloud Computing) @ Lovely Professional University' },
+          { type: 'text', text: '  Cohort Standing: Top 1% Global Cohort' },
+          { type: 'text', text: '  Key Roles: Lead Cloud Systems Architect & Head of Marketing @ CREST' },
+          { type: 'text', text: '  Target: Summer 2027 Internship (Cloud Architecture / DevOps / SWE)' },
+        ])
+        break
+
+      case 'cloud-audit':
+        setHistory((prev) => [
+          ...prev,
+          { type: 'highlight', text: '[EXECUTING CLOUD SECURITY & COMPLIANCE SCAN...]' },
+          { type: 'success', text: '  ✓ AWS IAM Zero-Trust Matrix: PASS (Least-privilege enforced)' },
+          { type: 'success', text: '  ✓ VPC Multi-AZ Peering: ACTIVE (us-east-1a / us-east-1b)' },
+          { type: 'success', text: '  ✓ Kubernetes Node Pods: 100% HEALTHY (0 CrashLoopBackOff)' },
+          { type: 'info', text: '  -> AUDIT RESULT: Infrastructure Ready for Enterprise Deployment.' },
+        ])
+        break
+
+      case 'skills':
+        setHistory((prev) => [
+          ...prev,
+          { type: 'highlight', text: '[ACTIVE STACK & TOOLCHAIN]' },
+          { type: 'text', text: '  Cloud & DevOps: AWS (EC2, S3, IAM, VPC), GCP, Docker, Kubernetes, CI/CD' },
+          { type: 'text', text: '  Languages: Python, C/C++, JavaScript, SQL' },
+          { type: 'text', text: '  Backend & Data: Node.js, Express, MongoDB, MySQL, Pandas' },
+          { type: 'text', text: '  Embedded IoT: ESP32, AS7262 Spectrometer, ThingSpeak, C/C++ Firmware' },
+        ])
+        break
+
+      case 'patent-iot':
+        setHistory((prev) => [
+          ...prev,
+          { type: 'highlight', text: '[PATENT INNOVATION // IOT HARDWARE]' },
+          { type: 'text', text: '  Invention: Smart Microplastic Detector (ESP32)' },
+          { type: 'text', text: '  Sensors: 6-Channel Optical Spectroscopy (AS7262) & Turbidity flow-cell' },
+          { type: 'text', text: '  Telemetry: Live ThingSpeak Cloud Streams & Telegram Emergency Alerts' },
+          { type: 'success', text: '  Status: Patent Application Filed & Functional Prototype Verified.' },
+        ])
+        break
+
+      case 'clear':
+        setHistory([])
+        break
+
+      default:
+        setHistory((prev) => [
+          ...prev,
+          { type: 'error', text: `Command not recognized: '${cmd}'. Type 'help' for available commands.` },
+        ])
+        break
+    }
+  }
 
   const attributesData = [
     {
@@ -112,7 +216,7 @@ export default function About() {
       color: 'var(--accent-purple)',
       desc: 'Directed 5+ developer squads in national hackathons (IITs & university arenas), synchronizing Git workflows, task delegation, and rapid MVP delivery.',
       metrics: ['IIT Hackathons Lead', 'Gitflow Governance', 'Cross-Disciplinary Sync', 'Jury Demo Defense'],
-      icon: <UsersIcon size={18} />,
+      icon: <Briefcase size={18} />,
     },
     {
       id: 'data',
@@ -138,7 +242,7 @@ export default function About() {
     {
       title: 'Tech & Gadget Prototyping',
       category: 'HARDWARE LAB',
-      icon: <Cpu size={22} />,
+      icon: <Cpu size={20} />,
       color: 'var(--accent-primary)',
       detail: 'Tinkering with microcontrollers, breakout boards, sensors, and hardware circuits to test real-world physical computing concepts.',
       stats: 'ESP32 • Arduino • Sensors',
@@ -146,7 +250,7 @@ export default function About() {
     {
       title: 'Photography & Video Editing',
       category: 'CREATIVE MEDIA',
-      icon: <Camera size={22} />,
+      icon: <Camera size={20} />,
       color: 'var(--accent-green)',
       detail: 'Crafting cinematic visual narratives, color grading, and framing dynamic visual content for digital campaigns and personal projects.',
       stats: 'Color Grading • Composition',
@@ -154,7 +258,7 @@ export default function About() {
     {
       title: 'Exploring Tech Architecture',
       category: 'SYSTEM STUDY',
-      icon: <Layers size={22} />,
+      icon: <Layers size={20} />,
       color: 'var(--accent-purple)',
       detail: 'Deep-diving into whitepapers, cloud infrastructure benchmarks, high-scale distributed designs, and edge computing innovations.',
       stats: 'Distributed Specs • Cloud Benchmarks',
@@ -162,7 +266,7 @@ export default function About() {
     {
       title: 'IoT Device Tinkering',
       category: 'AUTOMATION & ROBOTICS',
-      icon: <Zap size={22} />,
+      icon: <Zap size={20} />,
       color: 'var(--accent-amber)',
       detail: 'Building autonomous sensor nodes, wireless telemetry relays, and smart ambient monitors for real-time environment intelligence.',
       stats: 'Wireless Relays • Cloud Telemetry',
@@ -173,863 +277,572 @@ export default function About() {
     <section id="about" className="section" ref={sectionRef} style={{ position: 'relative', overflow: 'hidden' }}>
       <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         {/* ========================================================================= */}
-        {/* SECTION HEADER & INTERACTIVE MODE SELECTOR */}
+        {/* SECTION HEADER */}
         {/* ========================================================================= */}
-        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
           <div className="section-subtitle">
-            <User size={14} /> SYS_PROFILE // IDENTITY_VERIFICATION
+            <User size={14} /> COMMAND_CENTER // OPERATIVE_DOSSIER
           </div>
-          <h2 style={{ marginBottom: '1rem' }}>About & Engineering Profile</h2>
-
-          {/* Interactive Category Filter Pills */}
-          <div
+          <h2 style={{ marginBottom: '0.75rem' }}>Executive Bio & Engineering Command</h2>
+          <p
             style={{
-              display: 'inline-flex',
-              flexWrap: 'wrap',
-              gap: '0.5rem',
-              background: 'var(--bg-card)',
-              border: '1px solid var(--border-color)',
-              padding: '0.35rem 0.5rem',
-              borderRadius: '50px',
-              backdropFilter: 'blur(12px)',
-              boxShadow: '0 4px 20px var(--accent-glow)',
+              color: 'var(--text-secondary)',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.95rem',
+              maxWidth: '720px',
+              margin: '0 auto',
             }}
           >
-            {[
-              { id: 'all', label: 'All Dossiers' },
-              { id: 'bio', label: 'Executive Bio' },
-              { id: 'education', label: 'Academic History' },
-              { id: 'attributes', label: 'Core Attributes' },
-              { id: 'target', label: 'Target 2027 & Interests' },
-            ].map((f) => (
-              <button
-                key={f.id}
-                onClick={() => setViewFilter(f.id)}
-                style={{
-                  background: viewFilter === f.id ? 'linear-gradient(135deg, var(--bg-secondary), var(--bg-card))' : 'transparent',
-                  color: viewFilter === f.id ? 'var(--accent-primary)' : 'var(--text-secondary)',
-                  border: `1px solid ${viewFilter === f.id ? 'var(--accent-primary)' : 'transparent'}`,
-                  borderRadius: '30px',
-                  padding: '0.4rem 0.9rem',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.78rem',
-                  fontWeight: viewFilter === f.id ? '700' : '500',
-                  cursor: 'pointer',
-                  transition: 'all 0.25s ease',
-                }}
-              >
-                {viewFilter === f.id && <span style={{ marginRight: '0.35rem' }}>●</span>}
-                {f.label}
-              </button>
-            ))}
-          </div>
+            Unified engineering hub: interactive system terminal, verified academic milestones, strategic capabilities, and creative technical passions.
+          </p>
         </div>
 
         {/* ========================================================================= */}
-        {/* INTERACTIVE BENTO GRID LAYOUT */}
+        {/* BENTO GRID 2.0 COMMAND CENTER LAYOUT */}
         {/* ========================================================================= */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-          
-          {/* ROW 1: EXECUTIVE BIO & OPERATIVE SPECIFICATIONS (MASTER CARD) */}
-          {(viewFilter === 'all' || viewFilter === 'bio') && (
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.6 }}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(12, 1fr)',
+            gap: '1.75rem',
+          }}
+        >
+          {/* ======================================================================= */}
+          {/* BENTO CARD 1: EXECUTIVE BIO & PERSPECTIVE SWITCHER (8 COLS) */}
+          {/* ======================================================================= */}
+          <div style={{ gridColumn: 'span 12', lg: 'span 8' }} className="bento-span-8">
+            <TiltCard
+              borderTopColor="var(--accent-primary)"
+              style={{
+                height: '100%',
+                background: 'var(--bg-card-elevated)',
+                padding: '2.2rem',
+                border: '1px solid var(--border-color)',
+                boxShadow: '0 15px 40px rgba(15, 23, 42, 0.06)',
+                borderRadius: '16px',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
             >
-              <TiltCard
-                borderTopColor="var(--accent-primary)"
-                style={{
-                  background: 'var(--bg-card-elevated)',
-                  padding: '2.5rem',
-                  border: '1px solid var(--border-color)',
-                  boxShadow: '0 15px 45px rgba(15, 23, 42, 0.08), inset 0 0 25px rgba(217, 119, 6, 0.02)',
-                  borderRadius: '16px',
-                }}
-              >
-                {/* Terminal Header */}
-                <div className="terminal-header" style={{ marginBottom: '1.75rem' }}>
-                  <div className="terminal-dots">
-                    <span className="terminal-dot dot-red" />
-                    <span className="terminal-dot dot-yellow" />
-                    <span className="terminal-dot dot-green" />
-                    <span style={{ marginLeft: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
-                      antarip.identity // SYS_OPERATIVE_DOSSIER
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--accent-green)', fontSize: '0.78rem' }}>
-                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--accent-green)', boxShadow: '0 0 8px var(--accent-green)' }} />
-                    STATUS: ACTIVE_RESEARCHER & BUILDER
-                  </div>
-                </div>
-
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-                    gap: '2.5rem',
-                    alignItems: 'stretch',
-                  }}
-                >
-                  {/* Left Column: Heading, Role Highlights & Interactive Tabs */}
-                  <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <div className="cyber-tag" style={{ marginBottom: '1rem', width: 'fit-content' }}>
-                      <GraduationCap size={14} style={{ marginRight: '0.3rem' }} /> B.TECH CSE // CLOUD COMPUTING SPECIALIZATION
-                    </div>
-
-                    <h3
-                      style={{
-                        fontSize: 'clamp(1.5rem, 2.5vw, 2.2rem)',
-                        marginBottom: '1rem',
-                        lineHeight: '1.25',
-                        color: 'var(--text-primary)',
-                      }}
-                    >
-                      Building Scalable Infrastructures & Autonomous Systems
-                    </h3>
-
-                    {/* Interactive Perspective Switcher Tabs */}
-                    <div
-                      style={{
-                        display: 'flex',
-                        gap: '0.4rem',
-                        marginBottom: '1.5rem',
-                        borderBottom: '1px solid var(--border-subtle)',
-                        paddingBottom: '0.5rem',
-                      }}
-                    >
-                      {[
-                        { id: 'cloud', label: 'Cloud & Systems', icon: <Cpu size={14} /> },
-                        { id: 'iot', label: 'IoT & Patent Research', icon: <Zap size={14} /> },
-                        { id: 'leadership', label: 'CREST & Leadership', icon: <Sparkles size={14} /> },
-                      ].map((tab) => (
-                        <button
-                          key={tab.id}
-                          onClick={() => setActiveBioTab(tab.id)}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.4rem',
-                            padding: '0.4rem 0.8rem',
-                            background: activeBioTab === tab.id ? 'var(--bg-secondary)' : 'transparent',
-                            border: `1px solid ${activeBioTab === tab.id ? 'var(--accent-primary)' : 'transparent'}`,
-                            color: activeBioTab === tab.id ? 'var(--accent-primary)' : 'var(--text-secondary)',
-                            borderRadius: '6px',
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: '0.78rem',
-                            fontWeight: '600',
-                            cursor: 'pointer',
-                            transition: 'all 0.2s',
-                          }}
-                        >
-                          {tab.icon}
-                          {tab.label}
-                        </button>
-                      ))}
-                    </div>
-
-                    {/* Tab Content Display */}
-                    <div style={{ flex: 1, minHeight: '130px' }}>
-                      <AnimatePresence mode="wait">
-                        {activeBioTab === 'cloud' && (
-                          <motion.div
-                            key="cloud"
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.25 }}
-                            style={{ color: 'var(--text-secondary)', fontSize: '0.98rem', lineHeight: '1.8' }}
-                          >
-                            I am a driven <strong>B.Tech Computer Science Engineering undergraduate</strong> specializing in <strong>Cloud Computing</strong> at LPU. I thrive in high-pressure hackathons—frequently as team lead—architecting decoupled cloud topologies, containerized microservices, and secure backend systems under strict 24–48h clocks.
-                          </motion.div>
-                        )}
-
-                        {activeBioTab === 'iot' && (
-                          <motion.div
-                            key="iot"
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.25 }}
-                            style={{ color: 'var(--text-secondary)', fontSize: '0.98rem', lineHeight: '1.8' }}
-                          >
-                            My academic and research work bridges the critical gap between <strong>cloud systems</strong> and <strong>physical IoT hardware telemetry</strong>. As the inventor of the patent-pending <em>Smart Microplastic Detector</em>, I engineer ESP32 edge firmware with 6-channel optical spectrometry and automated cloud alerts.
-                          </motion.div>
-                        )}
-
-                        {activeBioTab === 'leadership' && (
-                          <motion.div
-                            key="leadership"
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.25 }}
-                            style={{ color: 'var(--text-secondary)', fontSize: '0.98rem', lineHeight: '1.8' }}
-                          >
-                            In parallel to core engineering, I serve as the <strong>Head of Marketing at CREST</strong>, orchestrating cross-functional teams, outreach analytics, and brand positioning across flagship university campaigns. I am seeking a <strong>Summer 2027 internship</strong> to contribute to high-impact enterprise teams.
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-
-                    {/* Fast Fact Metrics Row */}
-                    <div
-                      style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
-                        gap: '0.85rem',
-                        marginTop: '1.5rem',
-                        paddingTop: '1.25rem',
-                        borderTop: '1px solid var(--border-subtle)',
-                      }}
-                    >
-                      <div style={{ background: 'var(--bg-secondary)', padding: '0.65rem 0.85rem', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-                        <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>COHORT STANDING</span>
-                        <div style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--accent-primary)', marginTop: '0.15rem' }}>Top 1%</div>
-                        <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>Global Rank @ LPU</span>
-                      </div>
-
-                      <div style={{ background: 'var(--bg-secondary)', padding: '0.65rem 0.85rem', borderRadius: '8px', border: '1px solid var(--border-green)' }}>
-                        <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>RESEARCH IP</span>
-                        <div style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--accent-green)', marginTop: '0.15rem' }}>Patent Pending</div>
-                        <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>IoT Spectral Detector</span>
-                      </div>
-
-                      <div style={{ background: 'var(--bg-secondary)', padding: '0.65rem 0.85rem', borderRadius: '8px', border: '1px solid var(--border-purple)' }}>
-                        <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>COMMUNITY LEAD</span>
-                        <div style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--accent-purple)', marginTop: '0.15rem' }}>CREST Head</div>
-                        <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>Marketing & Outreach</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Right Column: Interactive Operative HUD & Telemetry Screen */}
-                  <div
-                    style={{
-                      background: 'var(--bg-secondary)',
-                      border: '1px solid var(--border-color)',
-                      borderRadius: '12px',
-                      padding: '1.5rem',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      boxShadow: 'inset 0 0 20px rgba(217, 119, 6, 0.04)',
-                    }}
-                  >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.65rem' }}>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent-primary)', fontWeight: '700' }}>
-                        TELEMETRY // LIVE_PROFILE_KERNEL
-                      </span>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-                        AES_256 // ENCRYPTED
-                      </span>
-                    </div>
-
-                    {/* Spec details lines */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontFamily: 'var(--font-mono)', fontSize: '0.82rem', flex: 1 }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0', borderBottom: '1px dashed var(--border-subtle)' }}>
-                        <span style={{ color: 'var(--text-muted)' }}>OPERATIVE_NAME:</span>
-                        <span style={{ color: 'var(--text-primary)', fontWeight: '600' }}>Antarip Chatterjee</span>
-                      </div>
-
-                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0', borderBottom: '1px dashed var(--border-subtle)' }}>
-                        <span style={{ color: 'var(--text-muted)' }}>PRIMARY_STACK:</span>
-                        <span style={{ color: 'var(--accent-primary)', fontWeight: '600' }}>AWS • GCP • Python • Node.js</span>
-                      </div>
-
-                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0', borderBottom: '1px dashed var(--border-subtle)' }}>
-                        <span style={{ color: 'var(--text-muted)' }}>SPECIALIZATION:</span>
-                        <span style={{ color: 'var(--accent-green)', fontWeight: '600' }}>Cloud Computing & IoT Hardware</span>
-                      </div>
-
-                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0', borderBottom: '1px dashed var(--border-subtle)' }}>
-                        <span style={{ color: 'var(--text-muted)' }}>ACADEMIC_INSTITUTE:</span>
-                        <span style={{ color: 'var(--text-primary)' }}>Lovely Professional University</span>
-                      </div>
-
-                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0', borderBottom: '1px dashed var(--border-subtle)' }}>
-                        <span style={{ color: 'var(--text-muted)' }}>TARGET_OPPORTUNITY:</span>
-                        <span style={{ color: 'var(--accent-purple)', fontWeight: '600' }}>Summer 2027 Internship</span>
-                      </div>
-
-                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.35rem 0' }}>
-                        <span style={{ color: 'var(--text-muted)' }}>LOCATION_MOBILITY:</span>
-                        <span style={{ color: 'var(--accent-amber)', fontWeight: '600' }}>India // Global Remote</span>
-                      </div>
-                    </div>
-
-                    {/* Interactive Action Buttons */}
-                    <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px solid var(--border-subtle)' }}>
-                      <a
-                        href="#projects"
-                        className="btn btn-primary"
-                        style={{ fontSize: '0.8rem', padding: '0.55rem 1rem', flex: 1 }}
-                      >
-                        <Compass size={14} /> View Flagship Builds
-                      </a>
-                      <a
-                        href="#contact"
-                        className="btn btn-outline"
-                        style={{ fontSize: '0.8rem', padding: '0.55rem 1rem', flex: 1 }}
-                      >
-                        <Briefcase size={14} /> Hire For Summer '27
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </TiltCard>
-            </motion.div>
-          )}
-
-          {/* ROW 2: ACADEMIC NEXUS (EDUCATION CARDS) */}
-          {(viewFilter === 'all' || viewFilter === 'education') && (
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
-                <div className="cyber-tag green" style={{ fontSize: '0.82rem' }}>
-                  <GraduationCap size={14} style={{ marginRight: '0.3rem' }} /> ACADEMIC_NEXUS // VERIFIED_HISTORY
-                </div>
-                <span style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.78rem' }}>
-                  CHRONOLOGICAL_RECORDS
-                </span>
-              </div>
-
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-                  gap: '1.8rem',
-                }}
-              >
-                {/* 1. Lovely Professional University Card */}
-                <motion.div
-                  initial={{ opacity: 0, y: 25 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-40px' }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <TiltCard
-                    borderTopColor="var(--accent-primary)"
-                    style={{
-                      height: '100%',
-                      background: 'var(--bg-card)',
-                      padding: '2rem',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      border: '1px solid var(--border-color)',
-                    }}
-                  >
-                    <div className="terminal-header" style={{ marginBottom: '1.2rem' }}>
-                      <div className="terminal-dots">
-                        <span className="terminal-dot dot-red" />
-                        <span className="terminal-dot dot-yellow" />
-                        <span className="terminal-dot dot-green" />
-                      </div>
-                      <span style={{ color: 'var(--accent-primary)', fontSize: '0.72rem' }}>EDU_RECORD // 01</span>
-                    </div>
-
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', marginBottom: '1rem' }}>
-                      <div
-                        style={{
-                          padding: '0.75rem',
-                          background: 'rgba(217, 119, 6, 0.1)',
-                          borderRadius: '10px',
-                          color: 'var(--accent-primary)',
-                          border: '1px solid var(--border-color)',
-                        }}
-                      >
-                        <GraduationCap size={28} />
-                      </div>
-                      <div>
-                        <span
-                          style={{
-                            fontSize: '0.74rem',
-                            color: 'var(--accent-primary)',
-                            fontWeight: '600',
-                            textTransform: 'uppercase',
-                            fontFamily: 'var(--font-mono)',
-                          }}
-                        >
-                          Expected Graduation: 2029
-                        </span>
-                        <h3 style={{ fontSize: '1.3rem', color: 'var(--text-primary)', marginTop: '0.15rem' }}>
-                          Lovely Professional University (LPU)
-                        </h3>
-                        <p style={{ color: 'var(--accent-green)', fontSize: '0.95rem', fontFamily: 'var(--font-mono)', fontWeight: '600' }}>
-                          B.Tech Computer Science & Engineering (Cloud Computing)
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Academic Accomplishments List */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', marginTop: '0.5rem', marginBottom: '1.25rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.88rem', color: 'var(--text-secondary)' }}>
-                        <Award size={16} color="var(--accent-primary)" style={{ flexShrink: 0 }} />
-                        <span><strong>Academic Rank:</strong> Ranked in the Top 1% of cohort globally</span>
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.88rem', color: 'var(--text-secondary)' }}>
-                        <ShieldAlert size={16} color="var(--accent-green)" style={{ flexShrink: 0 }} />
-                        <span><strong>Lab Focus:</strong> Cloud Orchestration, Microservices & IoT Integrations</span>
-                      </div>
-                    </div>
-
-                    {/* Core Curricular Pillars */}
-                    <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid var(--border-subtle)' }}>
-                      <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', display: 'block', marginBottom: '0.4rem' }}>
-                        ADVANCED_MODULES:
-                      </span>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
-                        {['Distributed Systems', 'Cloud Virtualization', 'DevOps CI/CD', 'IoT Systems', 'Data Structures'].map((tag, tIdx) => (
-                          <span
-                            key={tIdx}
-                            style={{
-                              fontSize: '0.72rem',
-                              fontFamily: 'var(--font-mono)',
-                              color: 'var(--accent-primary)',
-                              background: 'var(--bg-secondary)',
-                              padding: '0.2rem 0.5rem',
-                              borderRadius: '4px',
-                              border: '1px solid var(--border-color)',
-                            }}
-                          >
-                            #{tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </TiltCard>
-                </motion.div>
-
-                {/* 2. Krishnath College School Card */}
-                <motion.div
-                  initial={{ opacity: 0, y: 25 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-40px' }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
-                >
-                  <TiltCard
-                    borderTopColor="var(--accent-green)"
-                    style={{
-                      height: '100%',
-                      background: 'var(--bg-card)',
-                      padding: '2rem',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      border: '1px solid var(--border-green)',
-                    }}
-                  >
-                    <div className="terminal-header" style={{ marginBottom: '1.2rem' }}>
-                      <div className="terminal-dots">
-                        <span className="terminal-dot dot-red" />
-                        <span className="terminal-dot dot-yellow" />
-                        <span className="terminal-dot dot-green" />
-                      </div>
-                      <span style={{ color: 'var(--accent-green)', fontSize: '0.72rem' }}>EDU_RECORD // 02</span>
-                    </div>
-
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', marginBottom: '1rem' }}>
-                      <div
-                        style={{
-                          padding: '0.75rem',
-                          background: 'rgba(5, 150, 105, 0.1)',
-                          borderRadius: '10px',
-                          color: 'var(--accent-green)',
-                          border: '1px solid var(--border-green)',
-                        }}
-                      >
-                        <School size={28} />
-                      </div>
-                      <div>
-                        <span
-                          style={{
-                            fontSize: '0.74rem',
-                            color: 'var(--accent-green)',
-                            fontWeight: '600',
-                            textTransform: 'uppercase',
-                            fontFamily: 'var(--font-mono)',
-                          }}
-                        >
-                          Completed 2025
-                        </span>
-                        <h3 style={{ fontSize: '1.3rem', color: 'var(--text-primary)', marginTop: '0.15rem' }}>
-                          Krishnath College School
-                        </h3>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', fontFamily: 'var(--font-mono)', fontWeight: '600' }}>
-                          Senior Secondary (12th Grade) • Advanced PCMB
-                        </p>
-                      </div>
-                    </div>
-
-                    <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: '1.7', marginBottom: '1.25rem' }}>
-                      Rigorous STEM curriculum focusing on Advanced PCMB (Physics, Chemistry, Mathematics, Biology) and Analytical Problem Solving, establishing foundational mathematical and computational principles.
-                    </p>
-
-                    {/* PCMB Pillar Chips */}
-                    <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid var(--border-subtle)' }}>
-                      <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', display: 'block', marginBottom: '0.4rem' }}>
-                        CORE_CURRICULUM:
-                      </span>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
-                        {['Physics', 'Chemistry', 'Mathematics', 'Biology', 'Analytical Logic'].map((tag, tIdx) => (
-                          <span
-                            key={tIdx}
-                            style={{
-                              fontSize: '0.72rem',
-                              fontFamily: 'var(--font-mono)',
-                              color: 'var(--accent-green)',
-                              background: 'var(--bg-secondary)',
-                              padding: '0.2rem 0.5rem',
-                              borderRadius: '4px',
-                              border: '1px solid var(--border-green)',
-                            }}
-                          >
-                            #{tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </TiltCard>
-                </motion.div>
-              </div>
-            </div>
-          )}
-
-          {/* ROW 3: INTERACTIVE CORE ATTRIBUTES & CAPABILITY INSPECTOR */}
-          {(viewFilter === 'all' || viewFilter === 'attributes') && (
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.6 }}
-            >
-              <TiltCard
-                borderTopColor="var(--accent-purple)"
-                style={{
-                  background: 'var(--bg-card-elevated)',
-                  padding: '2.2rem',
-                  border: '1px solid var(--border-purple)',
-                  boxShadow: '0 15px 40px rgba(15, 23, 42, 0.08)',
-                  borderRadius: '16px',
-                }}
-              >
-                <div className="terminal-header" style={{ marginBottom: '1.25rem' }}>
-                  <div className="terminal-dots">
-                    <span className="terminal-dot dot-red" />
-                    <span className="terminal-dot dot-yellow" />
-                    <span className="terminal-dot dot-green" />
-                  </div>
-                  <span style={{ color: 'var(--accent-purple)', fontSize: '0.72rem' }}>MATRIX // CORE_ATTRIBUTES_&_MINDSET</span>
-                </div>
-
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
-                  <div>
-                    <h3 style={{ fontSize: '1.4rem', color: 'var(--text-primary)', margin: 0 }}>
-                      Engineering Mindset & Strategic Capabilities
-                    </h3>
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', fontFamily: 'var(--font-mono)', marginTop: '0.2rem' }}>
-                      Click on any capability node to inspect technical execution and toolchains.
-                    </p>
-                  </div>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent-purple)', fontWeight: '600' }}>
-                    SELECT_TO_INSPECT
+              <div className="terminal-header" style={{ marginBottom: '1.25rem' }}>
+                <div className="terminal-dots">
+                  <span className="terminal-dot dot-red" />
+                  <span className="terminal-dot dot-yellow" />
+                  <span className="terminal-dot dot-green" />
+                  <span style={{ marginLeft: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.8rem' }}>
+                    antarip.dossier // CORE_SYSTEMS_PROFILE
                   </span>
                 </div>
-
-                {/* Interactive Attribute Buttons */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem', marginBottom: '1.75rem' }}>
-                  {attributesData.map((attr, idx) => {
-                    const isSelected = selectedAttribute === idx
-                    return (
-                      <button
-                        key={attr.id}
-                        onClick={() => setSelectedAttribute(idx)}
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '0.5rem',
-                          padding: '0.55rem 1rem',
-                          background: isSelected ? 'var(--bg-secondary)' : 'var(--bg-card)',
-                          border: `1px solid ${isSelected ? attr.color : 'var(--border-subtle)'}`,
-                          color: isSelected ? attr.color : 'var(--text-secondary)',
-                          borderRadius: '8px',
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: '0.82rem',
-                          fontWeight: isSelected ? '700' : '500',
-                          cursor: 'pointer',
-                          boxShadow: isSelected ? '0 4px 15px var(--accent-glow)' : 'none',
-                          transition: 'all 0.25s ease',
-                        }}
-                      >
-                        {attr.icon}
-                        #{attr.name}
-                      </button>
-                    )
-                  })}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', color: 'var(--accent-green)', fontSize: '0.78rem' }}>
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--accent-green)', boxShadow: '0 0 8px var(--accent-green)' }} />
+                  STATUS: ACTIVE BUILDER
                 </div>
+              </div>
 
-                {/* Live Inspector Readout Panel */}
+              <h3 style={{ fontSize: 'clamp(1.4rem, 2.2vw, 1.9rem)', marginBottom: '0.75rem', color: 'var(--text-primary)', lineHeight: '1.3' }}>
+                Architecting Cloud Ecosystems & IoT Edge Systems
+              </h3>
+
+              {/* Perspective Filter Pills */}
+              <div style={{ display: 'flex', gap: '0.4rem', marginBottom: '1.25rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.5rem', flexWrap: 'wrap' }}>
+                {[
+                  { id: 'cloud', label: 'Cloud & Systems', icon: <Cpu size={14} /> },
+                  { id: 'iot', label: 'IoT & Patent Research', icon: <Zap size={14} /> },
+                  { id: 'leadership', label: 'CREST & Leadership', icon: <Sparkles size={14} /> },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveBioTab(tab.id)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.4rem',
+                      padding: '0.35rem 0.8rem',
+                      background: activeBioTab === tab.id ? 'var(--bg-secondary)' : 'transparent',
+                      border: `1px solid ${activeBioTab === tab.id ? 'var(--accent-primary)' : 'transparent'}`,
+                      color: activeBioTab === tab.id ? 'var(--accent-primary)' : 'var(--text-secondary)',
+                      borderRadius: '6px',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.78rem',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                    }}
+                  >
+                    {tab.icon}
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Dynamic Perspective Content */}
+              <div style={{ flex: 1, minHeight: '110px' }}>
                 <AnimatePresence mode="wait">
+                  {activeBioTab === 'cloud' && (
+                    <motion.p
+                      key="cloud"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.2 }}
+                      style={{ color: 'var(--text-secondary)', fontSize: '0.98rem', lineHeight: '1.8', margin: 0 }}
+                    >
+                      I am a <strong>B.Tech Computer Science Engineering undergraduate</strong> specializing in <strong>Cloud Computing</strong> at LPU. I thrive in high-pressure hackathons—frequently leading teams—architecting decoupled cloud topologies, containerized microservices, and secure backend systems under strict 24–48h clocks.
+                    </motion.p>
+                  )}
+
+                  {activeBioTab === 'iot' && (
+                    <motion.p
+                      key="iot"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.2 }}
+                      style={{ color: 'var(--text-secondary)', fontSize: '0.98rem', lineHeight: '1.8', margin: 0 }}
+                    >
+                      My research bridges the critical gap between <strong>cloud systems</strong> and <strong>physical IoT hardware telemetry</strong>. As the inventor of the patent-pending <em>Smart Microplastic Detector</em>, I engineer ESP32 edge firmware with 6-channel optical spectrometry and automated cloud alerts.
+                    </motion.p>
+                  )}
+
+                  {activeBioTab === 'leadership' && (
+                    <motion.p
+                      key="leadership"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.2 }}
+                      style={{ color: 'var(--text-secondary)', fontSize: '0.98rem', lineHeight: '1.8', margin: 0 }}
+                    >
+                      In parallel to core engineering, I serve as the <strong>Head of Marketing at CREST</strong>, orchestrating cross-functional teams, outreach analytics, and brand positioning across flagship university campaigns. I am seeking a <strong>Summer 2027 internship</strong> to contribute to high-impact enterprise teams.
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* 3 Metric Pills */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '0.85rem', marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--border-subtle)' }}>
+                <div style={{ background: 'var(--bg-secondary)', padding: '0.65rem 0.85rem', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                  <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>COHORT STANDING</span>
+                  <div style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--accent-primary)', marginTop: '0.15rem' }}>Top 1%</div>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>Global Rank @ LPU</span>
+                </div>
+                <div style={{ background: 'var(--bg-secondary)', padding: '0.65rem 0.85rem', borderRadius: '8px', border: '1px solid var(--border-green)' }}>
+                  <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>RESEARCH IP</span>
+                  <div style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--accent-green)', marginTop: '0.15rem' }}>Patent Pending</div>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>IoT Spectral Detector</span>
+                </div>
+                <div style={{ background: 'var(--bg-secondary)', padding: '0.65rem 0.85rem', borderRadius: '8px', border: '1px solid var(--border-purple)' }}>
+                  <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>COMMUNITY LEAD</span>
+                  <div style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--accent-purple)', marginTop: '0.15rem' }}>CREST Head</div>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>Marketing & Outreach</span>
+                </div>
+              </div>
+            </TiltCard>
+          </div>
+
+          {/* ======================================================================= */}
+          {/* BENTO CARD 2: ACADEMIC NEXUS (4 COLS) */}
+          {/* ======================================================================= */}
+          <div style={{ gridColumn: 'span 12', lg: 'span 4' }} className="bento-span-4">
+            <TiltCard
+              borderTopColor="var(--accent-green)"
+              style={{
+                height: '100%',
+                background: 'var(--bg-card)',
+                padding: '1.8rem',
+                border: '1px solid var(--border-green)',
+                borderRadius: '16px',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <div className="terminal-header" style={{ marginBottom: '1rem' }}>
+                <div className="terminal-dots">
+                  <span className="terminal-dot dot-red" />
+                  <span className="terminal-dot dot-yellow" />
+                  <span className="terminal-dot dot-green" />
+                </div>
+                <span style={{ color: 'var(--accent-green)', fontSize: '0.72rem', fontWeight: '600' }}>ACADEMIC_NEXUS</span>
+              </div>
+
+              {/* Institute Switcher Tabs */}
+              <div style={{ display: 'flex', gap: '0.35rem', marginBottom: '1.1rem', background: 'var(--bg-secondary)', padding: '0.25rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+                <button
+                  onClick={() => setActiveEduTab('lpu')}
+                  style={{
+                    flex: 1,
+                    padding: '0.35rem 0.6rem',
+                    background: activeEduTab === 'lpu' ? 'var(--bg-card)' : 'transparent',
+                    border: `1px solid ${activeEduTab === 'lpu' ? 'var(--border-color)' : 'transparent'}`,
+                    color: activeEduTab === 'lpu' ? 'var(--accent-primary)' : 'var(--text-secondary)',
+                    borderRadius: '6px',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.74rem',
+                    fontWeight: '700',
+                    cursor: 'pointer',
+                  }}
+                >
+                  LPU (2029)
+                </button>
+                <button
+                  onClick={() => setActiveEduTab('school')}
+                  style={{
+                    flex: 1,
+                    padding: '0.35rem 0.6rem',
+                    background: activeEduTab === 'school' ? 'var(--bg-card)' : 'transparent',
+                    border: `1px solid ${activeEduTab === 'school' ? 'var(--border-green)' : 'transparent'}`,
+                    color: activeEduTab === 'school' ? 'var(--accent-green)' : 'var(--text-secondary)',
+                    borderRadius: '6px',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.74rem',
+                    fontWeight: '700',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Krishnath (2025)
+                </button>
+              </div>
+
+              <AnimatePresence mode="wait">
+                {activeEduTab === 'lpu' ? (
                   <motion.div
-                    key={selectedAttribute}
+                    key="lpu"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.25 }}
-                    style={{
-                      background: 'var(--bg-secondary)',
-                      border: '1px solid var(--border-color)',
-                      borderRadius: '10px',
-                      padding: '1.4rem',
-                      boxShadow: 'inset 0 0 20px rgba(217, 119, 6, 0.03)',
-                    }}
+                    transition={{ duration: 0.2 }}
+                    style={{ display: 'flex', flexDirection: 'column', flex: 1 }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-                      <span
-                        style={{
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: '0.75rem',
-                          color: attributesData[selectedAttribute].color,
-                          fontWeight: '700',
-                          padding: '0.2rem 0.55rem',
-                          background: 'var(--bg-card)',
-                          borderRadius: '4px',
-                          border: `1px solid ${attributesData[selectedAttribute].color}`,
-                        }}
-                      >
-                        {attributesData[selectedAttribute].tag}
-                      </span>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-                        OPERATIONAL_READOUT
-                      </span>
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', marginBottom: '0.85rem' }}>
+                      <div style={{ padding: '0.6rem', background: 'rgba(217, 119, 6, 0.1)', borderRadius: '8px', color: 'var(--accent-primary)', border: '1px solid var(--border-color)' }}>
+                        <GraduationCap size={22} />
+                      </div>
+                      <div>
+                        <span style={{ fontSize: '0.7rem', color: 'var(--accent-primary)', fontWeight: '700', fontFamily: 'var(--font-mono)' }}>
+                          B.TECH CSE (CLOUD)
+                        </span>
+                        <h4 style={{ fontSize: '1.1rem', color: 'var(--text-primary)', margin: '0.15rem 0 0 0' }}>
+                          Lovely Professional University
+                        </h4>
+                      </div>
                     </div>
 
-                    <p style={{ color: 'var(--text-primary)', fontSize: '0.95rem', lineHeight: '1.7', marginBottom: '1.2rem' }}>
-                      {attributesData[selectedAttribute].desc}
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.6', marginBottom: '1rem' }}>
+                      Ranked in the <strong>Top 1% of cohort globally</strong>. Specializing in Cloud Virtualization, Distributed Microservices, and Edge IoT Telemetry.
                     </p>
 
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                      {attributesData[selectedAttribute].metrics.map((m, mIdx) => (
-                        <span
-                          key={mIdx}
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '0.35rem',
-                            fontSize: '0.78rem',
-                            fontFamily: 'var(--font-mono)',
-                            color: attributesData[selectedAttribute].color,
-                            background: 'var(--bg-card)',
-                            border: '1px solid var(--border-subtle)',
-                            padding: '0.25rem 0.6rem',
-                            borderRadius: '4px',
-                            fontWeight: '600',
-                          }}
-                        >
-                          <CheckCircle2 size={12} />
-                          {m}
+                    <div style={{ marginTop: 'auto', display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
+                      {['Distributed Systems', 'Cloud Virtualization', 'DevOps CI/CD', 'IoT Systems'].map((m, idx) => (
+                        <span key={idx} style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--accent-primary)', background: 'var(--bg-secondary)', padding: '0.2rem 0.5rem', borderRadius: '4px', border: '1px solid var(--border-color)' }}>
+                          #{m}
                         </span>
                       ))}
                     </div>
                   </motion.div>
-                </AnimatePresence>
-              </TiltCard>
-            </motion.div>
-          )}
+                ) : (
+                  <motion.div
+                    key="school"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    style={{ display: 'flex', flexDirection: 'column', flex: 1 }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', marginBottom: '0.85rem' }}>
+                      <div style={{ padding: '0.6rem', background: 'rgba(5, 150, 105, 0.1)', borderRadius: '8px', color: 'var(--accent-green)', border: '1px solid var(--border-green)' }}>
+                        <School size={22} />
+                      </div>
+                      <div>
+                        <span style={{ fontSize: '0.7rem', color: 'var(--accent-green)', fontWeight: '700', fontFamily: 'var(--font-mono)' }}>
+                          COMPLETED 2025
+                        </span>
+                        <h4 style={{ fontSize: '1.1rem', color: 'var(--text-primary)', margin: '0.15rem 0 0 0' }}>
+                          Krishnath College School
+                        </h4>
+                      </div>
+                    </div>
 
-          {/* ROW 4: TARGET OPPORTUNITY & HOBBIES GRID */}
-          {(viewFilter === 'all' || viewFilter === 'target') && (
-            <div
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: '1.6', marginBottom: '1rem' }}>
+                      Senior Secondary (12th Grade) • Advanced PCMB (Physics, Chemistry, Mathematics, Biology) with high analytical rigor.
+                    </p>
+
+                    <div style={{ marginTop: 'auto', display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
+                      {['Physics', 'Chemistry', 'Mathematics', 'Biology', 'Analytical Logic'].map((m, idx) => (
+                        <span key={idx} style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--accent-green)', background: 'var(--bg-secondary)', padding: '0.2rem 0.5rem', borderRadius: '4px', border: '1px solid var(--border-green)' }}>
+                          #{m}
+                        </span>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </TiltCard>
+          </div>
+
+          {/* ======================================================================= */}
+          {/* BENTO CARD 3: INTERACTIVE CLOUD COMMAND CONSOLE (7 COLS) */}
+          {/* ======================================================================= */}
+          <div style={{ gridColumn: 'span 12', lg: 'span 7' }} className="bento-span-7">
+            <TiltCard
+              borderTopColor="var(--accent-cyan)"
               style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-                gap: '1.8rem',
+                height: '100%',
+                background: 'var(--bg-card-elevated)',
+                padding: '1.8rem',
+                border: '1px solid var(--border-color)',
+                borderRadius: '16px',
+                display: 'flex',
+                flexDirection: 'column',
               }}
             >
-              {/* Card 4A: Internship Target Radar */}
-              <motion.div
-                initial={{ opacity: 0, x: -25 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.5 }}
+              <div className="terminal-header" style={{ marginBottom: '1rem' }}>
+                <div className="terminal-dots">
+                  <span className="terminal-dot dot-red" />
+                  <span className="terminal-dot dot-yellow" />
+                  <span className="terminal-dot dot-green" />
+                  <span style={{ marginLeft: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.78rem' }}>
+                    antarip@cloud-terminal: ~/telemetry-ops
+                  </span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--accent-green)', fontSize: '0.74rem' }}>
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--accent-green)', boxShadow: '0 0 6px var(--accent-green)' }} />
+                  LIVE_SOCKET
+                </div>
+              </div>
+
+              {/* Console Output Screen */}
+              <div
+                style={{
+                  flex: 1,
+                  minHeight: '180px',
+                  maxHeight: '260px',
+                  overflowY: 'auto',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.84rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.45rem',
+                  padding: '0.5rem 0',
+                }}
               >
-                <TiltCard
-                  borderTopColor="var(--accent-purple)"
-                  style={{
-                    height: '100%',
-                    background: 'var(--bg-card)',
-                    padding: '2rem',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    border: '1px solid var(--border-purple)',
-                  }}
-                >
-                  <div className="terminal-header" style={{ marginBottom: '1.2rem' }}>
-                    <div className="terminal-dots">
-                      <span className="terminal-dot dot-red" />
-                      <span className="terminal-dot dot-yellow" />
-                      <span className="terminal-dot dot-green" />
-                    </div>
-                    <span style={{ color: 'var(--accent-purple)', fontSize: '0.72rem' }}>TARGET_OP // SUMMER_2027</span>
-                  </div>
+                {history.map((line, idx) => {
+                  let color = 'var(--text-primary)'
+                  if (line.type === 'system') color = 'var(--accent-primary)'
+                  if (line.type === 'user') color = 'var(--accent-cyan)'
+                  if (line.type === 'info') color = 'var(--accent-amber)'
+                  if (line.type === 'highlight') color = 'var(--accent-purple)'
+                  if (line.type === 'success') color = 'var(--accent-green)'
+                  if (line.type === 'error') color = 'var(--accent-red)'
 
-                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', marginBottom: '1rem' }}>
-                    <div
-                      style={{
-                        padding: '0.75rem',
-                        background: 'rgba(124, 58, 237, 0.1)',
-                        borderRadius: '10px',
-                        color: 'var(--accent-purple)',
-                        border: '1px solid var(--border-purple)',
-                      }}
-                    >
-                      <Briefcase size={28} />
+                  return (
+                    <div key={idx} style={{ color, wordBreak: 'break-word', lineHeight: '1.5' }}>
+                      {line.text}
                     </div>
-                    <div>
-                      <span className="cyber-tag purple" style={{ fontSize: '0.72rem', marginBottom: '0.2rem' }}>
-                        ACTIVE CANDIDATE
-                      </span>
-                      <h3 style={{ fontSize: '1.3rem', color: 'var(--text-primary)', margin: 0 }}>
-                        Summer 2027 Internship
-                      </h3>
-                    </div>
-                  </div>
+                  )
+                })}
+                <div ref={bottomRef} />
+              </div>
 
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: '1.7', marginBottom: '1.25rem' }}>
-                    Actively seeking <strong>Summer 2027 Internships</strong> across Cloud Architecture, DevOps Automation, Software Engineering, or Systems Development.
-                  </p>
-
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem', marginBottom: '1.5rem', fontFamily: 'var(--font-mono)', fontSize: '0.8rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-secondary)' }}>
-                      <span>&gt; ROLES:</span>
-                      <span style={{ color: 'var(--text-primary)', fontWeight: '600' }}>Cloud / DevOps / SWE / IoT</span>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-secondary)' }}>
-                      <span>&gt; AVAILABILITY:</span>
-                      <span style={{ color: 'var(--accent-green)', fontWeight: '600' }}>Summer 2027 (Onsite / Remote)</span>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-secondary)' }}>
-                      <span>&gt; MOBILITY:</span>
-                      <span style={{ color: 'var(--accent-primary)', fontWeight: '600' }}>Open to Global Relocation</span>
-                    </div>
-                  </div>
-
-                  <a
-                    href="#contact"
-                    className="btn btn-primary"
-                    style={{ marginTop: 'auto', fontSize: '0.85rem', width: '100%', justifyContent: 'center' }}
-                  >
-                    <Briefcase size={16} /> Dispatch Internship Offer
-                  </a>
-                </TiltCard>
-              </motion.div>
-
-              {/* Card 4B: Hobbies & Personal Passions Nexus */}
-              <motion.div
-                initial={{ opacity: 0, x: 25 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-              >
-                <TiltCard
-                  borderTopColor="var(--accent-green)"
-                  style={{
-                    height: '100%',
-                    background: 'var(--bg-card)',
-                    padding: '2rem',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    border: '1px solid var(--border-green)',
-                  }}
-                >
-                  <div className="terminal-header" style={{ marginBottom: '1.2rem' }}>
-                    <div className="terminal-dots">
-                      <span className="terminal-dot dot-red" />
-                      <span className="terminal-dot dot-yellow" />
-                      <span className="terminal-dot dot-green" />
-                    </div>
-                    <span style={{ color: 'var(--accent-green)', fontSize: '0.72rem' }}>PASSIONS // CREATIVE_LAB</span>
-                  </div>
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-                    <div
-                      style={{
-                        padding: '0.65rem',
-                        background: 'rgba(5, 150, 105, 0.12)',
-                        borderRadius: '10px',
-                        color: 'var(--accent-green)',
-                        border: '1px solid var(--border-green)',
-                      }}
-                    >
-                      <Heart size={22} />
-                    </div>
-                    <div>
-                      <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', margin: 0 }}>
-                        Hobbies & Explorations
-                      </h3>
-                      <span style={{ color: 'var(--accent-green)', fontSize: '0.78rem', fontFamily: 'var(--font-mono)', fontWeight: '600' }}>
-                        HARDWARE • MEDIA • ARCHITECTURE
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Interactive Hobbies Mini Grid */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1rem' }}>
-                    {hobbiesData.map((hobby, hIdx) => {
-                      const isHovered = activeHobby === hIdx
-                      return (
-                        <div
-                          key={hIdx}
-                          onClick={() => setActiveHobby(hIdx)}
-                          style={{
-                            padding: '0.85rem',
-                            background: isHovered ? 'var(--bg-secondary)' : 'var(--bg-card)',
-                            border: `1px solid ${isHovered ? hobby.color : 'var(--border-subtle)'}`,
-                            borderRadius: '8px',
-                            cursor: 'pointer',
-                            transition: 'all 0.25s ease',
-                          }}
-                        >
-                          <div style={{ color: hobby.color, marginBottom: '0.35rem' }}>
-                            {hobby.icon}
-                          </div>
-                          <div style={{ fontSize: '0.82rem', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '0.2rem' }}>
-                            {hobby.title}
-                          </div>
-                          <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-                            {hobby.stats}
-                          </span>
-                        </div>
-                      )
-                    })}
-                  </div>
-
-                  {/* Active Hobby Description Box */}
-                  <div
+              {/* Quick Run Action Pills */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-subtle)', marginBottom: '0.75rem' }}>
+                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', alignSelf: 'center' }}>
+                  Quick:
+                </span>
+                {[
+                  { label: 'cloud-audit', desc: 'Scan' },
+                  { label: 'whoami', desc: 'Bio' },
+                  { label: 'skills', desc: 'Stack' },
+                  { label: 'patent-iot', desc: 'ESP32' },
+                  { label: 'clear', desc: 'Clear' },
+                ].map((btn, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => handleCommand(btn.label)}
+                    disabled={isExecuting}
                     style={{
-                      marginTop: 'auto',
-                      padding: '0.85rem 1rem',
                       background: 'var(--bg-secondary)',
-                      border: '1px solid var(--border-subtle)',
-                      borderRadius: '8px',
+                      border: '1px solid var(--border-color)',
+                      color: 'var(--accent-primary)',
+                      padding: '0.2rem 0.55rem',
+                      borderRadius: '5px',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.74rem',
+                      fontWeight: '600',
+                      cursor: 'pointer',
                     }}
                   >
-                    <span style={{ fontSize: '0.72rem', color: hobbiesData[activeHobby].color, fontFamily: 'var(--font-mono)', fontWeight: '700', display: 'block', marginBottom: '0.2rem' }}>
-                      &gt; {hobbiesData[activeHobby].category}
-                    </span>
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', lineHeight: '1.5', margin: 0 }}>
-                      {hobbiesData[activeHobby].detail}
-                    </p>
-                  </div>
-                </TiltCard>
-              </motion.div>
-            </div>
-          )}
+                    $ {btn.label}
+                  </button>
+                ))}
+              </div>
 
+              {/* Console Input Form */}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  handleCommand(input)
+                }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  background: 'var(--bg-secondary)',
+                  padding: '0.45rem 0.75rem',
+                  borderRadius: '8px',
+                  border: '1px solid var(--border-subtle)',
+                }}
+              >
+                <span style={{ color: 'var(--accent-green)', fontFamily: 'var(--font-mono)', fontWeight: 'bold', fontSize: '0.82rem' }}>
+                  ops:~$
+                </span>
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="type 'help', 'cloud-audit', 'whoami'..."
+                  disabled={isExecuting}
+                  style={{
+                    flex: 1,
+                    background: 'transparent',
+                    border: 'none',
+                    outline: 'none',
+                    color: 'var(--text-primary)',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.85rem',
+                  }}
+                />
+                <button
+                  type="submit"
+                  disabled={isExecuting || !input.trim()}
+                  style={{
+                    background: 'linear-gradient(135deg, var(--accent-primary), #b45309)',
+                    border: 'none',
+                    color: '#ffffff',
+                    padding: '0.35rem 0.75rem',
+                    borderRadius: '5px',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.75rem',
+                    fontWeight: '700',
+                    cursor: isExecuting ? 'not-allowed' : 'pointer',
+                  }}
+                >
+                  <Play size={10} style={{ display: 'inline', marginRight: '3px' }} /> EXEC
+                </button>
+              </form>
+            </TiltCard>
+          </div>
+
+          {/* ======================================================================= */}
+          {/* BENTO CARD 4: CORE ATTRIBUTES & HOBBY LAB (5 COLS) */}
+          {/* ======================================================================= */}
+          <div style={{ gridColumn: 'span 12', lg: 'span 5' }} className="bento-span-5">
+            <TiltCard
+              borderTopColor="var(--accent-purple)"
+              style={{
+                height: '100%',
+                background: 'var(--bg-card)',
+                padding: '1.8rem',
+                border: '1px solid var(--border-purple)',
+                borderRadius: '16px',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <div className="terminal-header" style={{ marginBottom: '0.85rem' }}>
+                <div className="terminal-dots">
+                  <span className="terminal-dot dot-red" />
+                  <span className="terminal-dot dot-yellow" />
+                  <span className="terminal-dot dot-green" />
+                </div>
+                <span style={{ color: 'var(--accent-purple)', fontSize: '0.72rem', fontWeight: '600' }}>
+                  CAPABILITY_RADAR
+                </span>
+              </div>
+
+              <h4 style={{ fontSize: '1.15rem', color: 'var(--text-primary)', marginBottom: '0.75rem' }}>
+                Technical Mindset & Passions
+              </h4>
+
+              {/* Attribute Selector Pills */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginBottom: '1rem' }}>
+                {attributesData.map((attr, idx) => {
+                  const isSelected = selectedAttribute === idx
+                  return (
+                    <button
+                      key={attr.id}
+                      onClick={() => setSelectedAttribute(idx)}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.35rem',
+                        padding: '0.35rem 0.65rem',
+                        background: isSelected ? 'var(--bg-secondary)' : 'transparent',
+                        border: `1px solid ${isSelected ? attr.color : 'var(--border-subtle)'}`,
+                        color: isSelected ? attr.color : 'var(--text-secondary)',
+                        borderRadius: '6px',
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.75rem',
+                        fontWeight: isSelected ? '700' : '500',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                      }}
+                    >
+                      {attr.icon}
+                      #{attr.name.split(' ')[0]}
+                    </button>
+                  )
+                })}
+              </div>
+
+              {/* Active Attribute Readout */}
+              <div
+                style={{
+                  background: 'var(--bg-secondary)',
+                  border: '1px solid var(--border-color)',
+                  borderRadius: '8px',
+                  padding: '0.85rem',
+                  marginBottom: '1rem',
+                }}
+              >
+                <span style={{ fontSize: '0.7rem', color: attributesData[selectedAttribute].color, fontFamily: 'var(--font-mono)', fontWeight: '700', display: 'block', marginBottom: '0.25rem' }}>
+                  &gt; {attributesData[selectedAttribute].tag}
+                </span>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', lineHeight: '1.5', margin: 0 }}>
+                  {attributesData[selectedAttribute].desc}
+                </p>
+              </div>
+
+              {/* Creative Hobby Lab */}
+              <div style={{ marginTop: 'auto', paddingTop: '0.75rem', borderTop: '1px solid var(--border-subtle)' }}>
+                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', display: 'block', marginBottom: '0.5rem' }}>
+                  CREATIVE_&_RESEARCH_LAB:
+                </span>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                  {hobbiesData.slice(0, 2).map((hobby, hIdx) => (
+                    <div
+                      key={hIdx}
+                      style={{
+                        padding: '0.6rem 0.75rem',
+                        background: 'var(--bg-secondary)',
+                        border: '1px solid var(--border-subtle)',
+                        borderRadius: '6px',
+                      }}
+                    >
+                      <div style={{ color: hobby.color, marginBottom: '0.2rem' }}>
+                        {hobby.icon}
+                      </div>
+                      <div style={{ fontSize: '0.75rem', fontWeight: '600', color: 'var(--text-primary)' }}>
+                        {hobby.title}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </TiltCard>
+          </div>
         </div>
       </div>
     </section>
   )
-}
-
-function UsersIcon(props) {
-  return <Briefcase {...props} />
 }
