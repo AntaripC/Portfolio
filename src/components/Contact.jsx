@@ -20,7 +20,7 @@ export default function Contact() {
   }, [])
 
   const copyEmail = () => {
-    navigator.clipboard.writeText('hello@antarip.dev')
+    navigator.clipboard.writeText('chatterjeeantarip69@gmail.com')
     setCopied(true)
     setTimeout(() => setCopied(false), 2500)
   }
@@ -137,7 +137,7 @@ export default function Contact() {
                     <div>
                       <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>DIRECT EMAIL</div>
                       <div style={{ fontSize: '0.88rem', fontWeight: '700', color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
-                        hello@antarip.dev
+                        chatterjeeantarip69@gmail.com
                       </div>
                     </div>
                   </div>

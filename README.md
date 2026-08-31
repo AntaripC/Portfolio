@@ -69,4 +69,4 @@ npm run build
 **Antarip Chatterjee**
 - B.Tech CSE (Cloud Computing) @ Lovely Professional University (LPU)
 - GitHub: [@AntaripC](https://github.com/AntaripC)
-- Email: [hello@antarip.dev](mailto:hello@antarip.dev)
+- Email: [chatterjeeantarip69@gmail.com](mailto:chatterjeeantarip69@gmail.com)
