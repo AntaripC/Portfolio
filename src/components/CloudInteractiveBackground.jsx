@@ -161,19 +161,19 @@ export default function CloudInteractiveBackground() {
 
         const nodeColor = currentDark
           ? node.type === 'aws'
-            ? '#60a5fa'
+            ? '#fbbf24' // Radiant Gold
             : node.type === 'k8s'
-            ? '#10b981'
+            ? '#34d399' // Emerald
             : node.type === 'gcp'
-            ? '#a855f7'
-            : '#38bdf8'
+            ? '#fb7185' // Sunset Coral
+            : '#f97316' // Warm Amber
           : node.type === 'aws'
-          ? '#3b82f6' // Warm Amber
+          ? '#d97706' // Warm Amber
           : node.type === 'k8s'
           ? '#059669' // Emerald
           : node.type === 'gcp'
-          ? '#7c3aed' // Royal Purple
-          : '#0284c7' // Azure Blue
+          ? '#e11d48' // Sunset Rose
+          : '#ea580c' // Warm Flame
 
         const pulseSize = node.radius + Math.sin(node.pulse) * 2.5
         ctx.beginPath()
@@ -190,7 +190,7 @@ export default function CloudInteractiveBackground() {
         ctx.shadowBlur = 0
 
         ctx.font = '600 9px "JetBrains Mono", monospace'
-        ctx.fillStyle = currentDark ? 'rgba(148, 163, 184, 0.55)' : 'rgba(51, 65, 85, 0.75)'
+        ctx.fillStyle = currentDark ? 'rgba(184, 172, 159, 0.65)' : 'rgba(99, 87, 80, 0.75)'
         ctx.fillText(node.label, node.x + 9, node.y + 3)
       })
 
@@ -203,13 +203,13 @@ export default function CloudInteractiveBackground() {
           const maxDist = 175
 
           if (dist < maxDist) {
-            const alpha = (1 - dist / maxDist) * (currentDark ? 0.2 : 0.28)
+            const alpha = (1 - dist / maxDist) * (currentDark ? 0.22 : 0.28)
             ctx.beginPath()
             ctx.moveTo(nodes[i].x, nodes[i].y)
             ctx.lineTo(nodes[j].x, nodes[j].y)
             ctx.strokeStyle = currentDark
-              ? `rgba(96, 165, 250, ${alpha})`
-              : `rgba(59, 130, 246, ${alpha})`
+              ? `rgba(251, 191, 36, ${alpha})`
+              : `rgba(217, 119, 6, ${alpha})`
             ctx.lineWidth = 1
             ctx.stroke()
 
@@ -221,7 +221,7 @@ export default function CloudInteractiveBackground() {
                 endY: nodes[j].y,
                 progress: 0,
                 speed: 0.015 + Math.random() * 0.02,
-                color: currentDark ? '#60a5fa' : '#3b82f6',
+                color: currentDark ? '#fbbf24' : '#d97706',
                 size: 2.2,
               })
               packetCountTracker++
@@ -232,7 +232,7 @@ export default function CloudInteractiveBackground() {
 
       // 4. Mouse Edge Gateway Node
       if (mouse.active) {
-        const cursorColor = currentDark ? '#60a5fa' : '#3b82f6'
+        const cursorColor = currentDark ? '#fb7185' : '#e11d48'
         ctx.beginPath()
         ctx.arc(mouse.x, mouse.y, 6.5, 0, Math.PI * 2)
         ctx.fillStyle = cursorColor
@@ -251,8 +251,8 @@ export default function CloudInteractiveBackground() {
             ctx.moveTo(mouse.x, mouse.y)
             ctx.lineTo(node.x, node.y)
             ctx.strokeStyle = currentDark
-              ? `rgba(16, 185, 129, ${alpha})`
-              : `rgba(5, 150, 105, ${alpha})`
+              ? `rgba(251, 113, 133, ${alpha})`
+              : `rgba(225, 29, 72, ${alpha})`
             ctx.lineWidth = 1.2
             ctx.stroke()
 
@@ -264,7 +264,7 @@ export default function CloudInteractiveBackground() {
                 endY: mouse.y,
                 progress: 0,
                 speed: 0.04,
-                color: currentDark ? '#10b981' : '#059669',
+                color: currentDark ? '#fbbf24' : '#d97706',
                 size: 2.5,
               })
             }
@@ -272,7 +272,7 @@ export default function CloudInteractiveBackground() {
         })
 
         ctx.font = '600 10px "JetBrains Mono", monospace'
-        ctx.fillStyle = currentDark ? 'rgba(96, 165, 250, 0.85)' : 'rgba(59, 130, 246, 0.95)'
+        ctx.fillStyle = currentDark ? 'rgba(251, 191, 36, 0.9)' : 'rgba(217, 119, 6, 0.95)'
         ctx.fillText('EDGE-CURSOR-GATEWAY // ACTIVE', mouse.x + 12, mouse.y - 8)
       }
 
@@ -338,14 +338,14 @@ export default function CloudInteractiveBackground() {
           transition: 'background 0.4s ease',
           background: isDark
             ? `
-              radial-gradient(ellipse 80% 60% at 50% -15%, rgba(96, 165, 250, 0.07) 0%, transparent 60%),
-              radial-gradient(ellipse 60% 50% at 90% 70%, rgba(16, 185, 129, 0.04) 0%, transparent 60%),
-              radial-gradient(ellipse 70% 60% at 10% 85%, rgba(168, 85, 247, 0.04) 0%, transparent 60%),
-              linear-gradient(180deg, #030712 0%, #060b17 50%, #030712 100%)
+              radial-gradient(ellipse 80% 60% at 50% -15%, rgba(251, 191, 36, 0.12) 0%, transparent 60%),
+              radial-gradient(ellipse 60% 50% at 90% 70%, rgba(251, 113, 133, 0.08) 0%, transparent 60%),
+              radial-gradient(ellipse 70% 60% at 10% 85%, rgba(249, 115, 22, 0.08) 0%, transparent 60%),
+              linear-gradient(180deg, #0d0a10 0%, #17121b 50%, #0d0a10 100%)
             `
             : `
-              radial-gradient(ellipse 85% 65% at 50% -15%, rgba(59, 130, 246, 0.12) 0%, transparent 60%),
-              radial-gradient(ellipse 65% 55% at 90% 70%, rgba(2, 132, 199, 0.09) 0%, transparent 60%),
+              radial-gradient(ellipse 85% 65% at 50% -15%, rgba(217, 119, 6, 0.12) 0%, transparent 60%),
+              radial-gradient(ellipse 65% 55% at 90% 70%, rgba(225, 29, 72, 0.08) 0%, transparent 60%),
               radial-gradient(ellipse 75% 65% at 10% 85%, rgba(245, 158, 11, 0.08) 0%, transparent 60%),
               linear-gradient(180deg, #faf6f0 0%, #f3ece0 50%, #faf6f0 100%)
             `,

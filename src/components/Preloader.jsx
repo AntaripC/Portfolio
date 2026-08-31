@@ -56,25 +56,25 @@ export default function Preloader() {
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: '#020617',
+            backgroundColor: '#0d0a10',
             zIndex: 99999,
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            color: '#f8fafc',
+            color: '#fdfaf6',
             padding: '1.5rem',
             overflow: 'hidden',
           }}
         >
-          {/* Subtle Ambient Background Gradients */}
+          {/* Subtle Warm Ambient Background Gradients */}
           <div
             style={{
               position: 'absolute',
               width: '450px',
               height: '450px',
               borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(59, 130, 246, 0.15), transparent 70%)',
+              background: 'radial-gradient(circle, rgba(251, 191, 36, 0.16), transparent 70%)',
               filter: 'blur(90px)',
               top: '20%',
               left: '25%',
@@ -87,7 +87,7 @@ export default function Preloader() {
               width: '400px',
               height: '400px',
               borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(6, 182, 212, 0.12), transparent 70%)',
+              background: 'radial-gradient(circle, rgba(251, 113, 133, 0.14), transparent 70%)',
               filter: 'blur(90px)',
               bottom: '20%',
               right: '25%',
@@ -116,7 +116,7 @@ export default function Preloader() {
                 fontSize: 'clamp(2rem, 5vw, 3.2rem)',
                 fontFamily: 'var(--font-main)',
                 fontWeight: 900,
-                background: 'linear-gradient(135deg, #ffffff 40%, #60a5fa 100%)',
+                background: 'linear-gradient(135deg, #ffffff 35%, #fbbf24 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 margin: 0,
@@ -136,7 +136,7 @@ export default function Preloader() {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.45rem',
-                color: '#38bdf8',
+                color: '#fbbf24',
                 letterSpacing: '0.18em',
                 fontSize: '0.78rem',
                 fontFamily: 'var(--font-mono)',
@@ -145,7 +145,7 @@ export default function Preloader() {
                 fontWeight: 600,
               }}
             >
-              <ShieldCheck size={14} color="#38bdf8" />
+              <ShieldCheck size={14} color="#fbbf24" />
               <span>INITIALIZING SECURE CLOUD ENVIRONMENT</span>
             </motion.div>
 
@@ -157,12 +157,12 @@ export default function Preloader() {
               style={{
                 width: '100%',
                 marginTop: '1.75rem',
-                background: 'rgba(15, 23, 42, 0.85)',
-                border: '1px solid rgba(59, 130, 246, 0.25)',
+                background: 'rgba(23, 18, 28, 0.88)',
+                border: '1px solid rgba(251, 191, 36, 0.25)',
                 borderRadius: '14px',
                 padding: '1.1rem 1.3rem',
                 backdropFilter: 'blur(20px)',
-                boxShadow: '0 15px 35px rgba(0, 0, 0, 0.4), 0 0 30px rgba(59, 130, 246, 0.15)',
+                boxShadow: '0 15px 35px rgba(0, 0, 0, 0.5), 0 0 35px rgba(251, 191, 36, 0.15)',
               }}
             >
               {/* Terminal Title Bar */}
@@ -185,7 +185,7 @@ export default function Preloader() {
                       marginLeft: '0.5rem',
                       fontFamily: 'var(--font-mono)',
                       fontSize: '0.72rem',
-                      color: '#94a3b8',
+                      color: '#b8ac9f',
                     }}
                   >
                     cloud-bootstrap.ts
@@ -195,7 +195,7 @@ export default function Preloader() {
                   style={{
                     fontFamily: 'var(--font-mono)',
                     fontSize: '0.7rem',
-                    color: '#38bdf8',
+                    color: '#fbbf24',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.3rem',
@@ -212,7 +212,7 @@ export default function Preloader() {
                   fontFamily: 'var(--font-mono)',
                   fontSize: '0.82rem',
                   lineHeight: '1.65',
-                  color: '#e2e8f0',
+                  color: '#fdfaf6',
                   minHeight: '110px',
                   whiteSpace: 'pre-wrap',
                   wordBreak: 'break-word',
@@ -224,7 +224,7 @@ export default function Preloader() {
                     display: 'inline-block',
                     width: '7px',
                     height: '14px',
-                    backgroundColor: '#38bdf8',
+                    backgroundColor: '#fbbf24',
                     marginLeft: '3px',
                     verticalAlign: 'middle',
                     animation: 'pulse-glow 1s infinite',
@@ -248,11 +248,11 @@ export default function Preloader() {
                 style={{
                   width: '100%',
                   height: '6px',
-                  background: 'rgba(30, 41, 59, 0.8)',
+                  background: 'rgba(30, 23, 38, 0.85)',
                   borderRadius: '999px',
                   overflow: 'hidden',
                   position: 'relative',
-                  border: '1px solid rgba(59, 130, 246, 0.2)',
+                  border: '1px solid rgba(251, 191, 36, 0.25)',
                   boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.6)',
                 }}
               >
@@ -260,10 +260,10 @@ export default function Preloader() {
                   style={{
                     height: '100%',
                     width: `${progress}%`,
-                    background: 'linear-gradient(90deg, #3b82f6, #06b6d4, #3b82f6)',
+                    background: 'linear-gradient(90deg, #fbbf24, #fb7185, #fbbf24)',
                     backgroundSize: '200% 100%',
                     borderRadius: '999px',
-                    boxShadow: '0 0 14px rgba(59, 130, 246, 0.7)',
+                    boxShadow: '0 0 14px rgba(251, 191, 36, 0.7)',
                     transition: 'width 0.05s linear',
                     position: 'relative',
                   }}
@@ -278,11 +278,11 @@ export default function Preloader() {
                   alignItems: 'center',
                   fontFamily: 'var(--font-mono)',
                   fontSize: '0.74rem',
-                  color: '#94a3b8',
+                  color: '#b8ac9f',
                 }}
               >
                 <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                  <Sparkles size={12} color="#38bdf8" />
+                  <Sparkles size={12} color="#fbbf24" />
                   {progress < 30
                     ? 'CONNECTING_EDGE_NODES...'
                     : progress < 70
@@ -291,7 +291,7 @@ export default function Preloader() {
                     ? 'COMPILING_SYSTEM_DOSSIER...'
                     : 'WORKSPACE_READY'}
                 </span>
-                <span style={{ color: '#60a5fa', fontWeight: 700 }}>{progress}%</span>
+                <span style={{ color: '#fbbf24', fontWeight: 700 }}>{progress}%</span>
               </div>
             </div>
           </div>
