@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import {
   User, GraduationCap, School, Sparkles, Heart, MapPin, Calendar,
-  Briefcase, Cpu, Globe, Camera, Layers, Activity, CheckCircle2
+  Briefcase, Cpu, Globe, Layers, Activity, CheckCircle2
 } from 'lucide-react'
 
 /* ── Reusable GlassCard (exported for other components) ── */
@@ -26,7 +26,6 @@ export default function About() {
   const [activeHobby, setActiveHobby] = useState(0)
 
   const hobbies = [
-    { icon: <Camera size={18} />, label: 'Photography', desc: 'Capturing landscapes and cityscapes' },
     { icon: <Globe size={18} />, label: 'Cloud Exploration', desc: 'Testing new AWS and GCP features' },
     { icon: <Cpu size={18} />, label: 'Hardware Tinkering', desc: 'ESP32, Arduino, and sensor experiments' },
     { icon: <Layers size={18} />, label: 'Open Source', desc: 'Contributing to developer tools' },
@@ -249,7 +248,7 @@ export default function About() {
                 <Heart size={18} color="var(--accent-tertiary)" />
                 <h3 style={{ fontSize: '1rem', margin: 0 }}>Beyond Code</h3>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.75rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '0.85rem' }}>
                 {hobbies.map((hobby, idx) => (
                   <button
                     key={idx}
