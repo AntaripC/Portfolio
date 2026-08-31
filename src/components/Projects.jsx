@@ -322,6 +322,26 @@ export default function Projects() {
                   ))}
                 </div>
 
+                {/* Telemetry Bar */}
+                <div style={{ marginBottom: '1.2rem', padding: '0.6rem 0.8rem', background: 'var(--bg-secondary)', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.68rem', fontFamily: 'var(--font-mono)', marginBottom: '0.35rem' }}>
+                    <span style={{ color: 'var(--text-muted)' }}>SYSTEM STABILITY & DEPLOYMENT</span>
+                    <span style={{ color: project.color, fontWeight: '700' }}>100% VERIFIED</span>
+                  </div>
+                  <div className="progress-bar-track" style={{ height: '5px' }}>
+                    <motion.div
+                      className="progress-bar-fill"
+                      initial={{ width: 0 }}
+                      whileInView={{ width: '100%' }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 1, delay: idx * 0.1 }}
+                      style={{ background: `linear-gradient(90deg, ${project.color}, var(--accent-cyan))` }}
+                    >
+                      <div className="progress-bar-cap" style={{ color: project.color }} />
+                    </motion.div>
+                  </div>
+                </div>
+
                 {/* Tech Chips */}
                 <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid var(--border-subtle)' }}>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
