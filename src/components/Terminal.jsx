@@ -105,7 +105,7 @@ export default function TerminalComponent() {
       case 'contact':
         setHistory((prev) => [
           ...prev,
-          { type: 'info', text: '  Email: antarippro@gmail.com' },
+          { type: 'info', text: '  Email: chatterjeeantarip69@gmail.com' },
           { type: 'info', text: '  GitHub: https://github.com/AntaripC' },
           { type: 'info', text: '  Status: Open for Summer 2027 Internship Opportunities' },
         ])
