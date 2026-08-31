@@ -1,21 +1,25 @@
 import React, { useRef, useState } from 'react'
-import { motion } from 'framer-motion'
-import { Briefcase, Cpu, Users, Trophy, CheckCircle2 } from 'lucide-react'
-import { GlassCard } from './About.jsx'
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
+import { Megaphone, Cpu, Code2, ShieldAlert, Award, Briefcase, CheckCircle2, ChevronRight, Sparkles, Users, Trophy } from 'lucide-react'
+import { TiltCard } from './About.jsx'
 
 export default function Experience() {
+  const containerRef = useRef(null)
   const [activeTrack, setActiveTrack] = useState('all')
 
   const timelineItems = [
     {
+      id: 'EXP // 01',
       title: 'Lead Hackathon Squad Architect',
       organization: 'National Hackathons (IITs & Premier Universities)',
       track: 'engineering',
       type: 'Sprint Team Lead • Full-Stack Prototyping',
       duration: '2025 – Present',
+      location: 'National Arenas',
       color: 'var(--accent-primary)',
-      icon: <Trophy size={18} />,
-      highlights: ['5+ National Sprints', 'High-Velocity MVPs', 'A* Pathfinding Engine'],
+      bg: 'rgba(59, 130, 246, 0.1)',
+      icon: <Trophy size={20} />,
+      impactMetrics: ['5+ National Sprints', 'High-Velocity MVPs', 'A* Pathfinding Graph Engine'],
       description:
         'Directing cross-functional engineering squads under 24–48h high-pressure hackathon clocks. Managing architecture design, code review pipelines, REST APIs, and technical demo defense.',
       deliverables: [
@@ -25,14 +29,17 @@ export default function Experience() {
       ],
     },
     {
+      id: 'EXP // 02',
       title: 'Patent-Pending IoT Hardware Prototyper',
       organization: 'Autonomous Environmental Research',
       track: 'engineering',
       type: 'Embedded Hardware & Edge Telemetry',
       duration: '2025 – Present',
-      color: 'var(--accent-green)',
-      icon: <Cpu size={18} />,
-      highlights: ['Patent Application Filed', '6-Channel Spectral Cell', 'ThingSpeak Streams'],
+      location: 'Embedded Hardware Lab',
+      color: '#059669',
+      bg: 'rgba(5, 150, 105, 0.1)',
+      icon: <Cpu size={20} />,
+      impactMetrics: ['Patent Application Filed', '6-Channel Spectral Optical Cell', 'ThingSpeak Streams'],
       description:
         'Engineered an innovative IoT spectral detector utilizing ESP32 microcontrollers, AS7262 optical sensors, and turbidity flow-cells to classify microplastics in real-time.',
       deliverables: [
@@ -42,14 +49,17 @@ export default function Experience() {
       ],
     },
     {
+      id: 'EXP // 03',
       title: 'Cloud Infrastructure & Systems Developer',
       organization: 'Cloud Computing Specialization Lab',
       track: 'engineering',
       type: 'Distributed Microservices & Cloud Security',
       duration: '2025 – Present',
-      color: 'var(--accent-secondary)',
-      icon: <Briefcase size={18} />,
-      highlights: ['AWS Well-Architected', 'Docker & K8s Pods', 'Zero-Trust IAM'],
+      location: 'LPU Cloud Labs',
+      color: '#7c3aed',
+      bg: 'rgba(124, 58, 237, 0.1)',
+      icon: <Briefcase size={20} />,
+      impactMetrics: ['AWS Well-Architected', 'Docker & K8s Pods', 'Zero-Trust IAM'],
       description:
         'Architecting distributed cloud environments on AWS, setting up multi-AZ VPC peering, least-privilege IAM matrices, containerized Docker microservices, and Kubernetes pod health monitoring.',
       deliverables: [
@@ -59,14 +69,17 @@ export default function Experience() {
       ],
     },
     {
+      id: 'EXP // 04',
       title: 'Community Cybersecurity Educator',
       organization: 'LPU Community Development Program',
       track: 'leadership',
       type: 'Community Outreach & Digital Safety',
       duration: '2025',
-      color: 'var(--accent-blue)',
-      icon: <Users size={18} />,
-      highlights: ['100+ Students Educated', 'Cyber Hygiene Training', 'Digital Safety'],
+      location: 'Regional Schools & Centers',
+      color: '#0284c7',
+      bg: 'rgba(2, 132, 199, 0.1)',
+      icon: <Users size={20} />,
+      impactMetrics: ['100+ Students Educated', 'Cyber Hygiene Training', 'Digital Safety Defense'],
       description:
         'Conducted interactive cybersecurity awareness workshops for regional high school students, teaching digital hygiene, password security, phishing defense, and safe browsing habits.',
       deliverables: [
@@ -76,37 +89,64 @@ export default function Experience() {
     },
   ]
 
-  const filtered = activeTrack === 'all' ? timelineItems : timelineItems.filter(i => i.track === activeTrack)
+  const filteredItems = timelineItems.filter((item) => {
+    if (activeTrack === 'all') return true
+    return item.track === activeTrack
+  })
 
   return (
-    <section id="experience" className="section">
+    <section id="experience" className="section" ref={containerRef} style={{ position: 'relative' }}>
       <div className="container">
+        {/* Section Header */}
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <div className="section-subtitle">
-            <Briefcase size={14} /> Experience
+            <Briefcase size={14} /> FIELD_OPERATIONS // CAREER_ROADMAP
           </div>
-          <h2 style={{ marginBottom: '0.75rem' }}>Leadership & Experience</h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', maxWidth: '600px', margin: '0 auto' }}>
-            A proven record of leadership, hackathon execution, and patent-pending hardware research.
+          <h2 style={{ marginBottom: '0.75rem' }}>Leadership & Experience Roadmap</h2>
+          <p
+            style={{
+              color: 'var(--text-secondary)',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.95rem',
+              maxWidth: '700px',
+              margin: '0 auto',
+            }}
+          >
+            A proven record of organizational leadership, high-velocity hackathon execution, and patent-pending hardware research.
           </p>
 
-          {/* Track filters */}
-          <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', marginTop: '1.5rem', flexWrap: 'wrap' }}>
+          {/* Track Filter Pills */}
+          <div
+            style={{
+              display: 'inline-flex',
+              gap: '0.45rem',
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border-color)',
+              padding: '0.35rem 0.5rem',
+              borderRadius: '50px',
+              marginTop: '1.5rem',
+              boxShadow: '0 4px 15px rgba(15, 23, 42, 0.04)',
+            }}
+          >
             {[
-              { id: 'all', label: 'All' },
-              { id: 'engineering', label: 'Engineering' },
-              { id: 'leadership', label: 'Leadership' },
-            ].map(t => (
+              { id: 'all', label: 'All Operations' },
+              { id: 'leadership', label: 'Leadership & Community' },
+              { id: 'engineering', label: 'Engineering & Hackathons' },
+            ].map((t) => (
               <button
                 key={t.id}
                 onClick={() => setActiveTrack(t.id)}
                 style={{
-                  padding: '0.4rem 0.9rem', borderRadius: 'var(--radius-full)',
-                  border: activeTrack === t.id ? '1px solid var(--accent-primary)' : '1px solid var(--border-subtle)',
-                  background: activeTrack === t.id ? 'rgba(124,58,237,0.1)' : 'transparent',
+                  background: activeTrack === t.id ? 'var(--bg-secondary)' : 'transparent',
                   color: activeTrack === t.id ? 'var(--accent-primary)' : 'var(--text-secondary)',
-                  fontFamily: 'var(--font-display)', fontSize: '0.82rem', fontWeight: 600,
-                  cursor: 'pointer', transition: 'all 0.25s ease',
+                  border: `1px solid ${activeTrack === t.id ? 'var(--accent-primary)' : 'transparent'}`,
+                  borderRadius: '30px',
+                  padding: '0.35rem 0.9rem',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.78rem',
+                  fontWeight: activeTrack === t.id ? '700' : '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
                 }}
               >
                 {t.label}
@@ -115,95 +155,125 @@ export default function Experience() {
           </div>
         </div>
 
-        {/* Timeline */}
-        <div style={{
-          maxWidth: '900px', margin: '0 auto', position: 'relative',
-          paddingLeft: '2.5rem',
-        }}>
-          {/* Vertical line */}
-          <div style={{
-            position: 'absolute', left: '11px', top: 0, bottom: 0,
-            width: '2px', background: 'var(--border-subtle)',
-          }} />
-
-          {filtered.map((item, idx) => (
+        {/* ========================================================================= */}
+        {/* TIMELINE CARDS */}
+        {/* ========================================================================= */}
+        <div style={{ maxWidth: '960px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+          {filteredItems.map((item, idx) => (
             <motion.div
-              key={item.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              key={item.id}
+              initial={{ opacity: 0, x: -25 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              style={{ position: 'relative', marginBottom: '1.75rem' }}
             >
-              {/* Timeline dot */}
-              <div style={{
-                position: 'absolute', left: '-2.5rem', top: '1.8rem',
-                width: '22px', height: '22px', borderRadius: '50%',
-                background: 'var(--bg-primary)', border: `2px solid ${item.color}`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2,
-              }}>
-                <div style={{
-                  width: '8px', height: '8px', borderRadius: '50%', background: item.color,
-                }} />
-              </div>
-
-              <GlassCard accentColor={item.color}>
+              <TiltCard
+                borderTopColor={item.color}
+                style={{
+                  background: 'var(--bg-card)',
+                  padding: '2rem',
+                  border: '1px solid var(--border-color)',
+                  borderRadius: '16px',
+                  boxShadow: '0 10px 30px rgba(15, 23, 42, 0.04)',
+                }}
+              >
                 {/* Header */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '0.75rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                    <div style={{
-                      padding: '0.5rem', background: `${item.color}15`, color: item.color,
-                      borderRadius: '10px', display: 'flex',
-                    }}>
+                <div className="terminal-header" style={{ marginBottom: '1.2rem' }}>
+                  <div className="terminal-dots">
+                    <span className="terminal-dot dot-red" />
+                    <span className="terminal-dot dot-yellow" />
+                    <span className="terminal-dot dot-green" />
+                  </div>
+                  <span style={{ color: item.color, fontSize: '0.72rem', fontWeight: '600' }}>
+                    {item.id}
+                  </span>
+                </div>
+
+                {/* Title info & Badge */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '1rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.85rem' }}>
+                    <div
+                      style={{
+                        padding: '0.65rem',
+                        background: item.bg,
+                        color: item.color,
+                        borderRadius: '10px',
+                        border: `1px solid ${item.color}40`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
                       {item.icon}
                     </div>
                     <div>
-                      <h3 style={{ fontSize: '1.1rem', margin: 0, fontFamily: 'var(--font-display)' }}>
+                      <h3 style={{ fontSize: '1.3rem', color: 'var(--text-primary)', margin: 0 }}>
                         {item.title}
                       </h3>
-                      <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginTop: '0.15rem' }}>
-                        <span style={{ color: item.color, fontWeight: 600 }}>{item.organization}</span>
-                        <span style={{ color: 'var(--text-muted)', margin: '0 0.4rem' }}>•</span>
-                        <span>{item.type}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap', marginTop: '0.2rem' }}>
+                        <span style={{ color: item.color, fontWeight: '700', fontFamily: 'var(--font-mono)', fontSize: '0.92rem' }}>
+                          {item.organization}
+                        </span>
+                        <span style={{ color: 'var(--border-subtle)' }}>•</span>
+                        <span style={{ color: 'var(--text-secondary)', fontSize: '0.82rem' }}>
+                          {item.type}
+                        </span>
                       </div>
                     </div>
                   </div>
 
-                  <span style={{
-                    fontSize: '0.78rem', padding: '0.3rem 0.7rem', borderRadius: '8px',
-                    background: 'var(--bg-secondary)', border: '1px solid var(--border-subtle)',
-                    fontFamily: 'var(--font-display)', fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap',
-                  }}>
+                  <div
+                    style={{
+                      background: 'var(--bg-secondary)',
+                      padding: '0.35rem 0.8rem',
+                      borderRadius: '6px',
+                      border: '1px solid var(--border-color)',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.8rem',
+                      color: 'var(--text-primary)',
+                      fontWeight: '600',
+                    }}
+                  >
                     {item.duration}
-                  </span>
+                  </div>
                 </div>
 
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.7, marginBottom: '1rem' }}>
+                {/* Narrative */}
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: '1.7', marginBottom: '1.2rem' }}>
                   {item.description}
                 </p>
 
-                {/* Deliverables */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem', marginBottom: '1rem' }}>
-                  {item.deliverables.map((d, dIdx) => (
-                    <div key={dIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                      <CheckCircle2 size={14} style={{ color: item.color, marginTop: '0.2rem', flexShrink: 0 }} />
-                      <span>{d}</span>
+                {/* Deliverables List */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.25rem' }}>
+                  {item.deliverables.map((del, dIdx) => (
+                    <div key={dIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.55rem', fontSize: '0.84rem', color: 'var(--text-secondary)' }}>
+                      <CheckCircle2 size={15} style={{ color: item.color, marginTop: '0.15rem', flexShrink: 0 }} />
+                      <span>{del}</span>
                     </div>
                   ))}
                 </div>
 
-                {/* Highlight pills */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-subtle)' }}>
-                  {item.highlights.map((h, hIdx) => (
-                    <span key={hIdx} className="tag" style={{
-                      fontSize: '0.7rem', padding: '0.2rem 0.55rem',
-                      color: item.color, background: `${item.color}10`, borderColor: `${item.color}25`,
-                    }}>
-                      {h}
+                {/* Impact Metrics Pill Row */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', paddingTop: '0.85rem', borderTop: '1px solid var(--border-subtle)' }}>
+                  {item.impactMetrics.map((met, mIdx) => (
+                    <span
+                      key={mIdx}
+                      style={{
+                        fontSize: '0.72rem',
+                        fontFamily: 'var(--font-mono)',
+                        color: item.color,
+                        background: item.bg,
+                        padding: '0.2rem 0.6rem',
+                        borderRadius: '4px',
+                        border: `1px solid ${item.color}30`,
+                        fontWeight: '600',
+                      }}
+                    >
+                      ★ {met}
                     </span>
                   ))}
                 </div>
-              </GlassCard>
+              </TiltCard>
             </motion.div>
           ))}
         </div>

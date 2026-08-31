@@ -1,99 +1,139 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Award, ShieldCheck, CheckCircle2 } from 'lucide-react'
-import { GlassCard } from './About.jsx'
+import { Award, ShieldCheck, CheckCircle2, ExternalLink, Sparkles, FileCheck, Filter } from 'lucide-react'
+import { TiltCard } from './About.jsx'
 
 export default function Certifications() {
   const [issuerFilter, setIssuerFilter] = useState('all')
 
   const certificates = [
     {
+      id: 'CERT // IITM_01',
       name: 'Data Analyst Certification',
       issuer: 'IIT Madras',
       category: 'iitm',
       type: 'Data Analytics, Statistical Modeling & Insights',
       skills: ['Exploratory Data Analysis', 'Statistical Inference', 'Python Data Stacks'],
+      glow: 'rgba(59, 130, 246, 0.25)',
       color: 'var(--accent-primary)',
-      badge: 'Premier Institute',
+      badge: 'PREMIER INSTITUTE',
     },
     {
+      id: 'CERT // INFOSYS_01',
       name: 'Cybersecurity Fundamentals',
       issuer: 'Infosys Springboard',
       category: 'infosys',
       type: 'Threat Modeling, Network Defense & Audit Protocols',
       skills: ['Network Security', 'Vulnerability Assessment', 'Security Audits'],
-      color: 'var(--accent-green)',
-      badge: 'Cyber Defense',
+      glow: 'rgba(5, 150, 105, 0.25)',
+      color: '#059669',
+      badge: 'CYBER DEFENSE',
     },
     {
+      id: 'CERT // INFOSYS_02',
       name: 'Big Data Systems & Analytics',
       issuer: 'Infosys Springboard',
       category: 'infosys',
       type: 'Distributed Data Storage, ETL & High-Scale Analytics',
       skills: ['Big Data Architecture', 'Distributed Storage', 'Data Pipelines'],
-      color: 'var(--accent-secondary)',
-      badge: 'Distributed Data',
+      glow: 'rgba(124, 58, 237, 0.25)',
+      color: '#7c3aed',
+      badge: 'DISTRIBUTED DATA',
     },
     {
+      id: 'CERT // INFOSYS_03',
       name: 'Data Science & Statistical ML',
       issuer: 'Infosys Springboard',
       category: 'infosys',
       type: 'Machine Learning Models & Analytical Computation',
       skills: ['Predictive Modeling', 'Feature Engineering', 'Data Visualization'],
-      color: 'var(--accent-blue)',
-      badge: 'Analytics',
+      glow: 'rgba(2, 132, 199, 0.25)',
+      color: '#0284c7',
+      badge: 'ANALYTICS',
     },
     {
+      id: 'CERT // INFOSYS_04',
       name: 'Python Programming Masterclass',
       issuer: 'Infosys Springboard',
       category: 'infosys',
       type: 'Object-Oriented Programming, Automation & Scripting',
       skills: ['Python OOP', 'Script Automation', 'System Tooling'],
-      color: 'var(--accent-rose)',
-      badge: 'Core Code',
+      glow: 'rgba(244, 63, 94, 0.25)',
+      color: '#f43f5e',
+      badge: 'CORE CODE',
     },
     {
+      id: 'CODE // NEOCOLAB_01',
       name: 'Computer Programming Algorithms',
       issuer: 'Neo Colab',
       category: 'neocolab',
       type: 'Data Structures, Algorithm Design & Problem Solving',
       skills: ['Data Structures', 'Dynamic Programming', 'Algorithmic Optimization'],
-      color: 'var(--accent-blue)',
-      badge: 'Algorithms',
+      glow: 'rgba(180, 83, 9, 0.25)',
+      color: '#2563eb',
+      badge: 'ALGORITHMS',
     },
   ]
 
-  const filtered = issuerFilter === 'all' ? certificates : certificates.filter(c => c.category === issuerFilter)
+  const filteredCerts = certificates.filter((c) => {
+    if (issuerFilter === 'all') return true
+    return c.category === issuerFilter
+  })
 
   return (
-    <section id="certifications" className="section">
+    <section id="certifications" className="section" style={{ position: 'relative' }}>
       <div className="container">
+        {/* Section Header */}
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <div className="section-subtitle">
-            <Award size={14} /> Certifications
+            <Award size={14} /> CREDENTIALS // VERIFIED_VAULT
           </div>
-          <h2 style={{ marginBottom: '0.75rem' }}>Verified Credentials</h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', maxWidth: '600px', margin: '0 auto' }}>
-            Technical certifications in Cloud Systems, Big Data, Cybersecurity, and Data Science from premier institutions.
+          <h2 style={{ marginBottom: '0.75rem' }}>Certifications & Verified Credentials</h2>
+          <p
+            style={{
+              color: 'var(--text-secondary)',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.95rem',
+              maxWidth: '700px',
+              margin: '0 auto',
+            }}
+          >
+            Verified technical certifications in Cloud Systems, Big Data, Cybersecurity, and Data Science from premier institutions.
           </p>
 
-          <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', marginTop: '1.5rem', flexWrap: 'wrap' }}>
+          {/* Filter Pills */}
+          <div
+            style={{
+              display: 'inline-flex',
+              gap: '0.45rem',
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border-color)',
+              padding: '0.35rem 0.5rem',
+              borderRadius: '50px',
+              marginTop: '1.5rem',
+              boxShadow: '0 4px 15px rgba(15, 23, 42, 0.04)',
+            }}
+          >
             {[
-              { id: 'all', label: `All (${certificates.length})` },
+              { id: 'all', label: 'All Credentials (6)' },
               { id: 'iitm', label: 'IIT Madras' },
-              { id: 'infosys', label: 'Infosys' },
+              { id: 'infosys', label: 'Infosys Springboard' },
               { id: 'neocolab', label: 'Neo Colab' },
-            ].map(f => (
+            ].map((f) => (
               <button
                 key={f.id}
                 onClick={() => setIssuerFilter(f.id)}
                 style={{
-                  padding: '0.4rem 0.9rem', borderRadius: 'var(--radius-full)',
-                  border: issuerFilter === f.id ? '1px solid var(--accent-primary)' : '1px solid var(--border-subtle)',
-                  background: issuerFilter === f.id ? 'rgba(124,58,237,0.1)' : 'transparent',
+                  background: issuerFilter === f.id ? 'var(--bg-secondary)' : 'transparent',
                   color: issuerFilter === f.id ? 'var(--accent-primary)' : 'var(--text-secondary)',
-                  fontFamily: 'var(--font-display)', fontSize: '0.82rem', fontWeight: 600,
-                  cursor: 'pointer', transition: 'all 0.25s ease',
+                  border: `1px solid ${issuerFilter === f.id ? 'var(--accent-primary)' : 'transparent'}`,
+                  borderRadius: '30px',
+                  padding: '0.35rem 0.9rem',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.78rem',
+                  fontWeight: issuerFilter === f.id ? '700' : '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
                 }}
               >
                 {f.label}
@@ -102,67 +142,127 @@ export default function Certifications() {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
-          {filtered.map((cert, idx) => (
+        {/* ========================================================================= */}
+        {/* CERTIFICATES GRID */}
+        {/* ========================================================================= */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.75rem' }}>
+          {filteredCerts.map((cert, idx) => (
             <motion.div
-              key={cert.name}
-              initial={{ opacity: 0, scale: 0.95 }}
+              key={cert.id}
+              initial={{ opacity: 0, scale: 0.92 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.5, delay: idx * 0.06 }}
+              transition={{ duration: 0.5, delay: idx * 0.08 }}
+              style={{ height: '100%' }}
             >
-              <GlassCard accentColor={cert.color} style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+              <TiltCard
+                borderTopColor={cert.color}
+                style={{
+                  height: '100%',
+                  background: 'var(--bg-card)',
+                  padding: '1.8rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  border: '1px solid var(--border-color)',
+                  borderRadius: '16px',
+                  boxShadow: '0 10px 30px rgba(15, 23, 42, 0.04)',
+                }}
+              >
                 {/* Header */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.85rem' }}>
-                  <div style={{
-                    width: '40px', height: '40px', borderRadius: '10px',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    background: `${cert.color}12`, color: cert.color,
-                  }}>
-                    <ShieldCheck size={20} />
+                <div className="terminal-header" style={{ marginBottom: '1rem' }}>
+                  <div className="terminal-dots">
+                    <span className="terminal-dot dot-red" />
+                    <span className="terminal-dot dot-yellow" />
+                    <span className="terminal-dot dot-green" />
                   </div>
-                  <span style={{
-                    fontSize: '0.7rem', padding: '0.2rem 0.5rem', borderRadius: '6px',
-                    background: `${cert.color}10`, color: cert.color, fontWeight: 700,
-                    fontFamily: 'var(--font-display)', border: `1px solid ${cert.color}20`,
-                  }}>
+                  <span style={{ color: cert.color, fontSize: '0.72rem', fontWeight: '600' }}>
+                    {cert.id}
+                  </span>
+                </div>
+
+                {/* Content */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
+                  <div
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '42px',
+                      height: '42px',
+                      background: 'var(--bg-secondary)',
+                      color: cert.color,
+                      borderRadius: '10px',
+                      border: `1px solid ${cert.color}40`,
+                    }}
+                  >
+                    <ShieldCheck size={22} />
+                  </div>
+                  <span
+                    style={{
+                      fontSize: '0.68rem',
+                      fontFamily: 'var(--font-mono)',
+                      color: cert.color,
+                      background: 'var(--bg-secondary)',
+                      padding: '0.2rem 0.55rem',
+                      borderRadius: '4px',
+                      border: `1px solid ${cert.color}30`,
+                      fontWeight: '700',
+                    }}
+                  >
                     {cert.badge}
                   </span>
                 </div>
 
-                <h3 style={{ fontSize: '1.05rem', marginBottom: '0.25rem', fontFamily: 'var(--font-display)' }}>
+                <h3 style={{ fontSize: '1.18rem', marginBottom: '0.25rem', color: 'var(--text-primary)' }}>
                   {cert.name}
                 </h3>
-                <p style={{ color: cert.color, fontSize: '0.85rem', fontWeight: 600, fontFamily: 'var(--font-display)', marginBottom: '0.35rem' }}>
+                <p style={{ color: cert.color, fontSize: '0.88rem', fontWeight: '700', fontFamily: 'var(--font-mono)', marginBottom: '0.4rem' }}>
                   {cert.issuer}
                 </p>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem', lineHeight: 1.5, marginBottom: '1rem' }}>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.84rem', lineHeight: '1.5', marginBottom: '1.25rem' }}>
                   {cert.type}
                 </p>
 
-                {/* Skills */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', marginBottom: '1rem' }}>
+                {/* Skill tags */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', marginBottom: '1.25rem' }}>
                   {cert.skills.map((s, sIdx) => (
-                    <span key={sIdx} className="tag" style={{ fontSize: '0.7rem', padding: '0.2rem 0.5rem' }}>
-                      {s}
+                    <span
+                      key={sIdx}
+                      style={{
+                        fontSize: '0.72rem',
+                        fontFamily: 'var(--font-mono)',
+                        color: 'var(--text-primary)',
+                        background: 'var(--bg-secondary)',
+                        padding: '0.15rem 0.45rem',
+                        borderRadius: '4px',
+                        border: '1px solid var(--border-subtle)',
+                      }}
+                    >
+                      +{s}
                     </span>
                   ))}
                 </div>
 
-                {/* Footer */}
-                <div style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                  marginTop: 'auto', paddingTop: '0.75rem', borderTop: '1px solid var(--border-subtle)',
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--accent-green)', fontSize: '0.75rem', fontFamily: 'var(--font-display)', fontWeight: 700 }}>
+                {/* Verified Footer */}
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginTop: 'auto',
+                    paddingTop: '0.75rem',
+                    borderTop: '1px solid var(--border-subtle)',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--accent-green)', fontSize: '0.75rem', fontFamily: 'var(--font-mono)', fontWeight: '700' }}>
                     <CheckCircle2 size={14} />
-                    Verified
+                    <span>AUTHENTICATED</span>
                   </div>
-                  <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-display)' }}>
-                    Completed
+                  <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                    COMPLETED
                   </span>
                 </div>
-              </GlassCard>
+              </TiltCard>
             </motion.div>
           ))}
         </div>

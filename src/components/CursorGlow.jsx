@@ -1,171 +1,112 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
+import { motion, useMotionValue, useSpring } from 'framer-motion'
 
 export default function CursorGlow() {
-  const dotRef = useRef(null)
-  const ringRef = useRef(null)
-  const glowRef = useRef(null)
-  const ripplesContainerRef = useRef(null)
+  const [position, setPosition] = useState({ x: 0, y: 0 })
+  const [isHovered, setIsHovered] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
+
+  const springConfig = { damping: 25, stiffness: 300, mass: 0.5 }
+  const cursorX = useMotionValue(0)
+  const cursorY = useMotionValue(0)
+
+  const springX = useSpring(cursorX, springConfig)
+  const springY = useSpring(cursorY, springConfig)
 
   useEffect(() => {
-    // Disable on coarse touch devices
-    if (typeof window === 'undefined' || window.matchMedia('(pointer: coarse)').matches) {
-      return
+    // Check if device is touch-only
+    if (window.matchMedia('(pointer: coarse)').matches) return
+
+    const moveCursor = (e) => {
+      setPosition({ x: e.clientX, y: e.clientY })
+      cursorX.set(e.clientX)
+      cursorY.set(e.clientY)
+      if (!isVisible) setIsVisible(true)
     }
 
-    const dot = dotRef.current
-    const ring = ringRef.current
-    const glow = glowRef.current
-    const ripplesContainer = ripplesContainerRef.current
+    const handleMouseLeave = () => setIsVisible(false)
+    const handleMouseEnter = () => setIsVisible(true)
 
-    if (!dot || !ring || !glow) return
-
-    let mouseX = window.innerWidth / 2
-    let mouseY = window.innerHeight / 2
-    let ringX = mouseX
-    let ringY = mouseY
-    let isHovered = false
-    let isClicked = false
-    let isVisible = false
-    let magneticTarget = null
-    let animId
-
-    // Direct 60/144Hz high-precision mouse tracking
-    const onMouseMove = (e) => {
-      mouseX = e.clientX
-      mouseY = e.clientY
-
-      if (!isVisible) {
-        isVisible = true
-        dot.style.opacity = '1'
-        ring.style.opacity = '0.9'
-        glow.style.opacity = '0.5'
-      }
-
-      // Zero-latency instant position for core dot
-      dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`
-      dot.style.setProperty('--cursor-x', `${mouseX}px`)
-      dot.style.setProperty('--cursor-y', `${mouseY}px`)
-
-      // Glow follower
-      glow.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate3d(-50%, -50%, 0)`
+    const addHoverEvents = () => {
+      const elements = document.querySelectorAll('a, button, input, textarea, select, .glass-card, .cyber-card')
+      elements.forEach((el) => {
+        el.addEventListener('mouseenter', () => setIsHovered(true))
+        el.addEventListener('mouseleave', () => setIsHovered(false))
+      })
     }
 
-    const onMouseDown = (e) => {
-      isClicked = true
-      ring.classList.add('active')
-
-      // Emit click shockwave ripple
-      if (ripplesContainer) {
-        const ripple = document.createElement('div')
-        ripple.className = 'cursor-click-ripple'
-        ripple.style.setProperty('--rx', `${e.clientX}px`)
-        ripple.style.setProperty('--ry', `${e.clientY}px`)
-        ripplesContainer.appendChild(ripple)
-        setTimeout(() => ripple.remove(), 550)
-      }
-    }
-
-    const onMouseUp = () => {
-      isClicked = false
-      ring.classList.remove('active')
-    }
-
-    const onMouseLeave = () => {
-      isVisible = false
-      dot.style.opacity = '0'
-      ring.style.opacity = '0'
-      glow.style.opacity = '0'
-    }
-
-    const onMouseEnter = () => {
-      isVisible = true
-      dot.style.opacity = '1'
-      ring.style.opacity = '0.9'
-      glow.style.opacity = '0.5'
-    }
-
-    // Fast delegated hover detector
-    const handleMouseOver = (e) => {
-      const target = e.target
-      const interactiveEl = target.closest('a, button, input, textarea, .tag, .btn, .glass-card, [role="button"]')
-
-      if (interactiveEl) {
-        isHovered = true
-        dot.classList.add('hover')
-        ring.classList.add('hover')
-
-        // Check if small element for magnetic snap
-        const rect = interactiveEl.getBoundingClientRect()
-        if (rect.width < 160 && rect.height < 80) {
-          magneticTarget = {
-            centerX: rect.left + rect.width / 2,
-            centerY: rect.top + rect.height / 2,
-          }
-        } else {
-          magneticTarget = null
-        }
-      } else {
-        isHovered = false
-        magneticTarget = null
-        dot.classList.remove('hover')
-        ring.classList.remove('hover')
-      }
-    }
-
-    // Ultra-smooth requestAnimationFrame spring loop
-    const render = () => {
-      let targetX = mouseX
-      let targetY = mouseY
-
-      // Magnetic bias if over a button or pill
-      if (magneticTarget && isHovered) {
-        targetX = mouseX + (magneticTarget.centerX - mouseX) * 0.35
-        targetY = mouseY + (magneticTarget.centerY - mouseY) * 0.35
-      }
-
-      // Smooth lerp damping
-      ringX += (targetX - ringX) * 0.22
-      ringY += (targetY - ringY) * 0.22
-
-      const scale = isClicked ? 0.7 : isHovered ? 1.75 : 1
-      ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) scale(${scale})`
-
-      animId = requestAnimationFrame(render)
-    }
-
-    window.addEventListener('mousemove', onMouseMove, { passive: true })
-    window.addEventListener('mousedown', onMouseDown, { passive: true })
-    window.addEventListener('mouseup', onMouseUp, { passive: true })
-    document.addEventListener('mouseover', handleMouseOver, { passive: true })
-    document.addEventListener('mouseleave', onMouseLeave, { passive: true })
-    document.addEventListener('mouseenter', onMouseEnter, { passive: true })
-
-    animId = requestAnimationFrame(render)
+    window.addEventListener('mousemove', moveCursor)
+    document.addEventListener('mouseleave', handleMouseLeave)
+    document.addEventListener('mouseenter', handleMouseEnter)
+    addHoverEvents()
 
     return () => {
-      window.removeEventListener('mousemove', onMouseMove)
-      window.removeEventListener('mousedown', onMouseDown)
-      window.removeEventListener('mouseup', onMouseUp)
-      document.removeEventListener('mouseover', handleMouseOver)
-      document.removeEventListener('mouseleave', onMouseLeave)
-      document.removeEventListener('mouseenter', onMouseEnter)
-      cancelAnimationFrame(animId)
+      window.removeEventListener('mousemove', moveCursor)
+      document.removeEventListener('mouseleave', handleMouseLeave)
+      document.removeEventListener('mouseenter', handleMouseEnter)
+      
+      const elements = document.querySelectorAll('a, button, input, textarea, select, .glass-card, .cyber-card')
+      elements.forEach((el) => {
+        el.removeEventListener('mouseenter', () => setIsHovered(true))
+        el.removeEventListener('mouseleave', () => setIsHovered(false))
+      })
     }
-  }, []) // Empty dependency array ensures zero listener re-attachment stutters
+  }, [cursorX, cursorY, isVisible])
+
+  if (!isVisible) return null
 
   return (
     <>
-      {/* Ambient background glow follower */}
-      <div ref={glowRef} className="mouse-glow" />
-
-      {/* Ripple container */}
-      <div ref={ripplesContainerRef} style={{ pointerEvents: 'none' }} />
-
-      {/* Zero-latency core dot */}
-      <div ref={dotRef} className="custom-cursor-dot" />
-
-      {/* Spring magnetic follower ring */}
-      <div ref={ringRef} className="custom-cursor-ring" />
+      {/* Background Mouse Glow */}
+      <motion.div
+        className="mouse-glow"
+        style={{
+          x: springX,
+          y: springY,
+          translateX: '-50%',
+          translateY: '-50%',
+        }}
+      />
+      {/* Custom Cursor Dot */}
+      <div
+        style={{
+          position: 'fixed',
+          left: 0,
+          top: 0,
+          transform: `translate3d(${position.x - 4}px, ${position.y - 4}px, 0)`,
+          width: 8,
+          height: 8,
+          backgroundColor: 'var(--accent-primary)',
+          borderRadius: '50%',
+          pointerEvents: 'none',
+          zIndex: 9999,
+          boxShadow: '0 0 10px var(--accent-glow)',
+        }}
+      />
+      {/* Custom Cursor Ring */}
+      <motion.div
+        style={{
+          position: 'fixed',
+          left: 0,
+          top: 0,
+          x: springX,
+          y: springY,
+          translateX: '-50%',
+          translateY: '-50%',
+          width: 32,
+          height: 32,
+          border: '1px solid rgba(0, 240, 255, 0.5)',
+          borderRadius: '50%',
+          pointerEvents: 'none',
+          zIndex: 9998,
+        }}
+        animate={{
+          scale: isHovered ? 1.5 : 1,
+          backgroundColor: isHovered ? 'rgba(0, 240, 255, 0.1)' : 'transparent',
+          borderColor: isHovered ? 'var(--accent-primary)' : 'rgba(0, 240, 255, 0.5)',
+        }}
+        transition={{ duration: 0.2 }}
+      />
     </>
   )
 }
