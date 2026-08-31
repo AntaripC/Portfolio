@@ -1,83 +1,144 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 export default function CursorGlow() {
   const dotRef = useRef(null)
   const ringRef = useRef(null)
   const glowRef = useRef(null)
-  const [isHovered, setIsHovered] = useState(false)
-  const [isClicked, setIsClicked] = useState(false)
-  const [isVisible, setIsVisible] = useState(false)
+  const ripplesContainerRef = useRef(null)
 
   useEffect(() => {
-    // Check if device has fine pointer (mouse)
-    if (window.matchMedia('(pointer: coarse)').matches) {
+    // Disable on coarse touch devices
+    if (typeof window === 'undefined' || window.matchMedia('(pointer: coarse)').matches) {
       return
     }
+
+    const dot = dotRef.current
+    const ring = ringRef.current
+    const glow = glowRef.current
+    const ripplesContainer = ripplesContainerRef.current
+
+    if (!dot || !ring || !glow) return
 
     let mouseX = window.innerWidth / 2
     let mouseY = window.innerHeight / 2
     let ringX = mouseX
     let ringY = mouseY
+    let isHovered = false
+    let isClicked = false
+    let isVisible = false
+    let magneticTarget = null
     let animId
 
+    // Direct 60/144Hz high-precision mouse tracking
     const onMouseMove = (e) => {
       mouseX = e.clientX
       mouseY = e.clientY
-      if (!isVisible) setIsVisible(true)
 
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`
+      if (!isVisible) {
+        isVisible = true
+        dot.style.opacity = '1'
+        ring.style.opacity = '0.9'
+        glow.style.opacity = '0.5'
       }
-      if (glowRef.current) {
-        glowRef.current.style.left = `${mouseX}px`
-        glowRef.current.style.top = `${mouseY}px`
+
+      // Zero-latency instant position for core dot
+      dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`
+      dot.style.setProperty('--cursor-x', `${mouseX}px`)
+      dot.style.setProperty('--cursor-y', `${mouseY}px`)
+
+      // Glow follower
+      glow.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate3d(-50%, -50%, 0)`
+    }
+
+    const onMouseDown = (e) => {
+      isClicked = true
+      ring.classList.add('active')
+
+      // Emit click shockwave ripple
+      if (ripplesContainer) {
+        const ripple = document.createElement('div')
+        ripple.className = 'cursor-click-ripple'
+        ripple.style.setProperty('--rx', `${e.clientX}px`)
+        ripple.style.setProperty('--ry', `${e.clientY}px`)
+        ripplesContainer.appendChild(ripple)
+        setTimeout(() => ripple.remove(), 550)
       }
     }
 
-    const onMouseDown = () => setIsClicked(true)
-    const onMouseUp = () => setIsClicked(false)
-    const onMouseLeave = () => setIsVisible(false)
-    const onMouseEnter = () => setIsVisible(true)
+    const onMouseUp = () => {
+      isClicked = false
+      ring.classList.remove('active')
+    }
 
-    // Check hover on interactive elements
+    const onMouseLeave = () => {
+      isVisible = false
+      dot.style.opacity = '0'
+      ring.style.opacity = '0'
+      glow.style.opacity = '0'
+    }
+
+    const onMouseEnter = () => {
+      isVisible = true
+      dot.style.opacity = '1'
+      ring.style.opacity = '0.9'
+      glow.style.opacity = '0.5'
+    }
+
+    // Fast delegated hover detector
     const handleMouseOver = (e) => {
       const target = e.target
-      if (
-        target.tagName === 'A' ||
-        target.tagName === 'BUTTON' ||
-        target.tagName === 'INPUT' ||
-        target.tagName === 'TEXTAREA' ||
-        target.closest('a') ||
-        target.closest('button') ||
-        target.classList?.contains('tag') ||
-        target.classList?.contains('btn') ||
-        target.getAttribute('role') === 'button'
-      ) {
-        setIsHovered(true)
+      const interactiveEl = target.closest('a, button, input, textarea, .tag, .btn, .glass-card, [role="button"]')
+
+      if (interactiveEl) {
+        isHovered = true
+        dot.classList.add('hover')
+        ring.classList.add('hover')
+
+        // Check if small element for magnetic snap
+        const rect = interactiveEl.getBoundingClientRect()
+        if (rect.width < 160 && rect.height < 80) {
+          magneticTarget = {
+            centerX: rect.left + rect.width / 2,
+            centerY: rect.top + rect.height / 2,
+          }
+        } else {
+          magneticTarget = null
+        }
       } else {
-        setIsHovered(false)
+        isHovered = false
+        magneticTarget = null
+        dot.classList.remove('hover')
+        ring.classList.remove('hover')
       }
     }
 
-    // Smooth spring/lerp loop for outer ring
+    // Ultra-smooth requestAnimationFrame spring loop
     const render = () => {
-      ringX += (mouseX - ringX) * 0.18
-      ringY += (mouseY - ringY) * 0.18
+      let targetX = mouseX
+      let targetY = mouseY
 
-      if (ringRef.current) {
-        const scale = isClicked ? 0.75 : isHovered ? 1.7 : 1
-        ringRef.current.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) scale(${scale})`
+      // Magnetic bias if over a button or pill
+      if (magneticTarget && isHovered) {
+        targetX = mouseX + (magneticTarget.centerX - mouseX) * 0.35
+        targetY = mouseY + (magneticTarget.centerY - mouseY) * 0.35
       }
+
+      // Smooth lerp damping
+      ringX += (targetX - ringX) * 0.22
+      ringY += (targetY - ringY) * 0.22
+
+      const scale = isClicked ? 0.7 : isHovered ? 1.75 : 1
+      ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) scale(${scale})`
 
       animId = requestAnimationFrame(render)
     }
 
-    window.addEventListener('mousemove', onMouseMove)
-    window.addEventListener('mousedown', onMouseDown)
-    window.addEventListener('mouseup', onMouseUp)
-    document.addEventListener('mouseover', handleMouseOver)
-    document.addEventListener('mouseleave', onMouseLeave)
-    document.addEventListener('mouseenter', onMouseEnter)
+    window.addEventListener('mousemove', onMouseMove, { passive: true })
+    window.addEventListener('mousedown', onMouseDown, { passive: true })
+    window.addEventListener('mouseup', onMouseUp, { passive: true })
+    document.addEventListener('mouseover', handleMouseOver, { passive: true })
+    document.addEventListener('mouseleave', onMouseLeave, { passive: true })
+    document.addEventListener('mouseenter', onMouseEnter, { passive: true })
 
     animId = requestAnimationFrame(render)
 
@@ -90,60 +151,21 @@ export default function CursorGlow() {
       document.removeEventListener('mouseenter', onMouseEnter)
       cancelAnimationFrame(animId)
     }
-  }, [isVisible, isClicked, isHovered])
+  }, []) // Empty dependency array ensures zero listener re-attachment stutters
 
   return (
     <>
       {/* Ambient background glow follower */}
       <div ref={glowRef} className="mouse-glow" />
 
-      {/* Interactive Cursor Dot */}
-      <div
-        ref={dotRef}
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '8px',
-          height: '8px',
-          marginTop: '-4px',
-          marginLeft: '-4px',
-          borderRadius: '50%',
-          backgroundColor: isHovered ? 'var(--accent-secondary)' : 'var(--accent-primary)',
-          boxShadow: `0 0 12px ${isHovered ? 'var(--accent-secondary)' : 'var(--accent-primary)'}`,
-          pointerEvents: 'none',
-          zIndex: 999999,
-          opacity: isVisible ? 1 : 0,
-          transition: 'background-color 0.2s ease, opacity 0.25s ease',
-          willChange: 'transform',
-        }}
-      />
+      {/* Ripple container */}
+      <div ref={ripplesContainerRef} style={{ pointerEvents: 'none' }} />
 
-      {/* Interactive Trailing Magnetic Ring */}
-      <div
-        ref={ringRef}
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '36px',
-          height: '36px',
-          marginTop: '-18px',
-          marginLeft: '-18px',
-          borderRadius: '50%',
-          border: `1.5px solid ${isHovered ? 'var(--accent-secondary)' : 'var(--accent-primary)'}`,
-          backgroundColor: isHovered ? 'rgba(236, 72, 153, 0.12)' : 'rgba(124, 58, 237, 0.04)',
-          backdropFilter: isHovered ? 'blur(2px)' : 'none',
-          boxShadow: isHovered
-            ? '0 0 20px rgba(236, 72, 153, 0.35)'
-            : '0 0 10px rgba(124, 58, 237, 0.15)',
-          pointerEvents: 'none',
-          zIndex: 999998,
-          opacity: isVisible ? 0.9 : 0,
-          transition: 'border-color 0.25s ease, background-color 0.25s ease, opacity 0.25s ease',
-          willChange: 'transform',
-        }}
-      />
+      {/* Zero-latency core dot */}
+      <div ref={dotRef} className="custom-cursor-dot" />
+
+      {/* Spring magnetic follower ring */}
+      <div ref={ringRef} className="custom-cursor-ring" />
     </>
   )
 }
