@@ -1,442 +1,154 @@
 import React, { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Code, Terminal, Cloud, Database, Cpu, Key, Layers, Search, BarChart3, Grid, Sparkles, CheckCircle2, Sliders } from 'lucide-react'
-import { TiltCard } from './About.jsx'
+import { motion, useInView } from 'framer-motion'
+import {
+  Cloud, Server, Code, Database, Shield, Cpu, Terminal, Search, BarChart3, Layers
+} from 'lucide-react'
 
 export default function Skills() {
-  const [activeCategory, setActiveCategory] = useState('ALL')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [showProgressBars, setShowProgressBars] = useState(true)
+  const [activeCategory, setActiveCategory] = useState('all')
 
   const categories = [
-    {
-      id: 'CLOUD_INFRA',
-      category: 'Cloud',
-      title: 'Cloud & Infrastructure',
-      color: '#3b82f6',
-      bg: 'rgba(59, 130, 246, 0.12)',
-      icon: <Cloud size={20} />,
-      skills: [
-        { name: 'AWS Core (EC2, S3, IAM, VPC)', level: 'Advanced', percent: 94 },
-        { name: 'GCP Cloud Foundations', level: 'Intermediate', percent: 82 },
-        { name: 'Distributed Systems Architecture', level: 'Advanced', percent: 90 },
-        { name: 'Zero-Trust Cloud Security', level: 'Advanced', percent: 88 },
-        { name: 'Cloud Infrastructure Automation', level: 'Intermediate', percent: 85 },
-      ],
-    },
-    {
-      id: 'DEV_SECOPS',
-      category: 'DevOps',
-      title: 'DevOps & Tooling',
-      color: '#0284c7',
-      bg: 'rgba(2, 132, 199, 0.12)',
-      icon: <Terminal size={20} />,
-      skills: [
-        { name: 'Docker Containerization', level: 'Advanced', percent: 92 },
-        { name: 'Kubernetes Pod Deployment', level: 'Intermediate', percent: 80 },
-        { name: 'CI/CD Pipelines (GitHub Actions)', level: 'Advanced', percent: 95 },
-        { name: 'Linux / Bash Shell Scripting', level: 'Advanced', percent: 91 },
-        { name: 'Security Vulnerability Audits', level: 'Intermediate', percent: 84 },
-      ],
-    },
-    {
-      id: 'PROG_LANG',
-      category: 'Languages',
-      title: 'Programming Languages',
-      color: '#f43f5e',
-      bg: 'rgba(244, 63, 94, 0.12)',
-      icon: <Code size={20} />,
-      skills: [
-        { name: 'Python (Data, Scripts, Automation)', level: 'Advanced', percent: 95 },
-        { name: 'C / C++ (Firmware & Algorithms)', level: 'Advanced', percent: 89 },
-        { name: 'JavaScript / ES6+', level: 'Advanced', percent: 93 },
-        { name: 'SQL & Database Queries', level: 'Advanced', percent: 90 },
-        { name: 'HTML5 & Modern CSS3', level: 'Advanced', percent: 96 },
-      ],
-    },
-    {
-      id: 'BACKEND_DATA',
-      category: 'Backend',
-      title: 'Backend & Databases',
-      color: '#7c3aed',
-      bg: 'rgba(124, 58, 237, 0.12)',
-      icon: <Database size={20} />,
-      skills: [
-        { name: 'Node.js & Express REST APIs', level: 'Advanced', percent: 92 },
-        { name: 'Relational DBMS (MySQL, Postgres)', level: 'Advanced', percent: 88 },
-        { name: 'MongoDB Document Stores', level: 'Intermediate', percent: 82 },
-        { name: 'A* Pathfinding & Graph Algorithms', level: 'Advanced', percent: 91 },
-        { name: 'Pandas & Data Manipulation', level: 'Intermediate', percent: 86 },
-      ],
-    },
-    {
-      id: 'HARDWARE_IOT',
-      category: 'IoT',
-      title: 'IoT & Edge Telemetry',
-      color: '#059669',
-      bg: 'rgba(5, 150, 105, 0.12)',
-      icon: <Cpu size={20} />,
-      skills: [
-        { name: 'ESP32 Firmware Architecture', level: 'Advanced', percent: 94 },
-        { name: 'Optical Multi-Spectrometry (AS7262)', level: 'Patent Research', percent: 96 },
-        { name: 'ThingSpeak IoT Cloud Streams', level: 'Advanced', percent: 89 },
-        { name: 'Turbidity & Fluid Flow Sensors', level: 'Advanced', percent: 87 },
-        { name: 'Telegram Bot Dispatch Triggers', level: 'Advanced', percent: 92 },
-      ],
-    },
-    {
-      id: 'STRATEGY_LEAD',
-      category: 'Leadership',
-      title: 'Leadership & Strategy',
-      color: '#2563eb',
-      bg: 'rgba(37, 99, 235, 0.12)',
-      icon: <Key size={20} />,
-      skills: [
-        { name: 'Cross-Functional Team Leadership', level: 'Leadership', percent: 95 },
-        { name: 'Hackathon Sprint Squad Lead', level: '5+ Sprints', percent: 98 },
-        { name: 'Zero-Trust Security Mentality', level: 'Strategic', percent: 90 },
-        { name: 'Rapid Tech Adaptability', level: 'Top 1% Standing', percent: 97 },
-        { name: 'Public Demo & Technical Defense', level: 'Executive', percent: 93 },
-      ],
-    },
+    { id: 'all', label: 'All', icon: <Layers size={14} /> },
+    { id: 'cloud', label: 'Cloud', icon: <Cloud size={14} /> },
+    { id: 'dev', label: 'Development', icon: <Code size={14} /> },
+    { id: 'data', label: 'Data & ML', icon: <Database size={14} /> },
+    { id: 'devops', label: 'DevOps', icon: <Server size={14} /> },
+    { id: 'security', label: 'Security', icon: <Shield size={14} /> },
   ]
 
-  const filteredCategories = categories.filter((cat) => {
-    if (activeCategory !== 'ALL' && cat.category !== activeCategory) {
-      return false
-    }
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase()
-      const matchesTitle = cat.title.toLowerCase().includes(q)
-      const matchesSkills = cat.skills.some((s) => s.name.toLowerCase().includes(q))
-      return matchesTitle || matchesSkills
-    }
-    return true
-  })
+  const skills = [
+    { name: 'AWS (EC2, S3, Lambda)', level: 85, category: 'cloud', color: '#f59e0b' },
+    { name: 'Google Cloud Platform', level: 70, category: 'cloud', color: '#3b82f6' },
+    { name: 'Docker & Containers', level: 80, category: 'devops', color: '#06b6d4' },
+    { name: 'Kubernetes', level: 60, category: 'devops', color: '#8b5cf6' },
+    { name: 'Python', level: 90, category: 'dev', color: '#10b981' },
+    { name: 'JavaScript / React', level: 82, category: 'dev', color: '#f472b6' },
+    { name: 'Node.js / Express', level: 75, category: 'dev', color: '#34d399' },
+    { name: 'C / C++ (Embedded)', level: 72, category: 'dev', color: '#a78bfa' },
+    { name: 'SQL / PostgreSQL', level: 78, category: 'data', color: '#60a5fa' },
+    { name: 'Machine Learning (Basics)', level: 55, category: 'data', color: '#fb7185' },
+    { name: 'Network Security', level: 65, category: 'security', color: '#fbbf24' },
+    { name: 'Linux Administration', level: 80, category: 'devops', color: '#22d3ee' },
+    { name: 'CI/CD Pipelines', level: 68, category: 'devops', color: '#e879f9' },
+    { name: 'IoT / ESP32', level: 88, category: 'dev', color: '#f59e0b' },
+    { name: 'Terraform / IaC', level: 55, category: 'cloud', color: '#a78bfa' },
+  ]
 
-  // Calculate overall metrics
-  const totalCompetencies = categories.reduce((acc, cat) => acc + cat.skills.length, 0)
-  const avgProficiency = Math.round(
-    categories.reduce(
-      (acc, cat) => acc + cat.skills.reduce((sAcc, s) => sAcc + s.percent, 0),
-      0
-    ) / totalCompetencies
-  )
+  const filtered = activeCategory === 'all' ? skills : skills.filter(s => s.category === activeCategory)
+
+  // Summary stats
+  const avgLevel = Math.round(skills.reduce((a, s) => a + s.level, 0) / skills.length)
+  const topSkills = skills.filter(s => s.level >= 80).length
+  const totalSkills = skills.length
 
   return (
-    <section id="skills" className="section" style={{ position: 'relative' }}>
+    <section id="skills" className="section">
       <div className="container">
-        {/* Section Header */}
-        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <div className="section-subtitle">
-            <Layers size={14} /> TECH_MATRIX // ARSENAL_RADAR
+            <Cpu size={14} /> Skills
           </div>
-          <h2 style={{ marginBottom: '0.75rem' }}>Cloud Architecture & Technical Arsenal</h2>
-          <p
-            style={{
-              color: 'var(--text-secondary)',
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.95rem',
-              maxWidth: '700px',
-              margin: '0 auto',
-            }}
-          >
-            Categorized competencies spanning enterprise cloud infrastructure, embedded IoT telemetry, distributed databases, and leadership frameworks.
+          <h2 style={{ marginBottom: '0.75rem' }}>Technical Proficiency</h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', maxWidth: '550px', margin: '0 auto' }}>
+            Cloud architecture, full-stack development, IoT prototyping, and DevOps workflows.
           </p>
-
-          {/* HUD Summary Bar */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              alignItems: 'center',
-              justifyContent: 'space-around',
-              gap: '1rem',
-              margin: '1.75rem auto 0 auto',
-              maxWidth: '850px',
-              padding: '0.9rem 1.4rem',
-              background: 'var(--bg-card)',
-              border: '1px solid var(--border-color)',
-              borderRadius: '16px',
-              boxShadow: '0 8px 25px rgba(15, 23, 42, 0.04)',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-              <Sparkles size={16} color="var(--accent-primary)" />
-              <div style={{ textAlign: 'left' }}>
-                <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>TOTAL COMPETENCIES</div>
-                <div style={{ fontSize: '0.95rem', fontWeight: '800', color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
-                  30 Active Modules
-                </div>
-              </div>
-            </div>
-
-            <div style={{ width: '1px', height: '28px', background: 'var(--border-color)', display: 'none' }} className="desktop-divider" />
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: '220px' }}>
-              <div style={{ textAlign: 'left', width: '100%' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-                  <span>AVERAGE PROFICIENCY</span>
-                  <span style={{ color: 'var(--accent-primary)', fontWeight: '700' }}>{avgProficiency}%</span>
-                </div>
-                <div className="progress-bar-track" style={{ marginTop: '0.35rem', height: '6px' }}>
-                  <motion.div
-                    className="progress-bar-fill"
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${avgProficiency}%` }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 1.2 }}
-                    style={{ background: 'linear-gradient(90deg, var(--accent-primary), var(--accent-cyan))' }}
-                  >
-                    <div className="progress-bar-cap" style={{ color: 'var(--accent-cyan)' }} />
-                  </motion.div>
-                </div>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-              <CheckCircle2 size={16} color="var(--accent-green)" />
-              <div style={{ textAlign: 'left' }}>
-                <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>PRIMARY STACK</div>
-                <div style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--accent-green)', fontFamily: 'var(--font-mono)' }}>
-                  AWS • Docker • ESP32 • Python
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Filter Pills, Search & Bar View Toggle */}
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: '0.75rem',
-              marginTop: '1.75rem',
-            }}
-          >
-            {/* Category Filter Pills */}
-            <div
-              style={{
-                display: 'inline-flex',
-                flexWrap: 'wrap',
-                gap: '0.35rem',
-                background: 'var(--bg-card)',
-                border: '1px solid var(--border-color)',
-                padding: '0.3rem 0.5rem',
-                borderRadius: '50px',
-                boxShadow: '0 4px 15px rgba(15, 23, 42, 0.04)',
-              }}
-            >
-              {['ALL', 'Cloud', 'DevOps', 'Languages', 'Backend', 'IoT', 'Leadership'].map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveCategory(tab)}
-                  className={`filter-pill-btn ${activeCategory === tab ? 'active' : ''}`}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
-
-            {/* Live Search Input */}
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                background: 'var(--bg-card)',
-                border: '1px solid var(--border-color)',
-                borderRadius: '30px',
-                padding: '0.3rem 0.85rem',
-              }}
-            >
-              <Search size={14} color="var(--text-muted)" />
-              <input
-                type="text"
-                placeholder="Search skill (e.g. AWS, ESP32)..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  outline: 'none',
-                  color: 'var(--text-primary)',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.78rem',
-                  width: '180px',
-                }}
-              />
-            </div>
-
-            {/* Toggle Progress Bars Display Button */}
-            <button
-              onClick={() => setShowProgressBars(!showProgressBars)}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.4rem',
-                background: showProgressBars ? 'rgba(59, 130, 246, 0.12)' : 'var(--bg-card)',
-                color: showProgressBars ? 'var(--accent-primary)' : 'var(--text-secondary)',
-                border: `1px solid ${showProgressBars ? 'var(--accent-primary)' : 'var(--border-color)'}`,
-                borderRadius: '30px',
-                padding: '0.35rem 0.85rem',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.76rem',
-                fontWeight: '600',
-                cursor: 'pointer',
-                transition: 'all 0.25s ease',
-              }}
-            >
-              <Sliders size={13} />
-              {showProgressBars ? 'Hide Progress Bars' : 'Show Progress Bars'}
-            </button>
-          </div>
         </div>
 
-        {/* ========================================================================= */}
-        {/* SKILLS CARDS GRID */}
-        {/* ========================================================================= */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(330px, 1fr))', gap: '1.75rem' }}>
-          {filteredCategories.map((cat, idx) => (
-            <motion.div
+        {/* Summary Cards */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginBottom: '2.5rem' }}
+        >
+          {[
+            { label: 'Total Skills', value: totalSkills },
+            { label: 'Advanced (80%+)', value: topSkills },
+            { label: 'Average Level', value: `${avgLevel}%` },
+          ].map((stat, idx) => (
+            <div key={idx} style={{
+              background: 'var(--bg-card)', border: '1px solid var(--border-subtle)',
+              borderRadius: 'var(--radius-lg)', padding: '1.1rem', textAlign: 'center',
+              backdropFilter: 'blur(12px)',
+            }}>
+              <div style={{
+                fontSize: '1.5rem', fontWeight: 800, fontFamily: 'var(--font-display)',
+                background: 'var(--gradient-primary)', WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}>
+                {stat.value}
+              </div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-display)', marginTop: '0.2rem' }}>
+                {stat.label}
+              </div>
+            </div>
+          ))}
+        </motion.div>
+
+        {/* Category Filters */}
+        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', marginBottom: '2rem', flexWrap: 'wrap' }}>
+          {categories.map((cat) => (
+            <button
               key={cat.id}
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.5, delay: idx * 0.07 }}
-              style={{ height: '100%' }}
+              onClick={() => setActiveCategory(cat.id)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '0.35rem',
+                padding: '0.45rem 0.9rem', borderRadius: 'var(--radius-full)',
+                border: activeCategory === cat.id ? '1px solid var(--accent-primary)' : '1px solid var(--border-subtle)',
+                background: activeCategory === cat.id ? 'rgba(124,58,237,0.1)' : 'transparent',
+                color: activeCategory === cat.id ? 'var(--accent-primary)' : 'var(--text-secondary)',
+                fontFamily: 'var(--font-display)', fontSize: '0.8rem', fontWeight: 600,
+                cursor: 'pointer', transition: 'all 0.25s ease',
+              }}
             >
-              <TiltCard
-                borderTopColor={cat.color}
-                style={{
-                  height: '100%',
-                  background: 'var(--bg-card)',
-                  padding: '1.8rem',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  border: '1px solid var(--border-color)',
-                  borderRadius: '16px',
-                  boxShadow: '0 10px 30px rgba(15, 23, 42, 0.04)',
-                }}
-              >
-                {/* Header */}
-                <div className="terminal-header" style={{ marginBottom: '1.1rem' }}>
-                  <div className="terminal-dots">
-                    <span className="terminal-dot dot-red" />
-                    <span className="terminal-dot dot-yellow" />
-                    <span className="terminal-dot dot-green" />
-                  </div>
-                  <span style={{ color: cat.color, fontSize: '0.72rem', fontWeight: '700', fontFamily: 'var(--font-mono)' }}>
-                    {cat.id}
-                  </span>
-                </div>
+              {cat.icon}
+              {cat.label}
+            </button>
+          ))}
+        </div>
 
-                {/* Title and Icon */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
-                  <div
-                    style={{
-                      color: cat.color,
-                      padding: '0.55rem',
-                      background: cat.bg,
-                      borderRadius: '10px',
-                      border: `1px solid ${cat.color}40`,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    {cat.icon}
-                  </div>
-                  <div>
-                    <h3 style={{ fontSize: '1.15rem', color: 'var(--text-primary)', margin: 0 }}>{cat.title}</h3>
-                    <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-                      {cat.skills.length} OPERATIVE MODULES
-                    </div>
-                  </div>
-                </div>
-
-                {/* Skill Items List */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: 'auto' }}>
-                  {cat.skills.map((skill, sIdx) => (
-                    <motion.div
-                      key={sIdx}
-                      whileHover={{ scale: 1.01, x: 2 }}
-                      transition={{ duration: 0.2 }}
-                      style={{
-                        background: 'var(--bg-secondary)',
-                        padding: '0.6rem 0.85rem',
-                        borderRadius: '8px',
-                        border: '1px solid var(--border-subtle)',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '0.45rem',
-                      }}
-                    >
-                      {/* Item Top Row */}
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '0.82rem', fontFamily: 'var(--font-mono)', color: 'var(--text-primary)', fontWeight: '600' }}>
-                          $ {skill.name}
-                        </span>
-                        <span
-                          style={{
-                            fontSize: '0.68rem',
-                            fontFamily: 'var(--font-mono)',
-                            color: cat.color,
-                            background: cat.bg,
-                            padding: '0.18rem 0.5rem',
-                            borderRadius: '4px',
-                            border: `1px solid ${cat.color}35`,
-                            fontWeight: '700',
-                            whiteSpace: 'nowrap',
-                          }}
-                        >
-                          {skill.level}
-                        </span>
-                      </div>
-
-                      {/* NEW ANIMATED PROFICIENCY BAR */}
-                      <AnimatePresence>
-                        {showProgressBars && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.3 }}
-                            style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginTop: '0.1rem' }}
-                          >
-                            <div className="progress-bar-track" style={{ height: '5px', flex: 1 }}>
-                              <motion.div
-                                className="progress-bar-fill"
-                                initial={{ width: 0 }}
-                                whileInView={{ width: `${skill.percent}%` }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 1, delay: sIdx * 0.08 }}
-                                style={{
-                                  background: `linear-gradient(90deg, ${cat.color}, var(--accent-cyan))`,
-                                }}
-                              >
-                                <div className="progress-bar-cap" style={{ color: cat.color }} />
-                              </motion.div>
-                            </div>
-                            <span style={{ fontSize: '0.68rem', fontFamily: 'var(--font-mono)', fontWeight: '700', color: 'var(--text-secondary)' }}>
-                              {skill.percent}%
-                            </span>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </motion.div>
-                  ))}
-                </div>
-              </TiltCard>
-            </motion.div>
+        {/* Skill Bars */}
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          {filtered.map((skill, idx) => (
+            <SkillBar key={skill.name} skill={skill} delay={idx * 0.04} />
           ))}
         </div>
       </div>
     </section>
+  )
+}
+
+function SkillBar({ skill, delay }) {
+  const ref = React.useRef(null)
+  const isInView = useInView(ref, { once: true, margin: '-50px' })
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, x: -15 }}
+      animate={isInView ? { opacity: 1, x: 0 } : {}}
+      transition={{ duration: 0.5, delay }}
+      style={{ marginBottom: '1.25rem' }}
+    >
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
+        <span style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>
+          {skill.name}
+        </span>
+        <span style={{ fontSize: '0.78rem', fontWeight: 700, color: skill.color, fontFamily: 'var(--font-display)' }}>
+          {skill.level}%
+        </span>
+      </div>
+      <div className="progress-track">
+        <motion.div
+          className="progress-fill"
+          initial={{ width: '0%' }}
+          animate={isInView ? { width: `${skill.level}%` } : { width: '0%' }}
+          transition={{ duration: 1.2, delay: delay + 0.1, ease: [0.22, 1, 0.36, 1] }}
+          style={{ background: `linear-gradient(90deg, ${skill.color}, ${skill.color}88)` }}
+        />
+      </div>
+    </motion.div>
   )
 }

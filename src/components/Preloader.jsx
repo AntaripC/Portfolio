@@ -1,38 +1,50 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ShieldCheck, Cpu, Cloud, Terminal, Sparkles } from 'lucide-react'
+import { Sparkles } from 'lucide-react'
 
 export default function Preloader() {
   const [isVisible, setIsVisible] = useState(true)
   const [progress, setProgress] = useState(0)
-  const [statusText, setStatusText] = useState('CONNECTING_NODES...')
+  const [statusIdx, setStatusIdx] = useState(0)
+
+  const statuses = [
+    'Initializing Aurora Core...',
+    'Loading Cloud Architecture...',
+    'Connecting IoT Sensor Mesh...',
+    'Compiling Experience Vault...',
+    'Launching Workspace...',
+  ]
 
   useEffect(() => {
-    const statusMessages = [
-      'INITIALIZING_KERNEL...',
-      'VERIFYING_AWS_IAM_POLICIES...',
-      'ALLOCATING_KUBERNETES_PODS...',
-      'CONNECTING_ESP32_TELEMETRY...',
-      'SYSTEM_READY // MOUNTING_HUD',
-    ]
+    const totalDuration = 4800 // ~4.8s + 0.5s fade out ≈ 5.3s total
+    const intervalTime = 50
+    const totalSteps = totalDuration / intervalTime
+    let currentStep = 0
 
     const interval = setInterval(() => {
-      setProgress((prev) => {
-        const next = prev + Math.floor(Math.random() * 25) + 15
-        if (next >= 100) {
-          clearInterval(interval)
-          setStatusText(statusMessages[4])
-          setTimeout(() => setIsVisible(false), 350)
-          return 100
-        }
-        const messageIndex = Math.min(Math.floor((next / 100) * statusMessages.length), 3)
-        setStatusText(statusMessages[messageIndex])
-        return next
-      })
-    }, 120)
+      currentStep++
+      const rawProgress = (currentStep / totalSteps) * 100
+      // Smooth ease-out style curve
+      const easedProgress = Math.min(100, Math.floor(rawProgress))
+      setProgress(easedProgress)
+
+      // Calculate status index based on current progress
+      const newStatusIdx = Math.min(
+        statuses.length - 1,
+        Math.floor((easedProgress / 100) * statuses.length)
+      )
+      setStatusIdx(newStatusIdx)
+
+      if (currentStep >= totalSteps) {
+        clearInterval(interval)
+        setTimeout(() => setIsVisible(false), 500)
+      }
+    }, intervalTime)
 
     return () => clearInterval(interval)
   }, [])
+
+  const letters = 'ANTARIP'.split('')
 
   return (
     <AnimatePresence>
@@ -40,168 +52,187 @@ export default function Preloader() {
         <motion.div
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 1.03 }}
-          transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
+          transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: '#020617',
+            backgroundColor: '#0a0a0f',
             zIndex: 99999,
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            color: '#f8fafc',
             overflow: 'hidden',
-            backgroundImage: `
-              radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 60%),
-              radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.05) 1px, transparent 0)
-            `,
-            backgroundSize: '100% 100%, 36px 36px',
           }}
         >
-          {/* Subtle glowing halo */}
+          {/* Ambient aurora floating orbs */}
+          <div
+            style={{
+              position: 'absolute',
+              width: '500px',
+              height: '500px',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(124,58,237,0.35), transparent 70%)',
+              filter: 'blur(90px)',
+              top: '15%',
+              left: '25%',
+              animation: 'aurora-drift 10s ease-in-out infinite',
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              width: '450px',
+              height: '450px',
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(236,72,153,0.28), transparent 70%)',
+              filter: 'blur(90px)',
+              bottom: '15%',
+              right: '20%',
+              animation: 'aurora-drift 12s ease-in-out infinite reverse',
+            }}
+          />
           <div
             style={{
               position: 'absolute',
               width: '350px',
               height: '350px',
               borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, rgba(6, 182, 212, 0.1) 50%, transparent 70%)',
-              filter: 'blur(50px)',
-              pointerEvents: 'none',
+              background: 'radial-gradient(circle, rgba(245,158,11,0.2), transparent 70%)',
+              filter: 'blur(80px)',
+              bottom: '30%',
+              left: '35%',
+              animation: 'aurora-drift 14s ease-in-out infinite',
             }}
           />
 
+          {/* Subtitle tag */}
           <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.4 }}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
             style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              padding: '0.35rem 0.85rem',
+              borderRadius: '999px',
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              marginBottom: '1.5rem',
+              backdropFilter: 'blur(10px)',
+              zIndex: 2,
+            }}
+          >
+            <Sparkles size={13} color="#f472b6" />
+            <span
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '0.75rem',
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                color: '#e4e4e7',
+                fontWeight: 600,
+              }}
+            >
+              Cloud & IoT Architect
+            </span>
+          </motion.div>
+
+          {/* Staggered Letter Reveal */}
+          <div style={{ display: 'flex', gap: '0.15em', position: 'relative', zIndex: 2 }}>
+            {letters.map((letter, i) => (
+              <motion.span
+                key={i}
+                initial={{ y: 50, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.2 + i * 0.07, ease: [0.22, 1, 0.36, 1] }}
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: 'clamp(3rem, 7vw, 5.5rem)',
+                  fontWeight: 800,
+                  background: 'linear-gradient(135deg, #a78bfa 0%, #f472b6 50%, #fbbf24 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  letterSpacing: '-0.02em',
+                }}
+              >
+                {letter}
+              </motion.span>
+            ))}
+          </div>
+
+          {/* Dynamic Status Text */}
+          <div style={{ minHeight: '24px', marginTop: '1.25rem', zIndex: 2 }}>
+            <motion.p
+              key={statusIdx}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.25 }}
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '0.86rem',
+                color: '#a1a1aa',
+                fontWeight: 500,
+                textAlign: 'center',
+                letterSpacing: '0.04em',
+              }}
+            >
+              {statuses[statusIdx]}
+            </motion.p>
+          </div>
+
+          {/* Progress Bar with Glow & Percentage */}
+          <motion.div
+            initial={{ opacity: 0, width: 0 }}
+            animate={{ opacity: 1, width: '260px' }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+            style={{
+              marginTop: '1.5rem',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              position: 'relative',
+              gap: '0.6rem',
               zIndex: 2,
-              padding: '2rem',
-              maxWidth: '480px',
-              width: '90%',
-              textAlign: 'center',
             }}
           >
-            {/* Top Security & System Badge */}
             <div
               style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.45rem',
-                padding: '0.35rem 0.85rem',
-                borderRadius: '50px',
-                background: 'rgba(15, 23, 42, 0.8)',
-                border: '1px solid rgba(59, 130, 246, 0.3)',
-                boxShadow: '0 0 20px rgba(59, 130, 246, 0.15)',
-                marginBottom: '1.75rem',
+                width: '100%',
+                height: '4px',
+                background: 'rgba(255, 255, 255, 0.08)',
+                borderRadius: '999px',
+                overflow: 'hidden',
+                position: 'relative',
+                boxShadow: 'inset 0 1px 2px rgba(0, 0, 0, 0.5)',
               }}
             >
-              <ShieldCheck size={14} color="#3b82f6" />
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: '#60a5fa', fontWeight: '700', letterSpacing: '0.08em' }}>
-                SYSTEM_BOOT // SECURE_CLOUD_OS
-              </span>
-            </div>
-
-            {/* Main Name & Identity Title */}
-            <h1
-              style={{
-                fontFamily: 'var(--font-main)',
-                fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
-                fontWeight: '800',
-                letterSpacing: '-0.02em',
-                background: 'linear-gradient(135deg, #ffffff 40%, #60a5fa 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                margin: '0 0 0.5rem 0',
-                lineHeight: 1.1,
-              }}
-            >
-              ANTARIP CHATTERJEE
-            </h1>
-
-            <p
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.78rem',
-                color: '#94a3b8',
-                margin: '0 0 2rem 0',
-                letterSpacing: '0.05em',
-              }}
-            >
-              Cloud Systems Architect • IoT Innovator
-            </p>
-
-            {/* Circular Progress & Telemetry Ring */}
-            <div style={{ position: 'relative', width: '100px', height: '100px', marginBottom: '1.75rem' }}>
-              <svg width="100" height="100" viewBox="0 0 100 100" style={{ transform: 'rotate(-90deg)' }}>
-                {/* Background Ring */}
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="42"
-                  stroke="rgba(255, 255, 255, 0.08)"
-                  strokeWidth="6"
-                  fill="transparent"
-                />
-                {/* Animated Progress Ring */}
-                <motion.circle
-                  cx="50"
-                  cy="50"
-                  r="42"
-                  stroke="url(#preloader-gradient)"
-                  strokeWidth="6"
-                  fill="transparent"
-                  strokeDasharray="264"
-                  strokeDashoffset={264 - (264 * progress) / 100}
-                  strokeLinecap="round"
-                  transition={{ duration: 0.2 }}
-                />
-                <defs>
-                  <linearGradient id="preloader-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#3b82f6" />
-                    <stop offset="100%" stopColor="#06b6d4" />
-                  </linearGradient>
-                </defs>
-              </svg>
-              {/* Percentage Counter Center Text */}
-              <div
+              <motion.div
                 style={{
-                  position: 'absolute',
-                  inset: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '1.05rem',
-                  fontWeight: '800',
-                  color: '#60a5fa',
+                  height: '100%',
+                  borderRadius: '999px',
+                  background: 'linear-gradient(90deg, #a78bfa, #f472b6, #fbbf24)',
+                  width: `${progress}%`,
+                  transition: 'width 0.08s linear',
+                  boxShadow: '0 0 12px rgba(244, 114, 182, 0.6)',
                 }}
-              >
-                {progress}%
-              </div>
+              />
             </div>
 
-            {/* Status Telemetry Text */}
             <div
               style={{
-                fontFamily: 'var(--font-mono)',
+                display: 'flex',
+                justifyContent: 'space-between',
+                width: '100%',
                 fontSize: '0.74rem',
-                color: '#38bdf8',
-                background: 'rgba(15, 23, 42, 0.6)',
-                border: '1px solid rgba(56, 189, 248, 0.2)',
-                borderRadius: '8px',
-                padding: '0.45rem 1rem',
-                letterSpacing: '0.06em',
-                boxShadow: '0 4px 15px rgba(0, 0, 0, 0.3)',
+                fontFamily: 'var(--font-mono)',
+                color: '#71717a',
+                padding: '0 2px',
               }}
             >
-              {statusText}
+              <span>BOOT_SEQUENCE</span>
+              <span style={{ color: '#f472b6', fontWeight: 600 }}>{progress}%</span>
             </div>
           </motion.div>
         </motion.div>
