@@ -5,6 +5,7 @@ import { Cloud, ShieldCheck, Cpu, ArrowUp, Heart } from 'lucide-react'
 import Preloader from './components/Preloader.jsx'
 import CursorGlow from './components/CursorGlow.jsx'
 import CloudInteractiveBackground from './components/CloudInteractiveBackground.jsx'
+import ScrollFloatingObjects from './components/ScrollFloatingObjects.jsx'
 import Navbar from './components/Navbar.jsx'
 import Hero from './components/Hero.jsx'
 import About from './components/About.jsx'
@@ -46,6 +47,7 @@ export default function App() {
       <Preloader />
       <CursorGlow />
       <CloudInteractiveBackground />
+      <ScrollFloatingObjects />
       <Navbar />
 
       <main style={{ position: 'relative', zIndex: 1 }}>

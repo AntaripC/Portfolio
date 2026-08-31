@@ -177,20 +177,28 @@ export default function CloudInteractiveBackground() {
       }
     }
 
-    const handleMouseUp = () => {
-      mouse.isDown = false
-      mouse.draggedNode = null
-    }
+    let lastScrollY = window.scrollY
+    let scrollVelocity = 0
 
-    const handleMouseLeave = () => {
-      mouse.active = false
-      mouse.draggedNode = null
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      scrollVelocity = (currentScrollY - lastScrollY) * 0.12
+      lastScrollY = currentScrollY
+
+      // Add directional drift to nodes on scroll
+      for (let i = 0; i < nodes.length; i++) {
+        nodes[i].y -= scrollVelocity * 0.4
+        // Wrap around vertically
+        if (nodes[i].y < -20) nodes[i].y = height + 20
+        if (nodes[i].y > height + 20) nodes[i].y = -20
+      }
     }
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true })
     window.addEventListener('mousedown', handleMouseDown)
     window.addEventListener('mouseup', handleMouseUp)
     window.addEventListener('mouseleave', handleMouseLeave)
+    window.addEventListener('scroll', handleScroll, { passive: true })
 
     // Continuous Telemetry Streamer
     const streamInterval = setInterval(() => {
@@ -475,6 +483,7 @@ export default function CloudInteractiveBackground() {
       window.removeEventListener('mousedown', handleMouseDown)
       window.removeEventListener('mouseup', handleMouseUp)
       window.removeEventListener('mouseleave', handleMouseLeave)
+      window.removeEventListener('scroll', handleScroll)
       clearInterval(streamInterval)
       clearInterval(statsInterval)
       cancelAnimationFrame(animationFrameId)
